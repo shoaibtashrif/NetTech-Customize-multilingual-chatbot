@@ -1,0 +1,22 @@
+{
+  "transcript": [
+    {
+      "role": "user",
+      "content": "hi, what time dr aysha will be available?"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello! Dr. Aysha is available for appointments from 9:00 am to 5:00 pm, Monday through Friday. Would you like to schedule an appointment with her?"
+    },
+    {
+      "role": "user",
+      "content": "ok thanks. also i have mind your behavior"
+    },
+    {
+      "role": "assistant",
+      "content": "I'm glad to hear that you have found Dr. Aysha's behavior to be positive. If you have any concerns or feedback, please feel free to share them with us. We always strive to provide the best possible care for our patients. Thank you for your feedback!"
+    }
+  ],
+  "summary": "Dr. Aysha is available for appointments from 9:00 am to 5:00 pm, Monday through Friday. The user appreciates Dr. Aysha's behavior and the assistant encourages the user to share any concerns or feedback for better patient care.",
+  "complaint_type": "timing info, behaviour complaint"
+}

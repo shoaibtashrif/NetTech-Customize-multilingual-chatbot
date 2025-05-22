@@ -1,0 +1,194 @@
+/* General body styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Main container for both upload section and chat window */
+.main-container {
+    display: flex;
+    gap: 30px;
+    width: 80%;
+    max-width: 1200px;
+}
+
+/* File upload section */
+.upload-section {
+    width: 250px;
+    background-color: #fafafa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.upload-section h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.file-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.file-input {
+    display: flex;
+    flex-direction: column;
+}
+
+.file-label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+input[type="file"] {
+    font-size: 14px;
+    padding: 8px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.upload-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.upload-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Chatbox section */
+.chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 24px;
+    color: #007bff;
+}
+
+/* Chatbox content */
+.chat-box {
+    flex: 1;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+    overflow-y: auto;
+    margin-bottom: 20px;
+    max-height: 400px;
+}
+
+/* Chat message styles */
+.message {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.message.user {
+    text-align: right;
+    color: #007bff;
+}
+
+.message.bot {
+    text-align: left;
+    color: #333;
+}
+
+/* User input container */
+.input-container {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.input-container input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    color: #333;
+}
+
+.input-container button {
+    padding: 12px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.input-container button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .upload-section {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .chat-container {
+        width: 100%;
+    }
+
+    .input-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* Allowed formats text styling */
+.allowed-formats {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+    font-style: italic;
+    display: inline-block;
+    background-color: #f5f7fa;
+    padding: 5px;
+    border: 1px dashed #ccc;
+    border-radius: 5px;
+}
+

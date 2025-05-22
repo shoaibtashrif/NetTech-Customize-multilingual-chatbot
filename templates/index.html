@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Urdu Chatbot</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="main-container">
+
+    <!-- Upload Section -->
+    <section class="upload-section">
+      <h3>Upload Prompt & Knowledge</h3>
+      <div class="file-inputs">
+        <div class="file-input">
+          <label for="promptFile">Prompt File</label>
+          <input type="file" id="promptFile" accept=".txt,.pdf,.docx"/>
+        </div>
+        <div class="file-input">
+          <label for="knowledgeFile">Knowledge File</label>
+          <input type="file" id="knowledgeFile" accept=".txt,.pdf,.docx"/>
+        </div>
+      </div>
+      <button onclick="uploadFiles()">Upload Files</button>
+    </section>
+
+    <!-- Chat Section -->
+    <section class="chat-container">
+      <header><h1>Chat with Urdu Bot</h1></header>
+      <section id="chat-box" class="chat-box"></section>
+
+      <div class="input-container">
+        <input type="text" id="user-input" placeholder="اپنا پیغام درج کریں..." />
+        <button id="sendBtn" onclick="sendMessage()" disabled>Send</button>
+      </div>
+
+      <div class="session-controls">
+        <button onclick="startSession()">Start Session</button>
+        <button onclick="endSession()">End Session</button>
+      </div>
+    </section>
+
+  </div>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

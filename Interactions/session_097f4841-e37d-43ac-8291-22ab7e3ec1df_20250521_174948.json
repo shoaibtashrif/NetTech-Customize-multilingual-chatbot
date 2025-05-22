@@ -1,0 +1,22 @@
+{
+  "transcript": [
+    {
+      "role": "user",
+      "content": "hi who is you"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello! I am a representative from Al-Shifa Clinic, here to assist you with booking appointments with Dr. Aisha Hameed. How can I help you today?"
+    },
+    {
+      "role": "user",
+      "content": "i have headache"
+    },
+    {
+      "role": "assistant",
+      "content": "I'm sorry to hear that you're experiencing a headache. It's important to determine the cause of your headache in order to provide the appropriate treatment. I can help you schedule an appointment with Dr. Aisha Hameed at Al-Shifa Clinic. Would you like to book a consultation?"
+    }
+  ],
+  "summary": "The user is inquiring about the assistant's identity, who then introduces themselves as a representative from Al-Shifa Clinic, offering assistance in booking appointments with Dr. Aisha Hameed. The user mentions having a headache, to which the assistant expresses concern and offers to help schedule a consultation with Dr. Aisha Hameed at the clinic.",
+  "complaint_type": "timing complaint"
+}
