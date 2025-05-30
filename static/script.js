@@ -7,7 +7,7 @@ const ENDPOINT = {
 };
 
 let sessionId = null;
-const btn = document.getElementById("sessionBtn");
+const btn     = document.getElementById("sessionBtn");
 const sendBtn = document.getElementById("sendBtn");
 
 function addMessage(sender, content) {
@@ -33,6 +33,8 @@ btn.addEventListener("click", async () => {
     sendBtn.disabled = false;
   } else if (data.ended) {
     addMessage("system", `Session ended (${data.status})`);
+    // Clear chatbox on session end:
+    document.getElementById("chat-box").innerHTML = "";
     sessionId = null;
     btn.textContent = "Start Session";
     sendBtn.disabled = true;
@@ -40,9 +42,7 @@ btn.addEventListener("click", async () => {
 });
 
 async function uploadFiles() {
-  if (!sessionId) return alert("Start a session first.");
   const fd = new FormData();
-  fd.append("session_id", sessionId);
   const pf = document.getElementById("promptFile").files[0];
   const kf = document.getElementById("knowledgeFile").files[0];
   if (pf) fd.append("promptFile", pf);
