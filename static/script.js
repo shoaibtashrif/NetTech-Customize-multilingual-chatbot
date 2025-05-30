@@ -20,12 +20,19 @@ function addMessage(sender, content) {
 }
 
 btn.addEventListener("click", async () => {
+  // Show loading state
+  btn.disabled = true;
+  sendBtn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = sessionId ? "Ending session..." : "Starting session...";
+
   const resp = await fetch(ENDPOINT.TOGGLE, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ session_id: sessionId })
   });
   const data = await resp.json();
+
   if (data.started) {
     sessionId = data.session_id;
     addMessage("system", `Session started: ${sessionId}`);
@@ -33,12 +40,13 @@ btn.addEventListener("click", async () => {
     sendBtn.disabled = false;
   } else if (data.ended) {
     addMessage("system", `Session ended (${data.status})`);
-    // Clear chatbox on session end:
     document.getElementById("chat-box").innerHTML = "";
     sessionId = null;
     btn.textContent = "Start Session";
-    sendBtn.disabled = true;
   }
+
+  // Restore state
+  btn.disabled = false;
 });
 
 async function uploadFiles() {
