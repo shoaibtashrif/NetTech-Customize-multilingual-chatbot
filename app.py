@@ -13,7 +13,7 @@ import openai
 
 # ─── Setup ─────────────────────────────────────────────────────────────
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = os.getenv("OPENAI_API_KEY", "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")
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 CORS(app)
@@ -76,6 +76,12 @@ def ai_detect_types(chat):
 @app.route("/")
 def home():
     return render_template("index.html")
+
+
+@app.route("/client")
+def client_chat():
+    # Render a client‐only chat interface (no upload or overrides)
+    return render_template("client.html")
 
 @app.route("/upload", methods=["POST"])
 def upload_override():
