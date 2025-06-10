@@ -13,8 +13,8 @@ import openai
 
 # ─── Setup ─────────────────────────────────────────────────────────────
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
+openai.api_key = os.getenv("OPENAI_API_KEY1", "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")
+print(f"KEY PRINTED : {openai.api_key}")
 app = Flask(__name__, template_folder="templates", static_folder="static")
 CORS(app)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -59,17 +59,53 @@ def ai_detect_types(chat):
       model="gpt-3.5-turbo",
       messages=[
         {"role":"system","content":(
-           "Classify each complaint into any of these types: "
-           "money complaints, ingredients related, eligibility, districts, other. "
-           "Return a JSON array of all types mentioned."
+           "Analyze this conversation and return a JSON object with two arrays: "
+           "'complaints' (for any complaints mentioned) and 'info_requests' (for information requests). "
+           "Categorize each item into one of these categories: 'money', 'district', 'eligibility', 'ingredients', or 'other'. "
+           "Example format: {'complaints': ['other', 'money'], 'info_requests': ['other', 'district']}"
         )},
         {"role":"user","content":"\n".join(f"{m['role']}: {m['content']}" for m in chat)}
       ]
     )
     try:
-        return json.loads(resp.choices[0].message.content)
+        result = json.loads(resp.choices[0].message.content)
+        
+        # Process complaints
+        processed_complaints = []
+        for item in result.get("complaints", []):
+            lower_item = item.lower()
+            if 'money' in lower_item or 'payment' in lower_item or 'fund' in lower_item:
+                processed_complaints.append("money")
+            elif 'district' in lower_item:
+                processed_complaints.append("district")
+            elif 'eligibility' in lower_item or 'eligible' in lower_item or 'qualification' in lower_item:
+                processed_complaints.append("eligibility")
+            elif 'ingredient' in lower_item or 'material' in lower_item:
+                processed_complaints.append("ingredients")
+            else:
+                processed_complaints.append("other")
+        
+        # Process info_requests
+        processed_info_requests = []
+        for item in result.get("info_requests", []):
+            lower_item = item.lower()
+            if 'money' in lower_item or 'payment' in lower_item or 'fund' in lower_item:
+                processed_info_requests.append("money")
+            elif 'district' in lower_item:
+                processed_info_requests.append("district")
+            elif 'eligibility' in lower_item or 'eligible' in lower_item or 'qualification' in lower_item:
+                processed_info_requests.append("eligibility")
+            elif 'ingredient' in lower_item or 'material' in lower_item:
+                processed_info_requests.append("ingredients")
+            else:
+                processed_info_requests.append("other")
+        
+        return {
+            "complaints": processed_complaints,
+            "info_requests": processed_info_requests
+        }
     except:
-        return [t.strip() for t in resp.choices[0].message.content.split(",")]
+        return {"complaints": ["other"], "info_requests": ["other"]}
 
 # ─── Routes ───────────────────────────────────────────────────────────
 
@@ -80,12 +116,10 @@ def home():
 
 @app.route("/client")
 def client_chat():
-    # Render a client‐only chat interface (no upload or overrides)
     return render_template("client.html")
 
 @app.route("/upload", methods=["POST"])
 def upload_override():
-    # Admin endpoint: override the system prompt & knowledge globally
     global global_prompt, global_knowledge
     if "promptFile" in request.files:
         global_prompt = extract_text(request.files["promptFile"])
@@ -101,29 +135,31 @@ def start_toggle():
     sid  = data.get("session_id")
     logging.info(f"Toggle session called with session_id={sid}")
 
-    # Start new session
     if not sid or sid not in histories:
         sid = str(uuid.uuid4())
         histories[sid] = []
         last_active[sid] = datetime.now()
         return jsonify({"started":True, "session_id":sid})
 
-    # End existing session
     chat = histories.pop(sid, [])
     last_active.pop(sid, None)
 
-    # AI analysis
     summary  = ai_summarize(chat)
     types    = ai_detect_types(chat)
     duration = str(len(chat))
 
     payload = {
       "tdatetime": now_str(),
-      "summary":   summary,
-      "duration":  duration,
-      "types":     json.dumps({"types": types}, ensure_ascii=False),
-      "chat":      json.dumps(chat, ensure_ascii=False)
+      "session_id": sid,  # Added session_id to payload
+      "summary": summary,
+      "duration": duration,
+      "types": json.dumps({
+          "complaints": types.get("complaints", []),
+          "info_requests": types.get("info_requests", [])
+      }, ensure_ascii=False),
+      "chat": json.dumps(chat, ensure_ascii=False)
     }
+    
     logging.info(f"Posting transcript payload: {payload}")
     try:
         res = requests.post(
