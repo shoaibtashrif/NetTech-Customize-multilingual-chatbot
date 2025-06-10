@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urdu Chatbot (Client)</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .chat-container {
+            width: 90%;
+            max-width: 500px;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            border-radius: 15px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header-container {
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-container h1 {
+            font-size: 18px;
+        }
+
+        #sessionBtn {
+            padding: 8px 16px;
+            background-color: white;
+            color: #007bff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        #sessionBtn:hover {
+            background-color: #e0e0e0;
+        }
+
+        #chat-box {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chat-box::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #chat-box::-webkit-scrollbar-thumb {
+            background-color: #bbb;
+            border-radius: 5px;
+        }
+
+        .user-message, .bot-message {
+            margin: 8px 0;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: 75%;
+            word-wrap: break-word;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+
+        .user-message {
+            background-color: #007bff;
+            color: white;
+            align-self: flex-end;
+            animation: fadeInRight 0.3s ease;
+        }
+
+        .bot-message {
+            background-color: #e9ecef;
+            color: #333;
+            align-self: flex-start;
+            animation: fadeInLeft 0.3s ease;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .input-container {
+            display: flex;
+            border-top: 1px solid #ddd;
+            padding: 10px 15px;
+            background-color: white;
+            align-items: center;
+        }
+
+        #user-input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            padding: 10px 15px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        #user-input:focus {
+            border-color: #007bff;
+        }
+
+        button.send-btn {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        button.send-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Header with Session Button -->
+        <div class="header-container">
+            <h1>Urdu Chatbot (Client)</h1>
+            <button id="sessionBtn">Start Session</button>
+        </div>
+
+        <!-- Chat Messages Area -->
+        <div id="chat-box">
+            <!-- Messages will be dynamically added here -->
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Type your message..." />
+            <button class="send-btn" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const ENDPOINT = {
+            TOGGLE: "/start_toggle",
+            CHAT:   "/chat"
+        };
+
+        let sessionId = null;
+        const btn     = document.getElementById("sessionBtn");
+
+        function addMessage(sender, content) {
+            const chatBox = document.getElementById("chat-box");
+            const msg     = document.createElement("div");
+            msg.className = sender === "user" ? "user-message" : "bot-message";
+            msg.textContent = content;
+            chatBox.appendChild(msg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        btn.addEventListener("click", async () => {
+            btn.disabled = true;
+            const originalText = btn.textContent;
+            btn.textContent = sessionId ? "Ending session..." : "Starting session...";
+
+            const resp = await fetch(ENDPOINT.TOGGLE, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ session_id: sessionId })
+            });
+            const data = await resp.json();
+
+            if (data.started) {
+                sessionId = data.session_id;
+                addMessage("bot", `Session started: ${sessionId}`);
+                btn.textContent = "End Session";
+            } else if (data.ended) {
+                addMessage("bot", `Session ended (${data.status})`);
+                document.getElementById("chat-box").innerHTML = "";
+                sessionId = null;
+                btn.textContent = "Start Session";
+            }
+
+            btn.disabled = false;
+        });
+
+        async function sendMessage() {
+            const input = document.getElementById("user-input");
+            const text  = input.value.trim();
+            if (!text) return;
+            if (!sessionId) {
+                addMessage("bot", "Please start a session first.");
+                return;
+            }
+            addMessage("user", text);
+            input.value = "";
+
+            try {
+                const resp = await fetch(ENDPOINT.CHAT, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ prompt: text, session_id: sessionId })
+                });
+                const data = await resp.json();
+                addMessage("bot", data.response || "No response.");
+            } catch {
+                addMessage("bot", "Error: Unable to connect. Please try again.");
+            }
+        }
+
+        // Send on Enter key
+        document.getElementById("user-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

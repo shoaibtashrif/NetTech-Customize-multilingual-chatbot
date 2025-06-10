@@ -77,6 +77,12 @@ def ai_detect_types(chat):
 def home():
     return render_template("index.html")
 
+
+@app.route("/client")
+def client_chat():
+    # Render a client‐only chat interface (no upload or overrides)
+    return render_template("client.html")
+
 @app.route("/upload", methods=["POST"])
 def upload_override():
     # Admin endpoint: override the system prompt & knowledge globally
