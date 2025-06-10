@@ -13,7 +13,7 @@ import openai
 
 # ─── Setup ─────────────────────────────────────────────────────────────
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY1", "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")
+openai.api_key = os.getenv("OPENAI_API_KEY1")
 print(f"KEY PRINTED : {openai.api_key}")
 app = Flask(__name__, template_folder="templates", static_folder="static")
 CORS(app)
