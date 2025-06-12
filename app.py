@@ -54,7 +54,15 @@ def load_prompt(sid=None):
     return "Default system prompt."
 
 def load_knowledge(sid=None):
-    return global_knowledge or ""
+    if global_knowledge:
+        return global_knowledge
+    if os.path.exists("custom_knowledge.txt"):
+        try:
+            return codecs.open("custom_knowledge.txt", "r", "utf8").read()
+        except Exception as e:
+            logging.error(f"Error loading knowledge base: {str(e)}")
+            return ""
+    return "KNowledge base not found. pls upload knowledge base."
 
 def ai_summarize(chat):
     resp = openai.ChatCompletion.create(
@@ -71,18 +79,31 @@ def ai_detect_types(chat):
       model="gpt-3.5-turbo",
       messages=[
         {"role":"system","content":(
-           "Analyze this conversation and return a JSON object with two arrays: "
-           "'complaints' and 'info_requests'. Categorize each into: "
-           "'money', 'district', 'eligibility', 'ingredients', or 'other'."
+           "Analyze this conversation and return a JSON object with: "
+           "'complaints' array (categorized as 'money', 'district', 'eligibility', or 'other'). "
+           "If there are any complaints, ignore all information requests and just return the complaint types. "
+           "Only if there are no complaints, return information requests as 'other'."
         )},
         {"role":"user","content":"\n".join(f"{m['role']}: {m['content']}" for m in chat)}
-      ]
+      ],
+      temperature=0.3  # Makes responses more focused
     )
+    
     try:
         result = json.loads(resp.choices[0].message.content)
-        return result
+        
+        # Prioritize complaints - return them if they exist
+        if 'complaints' in result and result['complaints']:
+            return {
+                'types': [c for c in result['complaints'] 
+                         if c in ['money', 'district', 'eligibility'] or 'other']
+            }
+        
+        # Fallback to info requests if no complaints
+        return {'types': ['other']}
+        
     except:
-        return {"complaints": ["other"], "info_requests": ["other"]}
+        return {'types': ['other']}  # Safe default
 
 # ─── Admin endpoints ───────────────────────────────────────────────────
 @app.route("/upload", methods=["POST"])
