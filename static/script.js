@@ -1,9 +1,11 @@
+// static/script.js
 console.log("script.js loaded");
 
 const ENDPOINT = {
   TOGGLE: "/start_toggle",
   UPLOAD: "/upload",
-  CHAT:   "/chat"
+  CHAT:   "/chat",
+  SETMDL: "/set_model"
 };
 
 let sessionId = null;
@@ -20,11 +22,9 @@ function addMessage(sender, content) {
 }
 
 btn.addEventListener("click", async () => {
-  // Show loading state
-  btn.disabled = true;
+  btn.disabled     = true;
   sendBtn.disabled = true;
-  const originalText = btn.textContent;
-  btn.textContent = sessionId ? "Ending session..." : "Starting session...";
+  btn.textContent  = sessionId ? "Ending session..." : "Starting session...";
 
   const resp = await fetch(ENDPOINT.TOGGLE, {
     method: "POST",
@@ -37,7 +37,7 @@ btn.addEventListener("click", async () => {
     sessionId = data.session_id;
     addMessage("system", `Session started: ${sessionId}`);
     btn.textContent = "End Session";
-    sendBtn.disabled = false;
+    sendBtn.disabled= false;
   } else if (data.ended) {
     addMessage("system", `Session ended (${data.status})`);
     document.getElementById("chat-box").innerHTML = "";
@@ -45,7 +45,6 @@ btn.addEventListener("click", async () => {
     btn.textContent = "Start Session";
   }
 
-  // Restore state
   btn.disabled = false;
 });
 
@@ -60,6 +59,21 @@ async function uploadFiles() {
   alert(data.status);
 }
 
+async function applyModel() {
+  const m = document.getElementById("model-picker").value;
+  const resp = await fetch(ENDPOINT.SETMDL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ model: m })
+  });
+  const data = await resp.json();
+  if (data.status === "ok") {
+    alert("Model switched to: " + data.model);
+  } else {
+    alert("Error: " + data.message);
+  }
+}
+
 async function sendMessage() {
   const input = document.getElementById("user-input");
   const text  = input.value.trim();
@@ -70,6 +84,7 @@ async function sendMessage() {
   }
   addMessage("user", text);
   input.value = "";
+
   const resp = await fetch(ENDPOINT.CHAT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
