@@ -1,84 +1,83 @@
-کلینک کا نام: الشفاء کلینک  
-ڈاکٹر: ڈاکٹر عائشہ حامد  
-خصوصی مہارت: جنرل پریکٹیشنر، بچوں کے امراض، خواتین کی صحت، بزرگوں کے مسائل  
+## 1. BISP Nashonuma Programme
 
-کلینک کا پتہ: گلی نمبر 5، مین بازار، فیصل ٹاؤن، لاہور  
-فون نمبر: 042-1234567  
-کلینک کا وقت:  
-- پیر تا جمعہ: صبح 9 بجے سے شام 5 بجے تک  
-- ہفتہ: صبح 10 بجے سے دوپہر 2 بجے تک  
-- اتوار: چھٹی  
+The Benazir Income Support Programme (BISP) is implementing its flagship Conditional Cash Transfer–based Stunting Prevention Programme “Nashonuma” to break the intergenerational cycle of malnutrition in the poorest households. Launched in August 2020 in 14 districts (and ICT), and scaled up nationwide in December 2022, it targets pregnant & lactating women and children under two, delivering a comprehensive package of nutrition and health interventions through “Facilitation Centres” embedded at tehsil/taluka/district health facilities .
 
-خدمات:  
-1. جنرل چیک اپ  
-2. بچوں کی ویکسینیشن  
-3. خواتین کے صحت کے مسائل  
-4. بلڈ پریشر اور شوگر کا علاج  
-5. بزرگوں کی صحت کے مشورے  
+---
 
+## 2. Adolescent Health and Nutrition in Pakistan
 
-فیسیس:  
-- جنرل چیک اپ: 1000 روپے  
-- اسپیشل کنسلٹیشن: 1500 روپے  
-- لیب ٹیسٹ: 500 سے 2000 روپے  
+* **Demographics & Context**
+  Pakistan has \~42 million adolescents. Despite a demographic dividend, poverty, low female education, limited water/sanitation, and gender norms hinder adolescent health.&#x20;
+* **Reproductive Health**
+  Median age at first birth remains 22 years. 8 % of girls 13–19 have begun childbearing (15 % among those without education), and 39 % of first births occur in this age group. Contraceptive prevalence is just 7 % for married adolescents (13–19 years). Adolescent fertility (44 / 1 000) is among the highest globally, and maternal mortality for 13–19 year‐olds is 194 / 100 000 live births vs. 166 / 100 000 national average .
+* **Nutrition Status**
+  Malnutrition is the third leading cause of DALYs among adolescents. 11.8 % of girls are underweight; 11.4 % are overweight. Over half (56.6 %) of adolescent girls are anemic, with higher rates among those from poorer or less‐educated families.&#x20;
+* **Barriers**
+  Cultural norms limit girls’ autonomy, control over food, and use of health services; mothers often make nutrition decisions.&#x20;
 
-مریضوں کے لیے ہدایات:  
-- وقت پر پہنچیں تاکہ انتظار نہ کرنا پڑے۔  
-- پہلے سے اپائنٹمنٹ بک کروائیں۔  
-- اپنے پرانے میڈیکل رپورٹس اور نسخے ساتھ لائیں۔  
-- ماسک پہن کر آئیں اور سماجی فاصلے کا خیال رکھیں۔  
+---
 
-اپائنٹمنٹ بک کروانے کا طریقہ:  
-- فون نمبر 042-1234567 پر کال کریں۔  
-- کلینک کے واٹس ایپ نمبر پر پیغام بھیجیں۔  
-- ویب سائٹ پر فارم بھر کر بکنگ کریں۔  
+## 3. Current Interventions on Adolescent Girls
 
+There are few pilot nutrition interventions—no large‐scale programmes. Pilots focus on micronutrient deficiencies, including:
 
-کلینک کی اضافی خدمات:
-ای سی جی (ECG): دل کی جانچ کے لیے جدید مشینری۔
-الٹراساونڈ: جدید مشینوں کے ساتھ تفصیلی سکیننگ۔
-ماہانہ میڈیکل کیمپ: مفت مشورے اور جانچ۔
-ڈائیٹ کنسلٹیشن: وزن کم کرنے اور صحت مند زندگی کے لیے مشورے۔
-ادویات کی فراہمی: مریضوں کو کلینک میں ہی ادویات دستیاب۔
-ایمرجنسی سروسز: ابتدائی طبی امداد کی سہولت۔
+* Screening malnourished girls for anemia
+* School-based WASH and menstrual hygiene management
+* Biannual deworming and distribution of iron & folic acid or multi-micronutrient supplements
+* Preconception care integrated into adolescent outreach
 
+These pilots have been linked to improved school performance, energy levels and reproductive outcomes. Multi-micronutrient trials in Sindh will inform future policy .
 
-ڈاکٹرز کی ٹیم:
-ڈاکٹر عائشہ حامد (جنرل پریکٹیشنر)
-ڈاکٹر حسن رضا (ماہر امراضِ قلب)
-ڈاکٹر فاطمہ خان (ماہر امراضِ نسواں)
-ڈاکٹر زین علی (ماہر امراضِ ا
+---
 
+## 4. Primary Objectives
 
-کلینک کی جدید سہولیات:
-ایئر کنڈیشنڈ انتظارگاہ
-بچوں کے لیے کھیلنے کا علاقہ
-مفت وائی فائی سہولت
-معذور افراد کے لیے الگ راستہ اور سہولیات
+* Contribute to reduction of anemia among adolescent girls in BISP Kafalat households&#x20;
 
+---
 
-علاقے میں شہرت:
-الشفاء کلینک فیصل ٹاؤن میں اپنی اعلیٰ معیار کی خدمات اور ماہر ڈاکٹروں کی ٹیم کے لیے مشہور ہے۔ مریضوں کا کہنا ہے کہ یہاں پر دی جانے والی توجہ اور علاج دوسری جگہوں سے کہیں بہتر ہے۔
+## 5. Secondary Objectives
 
+* Provide weekly iron-folic acid supplementation to 100 000 adolescent girls (13–19 years) in 6 targeted districts
+* Engage adolescent girls as agents of change to influence household and community nutrition behaviors&#x20;
 
-نئی خدمات کا اعلان:
-آن لائن کنسلٹیشن: مریض اب ویڈیو کال کے ذریعے ڈاکٹر عائشہ حامد سے مشورہ لے سکتے ہیں۔
-ہوم سیمپل کلیکشن: خون یا دیگر ٹیسٹ کے لیے سیمپل لینے کی ہوم سروس۔
-میڈیکل ریکارڈ ڈیجیٹلائزیشن: مریضوں کا ریکارڈ اب ڈیجیٹل فارم میں محفوظ کیا جا رہا ہے۔
+---
 
+## 6. Process Flow
 
+1. **Facilitation Centre Setup**
+   Each district/tehsil hospital hosts a centre staffed and trained per BNP protocols.
+2. **Enrollment & Registration**
+   – Verify beneficiary via mother’s CNIC (synced with NSER/NADRA); adolescent’s B-form required.
+   – Issue registration booklet; record family composition and enter data into the application.
+3. **Anthropometry**
+   Measure height & weight; record in booklet and system.
+4. **Awareness Session**
+   Interactive group counselling for girls and mothers on healthy diets, IFA importance, hygiene and health-seeking.
+5. **Supplement Provision & Cash Transfer**
+   – Administer first IFA tablet under staff supervision.
+   – On compliance verification, disburse Rs 2 000 per quarter via BISP payment, guiding use for daughter’s nutrition.
+6. **Follow-up & Peer Support**
+   – Monthly visits by social mobilizers/LHWs for adherence data.
+   – LHWs counsel families; peer groups reinforce messaging in community.
+7. **Supply Chain Management**
+   WFP stores IFA at district warehouses and distributes to centres; stock registers maintained.
+8. **Graduation/Exit**
+   Continues until final quarter or age 19, with compliance as graduation criterion .
 
-عام سوالات:
-کیا کلینک پر واک ان مریضوں کو قبول کیا جاتا ہے؟
-جی ہاں، لیکن اپائنٹمنٹ والے مریضوں کو ترجیح دی جاتی ہے۔
-ادائیگی کے طریقے کون سے ہیں؟
-نقد رقم، کارڈ، اور ایزی پیسہ کے ذریعے ادائیگی ممکن ہے۔
-اگر اپائنٹمنٹ کینسل کرنی ہو تو کیا کریں؟
-کم از کم 24 گھنٹے پہلے فون کر کے اطلاع دیں۔
+---
 
+## 7. Supplementation Protocols
 
-فیسوں کی مزید تفصیل:
-خون کے ٹیسٹ: 800 روپے
-ایکسرے: 1500 روپے
-دل کے ٹیسٹ (ای سی جی): 2000 روپے
+* **Awareness & First Dose**
+  Combined with the first quarter awareness session.
+* **Dosage**
+  – Iron: 60 mg elemental
+  – Folic acid: 2 800 μg (2.8 mg)
+* **Schedule**
+  – Once-weekly for 3 months, then continued weekly (36 weeks in Year 1; 52 weeks/year thereafter per July 29 2024 update).
+* **Missed Doses**
+  Take the missed tablet next day; if not feasible, resume on the following week’s scheduled day.
+* **Side Effects & Guidance**
+  Participants refer concerns to a doctor; protocols and calendar pasted in the registration card for self-recording .
 

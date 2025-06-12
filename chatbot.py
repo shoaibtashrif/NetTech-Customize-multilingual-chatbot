@@ -12,7 +12,7 @@ import codecs
 
 # ─── Setup & Logging ─────────────────────────────────────────
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = os.getenv("OPENAI_API_KEYY")
 
 app = Flask(
     __name__,

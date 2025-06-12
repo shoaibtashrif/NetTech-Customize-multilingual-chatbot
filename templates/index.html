@@ -1,3 +1,4 @@
+<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,6 +24,16 @@
         </div>
       </div>
       <button onclick="uploadFiles()">Upload Overrides</button>
+    </section>
+
+    <!-- Admin Model Selector -->
+    <section class="admin-model-section">
+      <h3>Admin: Select Model Backend</h3>
+      <select id="model-picker">
+        <option value="openai" selected>OpenAI GPT-3.5</option>
+        <option value="huggingface">Hugging Face</option>
+      </select>
+      <button onclick="applyModel()">Apply Model</button>
     </section>
 
     <!-- Chat Section -->

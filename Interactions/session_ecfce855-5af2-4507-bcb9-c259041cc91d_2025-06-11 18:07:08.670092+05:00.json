@@ -1,0 +1,8 @@
+{
+  "tdatetime": "2025-06-11 18:07:04.984167+05:00",
+  "sessionid": "ecfce855-5af2-4507-bcb9-c259041cc91d",
+  "summary": "آپ کا کہنا ہے کہ آپ کو پیسے نہیں ملے، میں یہاں ہوں کہ مدد کر سکوں۔ آپ کی کوئی بھی فکر ہے جیسے کا میڈیکل پوائنٹمینٹ یا کوئی اور سوال، تو آپ یہاں پوچھ سکتے ہیں اور میں آپ کی مدد کرنے میں خوشی محسوس کروں گا۔ اگر آپ کے پیسے سے متعلق کوئی مسئلہ ہے تو میں کلینک کے بلنگ ڈیپارٹمنٹ سے رابطہ کرنے کی تجویز کروں گا۔ وہ آپ کو کسی بھی مالی معاملے میں مزید مدد فراہم کرسکتے ہیں۔",
+  "duration": "2",
+  "types": "{\"complaints\": [\"money\"], \"info_requests\": []}",
+  "chat": "[{\"role\": \"user\", \"content\": \"i did not get money\"}, {\"role\": \"assistant\", \"content\": \"I'm sorry to hear that you did not receive money. As a representative of Al-Shifa Clinic, I can help you with appointments and medical-related queries. If you have any concerns about payments or refunds, please contact the clinic's billing department directly at [billing department contact information]. They will be able to assist you further with any financial matters. If you have any medical concerns or need to schedule an appointment, feel free to ask, and I'll be happy to help.\"}]"
+}

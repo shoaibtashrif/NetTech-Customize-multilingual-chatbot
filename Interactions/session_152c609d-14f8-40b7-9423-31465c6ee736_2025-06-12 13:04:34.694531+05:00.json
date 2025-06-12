@@ -1,0 +1,8 @@
+{
+  "tdatetime": "2025-06-12 13:04:31.207065+05:00",
+  "sessionid": "152c609d-14f8-40b7-9423-31465c6ee736",
+  "summary": "\nمکالمے کا خلاصہ: صارف نے معاف کی ہے اور پوچھا کہ کون سے شہراہل ہیں، تو معاون نے بتایا کہ وہ میٹا کمپنی کے مصنوعات میں فیس بک، انسٹاگرام، اور واٹس ایپ شامل ہیں۔ جب صارف نے ان کا کردار پوچھا تو معاون نے بتایا کہ وہ ایک کرترم ہوشیاری نمونہ ہیں جسے \"لاما\" کہا جاتا ہے اور \"لارج لینگویج ماڈل میٹا اے آئی\" کا مطلب ہوتا ہے۔",
+  "duration": "6",
+  "types": "{\"complaints\": [], \"info_requests\": [{\"category\": \"eligibility\"}, {\"category\": \"other\"}]}",
+  "chat": "[{\"role\": \"user\", \"content\": \"hi\"}, {\"role\": \"assistant\", \"content\": \"Hi! It's nice to meet you. Is there something I can help you with or would you like to chat?\"}, {\"role\": \"user\", \"content\": \"kon kon sy city eligibale hain?\"}, {\"role\": \"assistant\", \"content\": \"Meta, woh company jisne mujhe banaya, uske products include karte hai Facebook, Instagram, aur WhatsApp, saath meh aur bhi products aur services.\"}, {\"role\": \"user\", \"content\": \"apka role kia h?\"}, {\"role\": \"assistant\", \"content\": \"Main ek kritrim buddhimatta model hoon jise Llama kehte hain. Llama ka matlab hai \\\"Large Language Model Meta AI\\\".\"}]"
+}
