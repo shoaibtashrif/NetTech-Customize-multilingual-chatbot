@@ -1,4 +1,5 @@
 interactions/
+Interactions/
 venv/
 .env
 __pycache__/
