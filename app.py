@@ -38,6 +38,7 @@ global_knowledge = None
 # ─── In‐Memory Stores ──────────────────────────────────────────────────
 histories   = {}   # sid → list of {role,content}
 last_active = {}   # sid → datetime
+session_types = {} # sid → 'complaint' or 'info'
 
 # ─── Helpers ───────────────────────────────────────────────────────────
 def now_str():
@@ -80,28 +81,25 @@ def ai_detect_types(chat):
       messages=[
         {"role":"system","content":(
            "Analyze this conversation and return a JSON object with: "
-           "'complaints' array (categorized as 'money', 'district', 'eligibility', or 'other'). "
+           "'complaints' array (categorized as 'money', 'district', 'eligibility', 'ingredients', or 'other'). "
            "If there are any complaints, ignore all information requests and just return the complaint types. "
            "Only if there are no complaints, return information requests as 'other'."
         )},
         {"role":"user","content":"\n".join(f"{m['role']}: {m['content']}" for m in chat)}
       ],
-      temperature=0.3  # Makes responses more focused
+      temperature=0.3
     )
-    
     try:
         result = json.loads(resp.choices[0].message.content)
-        
+        valid_types = ['money', 'district', 'eligibility', 'ingredients', 'other']
         # Prioritize complaints - return them if they exist
         if 'complaints' in result and result['complaints']:
-            return {
-                'types': [c for c in result['complaints'] 
-                         if c in ['money', 'district', 'eligibility'] or 'other']
-            }
-        
+            types = [c if c in valid_types else 'other' for c in result['complaints']]
+            if not types:
+                types = ['other']
+            return {'types': types}
         # Fallback to info requests if no complaints
         return {'types': ['other']}
-        
     except:
         return {'types': ['other']}  # Safe default
 
@@ -153,7 +151,17 @@ def start_toggle():
     chat     = histories.pop(sid, [])
     last_active.pop(sid, None)
     summary  = ai_summarize(chat)
-    types    = ai_detect_types(chat)
+    # Determine session type
+    stype = session_types.get(sid, "info")
+    if stype == "complaint":
+        types = ai_detect_types(chat)
+        complaints = types.get("types", ["other"])
+        if not complaints:
+            complaints = ["other"]
+        info_requests = []
+    else:
+        complaints = []
+        info_requests = ["info"]
     duration = str(len(chat))
 
     payload = {
@@ -162,8 +170,8 @@ def start_toggle():
       "summary":   summary,
       "duration":  duration,
       "types":     json.dumps({
-                       "complaints":    types.get("complaints", []),
-                       "info_requests": types.get("info_requests", [])
+                       "complaints":    complaints,
+                       "info_requests": info_requests
                    }, ensure_ascii=False),
       "chat":      json.dumps(chat, ensure_ascii=False)
     }
@@ -193,37 +201,68 @@ def chat():
     data   = request.get_json() or {}
     sid    = data.get("session_id")
     prompt = data.get("prompt", "")
+    session_type = data.get("session_type")
     if sid not in histories:
         return jsonify(response="Please start a session first."), 400
 
+    # Store session type if provided and not already set
+    if session_type and sid not in session_types:
+        session_types[sid] = session_type
+
+    # Default to info if not set (for backward compatibility)
+    stype = session_types.get(sid, "info")
+
     histories[sid].append({"role":"user","content":prompt})
 
+    # Always load the full knowledge base
+    try:
+        with open("custom_knowledge.txt", "r", encoding="utf8") as f:
+            full_knowledge = f.read()
+    except Exception as e:
+        full_knowledge = ""
+
+    if stype == "complaint":
+        # Extract complaint type
+        complaint_types = ai_detect_types(histories[sid]).get("types", ["other"])
+        if not complaint_types:
+            complaint_types = ["other"]
+        # POST complaint type to backend endpoint
+        payload = {
+            "session_id": sid,
+            "complaint_types": complaint_types,
+            "message": prompt
+        }
+        try:
+            res = requests.post(
+                "https://urdubot.nettechltd.com/api/complaints",
+                json=payload, timeout=10
+            )
+            res.raise_for_status()
+        except Exception as e:
+            logging.error(f"Complaint POST failed: {e}")
+        # Do not reply to complaint
+        return jsonify(response=None)
+
+    # Info session: proceed as normal
     if current_model == "huggingface":
         groq_url     = "https://api.groq.com/openai/v1/chat/completions"
         headers      = {
             "Content-Type":  "application/json",
             "Authorization": f"Bearer {GROQ_API_KEY}"
         }
-
-        # 1) Load your system prompt and knowledge
         system_p  = load_prompt(sid)
-        knowledge = load_knowledge(sid)
-
-        # 2) Build the messages array
+        knowledge = full_knowledge
         msgs = [{"role": "system", "content": system_p}]
         if knowledge:
             msgs.append({"role": "system", "content": knowledge})
         msgs.append({"role": "user",   "content": prompt})
-
         payload = {
             "model": "gemma2-9b-it",
             "messages": msgs
         }
-
         logging.info(f"Groq request → URL: {groq_url}, model: {HF_MODEL_ID}")
         groq_resp = requests.post(groq_url, headers=headers, json=payload, timeout=30)
         logging.info(f"Groq response status: {groq_resp.status_code}")
-
         try:
             groq_resp.raise_for_status()
             data  = groq_resp.json()
@@ -231,19 +270,94 @@ def chat():
         except requests.exceptions.HTTPError:
             code  = groq_resp.status_code
             reply = f"[Groq error {code}] {groq_resp.text}"
-
     else:
         system_p = load_prompt()
-        context  = [{"role":"system","content":system_p}] + histories[sid][-20:]
+        # Always include full knowledge base as a system message
+        context  = [
+            {"role":"system","content":system_p},
+            {"role":"system","content":full_knowledge}
+        ] + histories[sid][-20:]
         oa_resp  = openai.ChatCompletion.create(
                      model="gpt-3.5-turbo",
                      messages=context,
                      temperature=0.4
                    )
         reply    = oa_resp.choices[0].message.content
-
     histories[sid].append({"role":"assistant","content":reply})
-    return jsonify(response=reply)
+
+    # 2. Get relevant knowledge base excerpt
+    kb_excerpt = ""
+    if full_knowledge.strip():
+        try:
+            kb_prompt = (
+                "Given the following knowledge base and user question, extract the most relevant section or paragraph from the knowledge base that answers or relates to the user's question. "
+                "Return only the relevant excerpt, not the whole knowledge base."
+            )
+            kb_resp = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": kb_prompt},
+                    {"role": "user", "content": f"Knowledge Base:\n{full_knowledge}\nUser Question: {prompt}"}
+                ],
+                temperature=0.2
+            )
+            kb_excerpt = kb_resp.choices[0].message.content.strip()
+        except Exception as e:
+            logging.error(f"Knowledge base excerpt error: {e}")
+            kb_excerpt = ""
+
+    return jsonify(response=reply, kb_excerpt=kb_excerpt)
+
+@app.route("/suggestions", methods=["POST"])
+def suggestions():
+    data = request.get_json() or {}
+    user_input = data.get("input", "")
+    # Load knowledge base
+    try:
+        with open("custom_knowledge.txt", "r", encoding="utf8") as f:
+            knowledge = f.read()
+    except Exception as e:
+        knowledge = ""
+    # Use OpenAI to generate 2-3 related questions based on the input and knowledge
+    if not user_input.strip():
+        system_prompt = (
+            "Given the following knowledge base, suggest 2-3 common questions or issues a user might ask. "
+            "Return ONLY a plain English list of questions, no code, no JSON, no brackets."
+        )
+        user_content = knowledge
+    else:
+        system_prompt = (
+            "Given the following knowledge base and user input, suggest 2-3 related, common questions or issues that might be relevant. "
+            "Return ONLY a plain English list of questions, no code, no JSON, no brackets."
+        )
+        user_content = f"Knowledge Base:\n{knowledge}\nUser Input: {user_input}"
+    try:
+        resp = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_content}
+            ],
+            temperature=0.5
+        )
+        # Parse as plain text lines
+        text = resp.choices[0].message.content.strip()
+        suggestions = [line.strip('-* 1234567890.') for line in text.split('\n') if line.strip()][:3]
+        if not suggestions:
+            suggestions = [
+                "What is the purpose of the BISP Nashonuma program?",
+                "Who is eligible for the program?",
+                "How can I receive cash transfers?"
+            ]
+        return jsonify({"suggestions": suggestions[:3]})
+    except Exception as e:
+        logging.error(f"Suggestion generation failed: {e}")
+        # Always return some default suggestions in English
+        return jsonify({"suggestions": [
+            "What is the purpose of the BISP Nashonuma program?",
+            "Who is eligible for the program?",
+            "How can I receive cash transfers?"
+        ]})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
