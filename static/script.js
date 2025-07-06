@@ -66,6 +66,9 @@ btn.addEventListener("click", async () => {
 
   if (data.started) {
     sessionId = data.session_id;
+    // Reset session type for new session
+    sessionType = null;
+    hasAskedSessionType = false;
     addMessage("system", `Session started: ${sessionId}`);
     btn.textContent = "End Session";
     sendBtn.disabled= false;
@@ -73,6 +76,9 @@ btn.addEventListener("click", async () => {
     addMessage("system", `Session ended (${data.status})`);
     document.getElementById("chat-box").innerHTML = "";
     sessionId = null;
+    // Reset session type when session ends
+    sessionType = null;
+    hasAskedSessionType = false;
     btn.textContent = "Start Session";
   }
 
@@ -331,8 +337,8 @@ async function sendMessage() {
     addMessage("bot","Please start a session first.");
     return;
   }
-  // Always ask for session type on first input
-  if (!sessionType) {
+  // Always ask for session type on first message of each session
+  if (!sessionType || !hasAskedSessionType) {
     showSessionTypeModal(() => sendMessage());
     return;
   }
