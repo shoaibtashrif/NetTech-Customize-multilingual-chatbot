@@ -10,6 +10,8 @@ from dotenv import load_dotenv
 import codecs
 import openai
 from zoneinfo import ZoneInfo
+import re
+import pprint
 
 # ─── Setup ─────────────────────────────────────────────────────────────
 load_dotenv(override=True)
@@ -39,6 +41,7 @@ global_knowledge = None
 histories   = {}   # sid → list of {role,content}
 last_active = {}   # sid → datetime
 session_types = {} # sid → 'complaint' or 'info'
+session_type_history = {} # sid → set of types used in session
 
 # ─── Helpers ───────────────────────────────────────────────────────────
 def now_str():
@@ -67,41 +70,90 @@ def load_knowledge(sid=None):
 
 def ai_summarize(chat):
     resp = openai.ChatCompletion.create(
-      model="gpt-3.5-turbo",
+      model="gpt-4-turbo",
       messages=[
-        {"role":"system","content":"Summarize this conversation in Urdu."},
+        {"role":"system","content":"Summarize this conversation in English."},
         {"role":"user","content":"\n".join(f"{m['role']}: {m['content']}" for m in chat)}
       ]
     )
     return resp.choices[0].message.content
 
-def ai_detect_types(chat):
+def ai_detect_types(chat, session_types_map=None):
+    # Improved prompt for dual categorization with session type awareness and money priority
+    system_prompt = (
+        "Analyze the following conversation. Each user message is labeled as either (complaint) or (info). "
+        "For each, categorize it as one or more of: 'money', 'eligibility', 'district', 'ingredients', or 'other'. "
+        "If a message is about money (e.g., uses words like 'pasy', 'paise', 'money', 'amount', 'rupees'), always include 'money' as the first category. "
+        "If a message fits multiple categories, include all that apply, but always put 'money' first if present. "
+        "Every user message labeled as (complaint) must be categorized into at least one of the five categories. Never leave the complaints array empty if there is a complaint message. "
+        "Return a JSON object with two arrays: 'complaints' and 'info', each listing the categories (no duplicates). "
+        "Example: {\"complaints\": [\"money\"], \"info\": [\"money\", \"district\"]} "
+        "Example: user (complaint): pasy nahi mile → complaints: ['money']"
+    )
+    # Build chat with session type labels
+    lines = []
+    if session_types_map is None:
+        session_types_map = {}
+    complaint_indices = []
+    for idx, m in enumerate(chat):
+        role = m.get('role')
+        content = m.get('content', '')
+        if role == 'user':
+            stype = session_types_map.get(idx, 'info')
+            lines.append(f"user ({stype}): {content}")
+            if stype == 'complaint':
+                complaint_indices.append(idx)
+        else:
+            lines.append(f"{role}: {content}")
+    logging.info("[ai_detect_types] session_types_map: %s", pprint.pformat(session_types_map))
+    logging.info("[ai_detect_types] lines sent to model:\n%s", '\n'.join(lines))
     resp = openai.ChatCompletion.create(
-      model="gpt-3.5-turbo",
+      model="gpt-4-turbo",
       messages=[
-        {"role":"system","content":(
-           "Analyze this conversation and return a JSON object with: "
-           "'complaints' array (categorized as 'money', 'district', 'eligibility', 'ingredients', or 'other'). "
-           "If there are any complaints, ignore all information requests and just return the complaint types. "
-           "Only if there are no complaints, return information requests as 'other'."
-        )},
-        {"role":"user","content":"\n".join(f"{m['role']}: {m['content']}" for m in chat)}
+        {"role":"system","content": system_prompt},
+        {"role":"user","content":"\n".join(lines)}
       ],
       temperature=0.3
     )
     try:
-        result = json.loads(resp.choices[0].message.content)
-        valid_types = ['money', 'district', 'eligibility', 'ingredients', 'other']
-        # Prioritize complaints - return them if they exist
-        if 'complaints' in result and result['complaints']:
-            types = [c if c in valid_types else 'other' for c in result['complaints']]
-            if not types:
-                types = ['other']
-            return {'types': types}
-        # Fallback to info requests if no complaints
-        return {'types': ['other']}
-    except:
-        return {'types': ['other']}  # Safe default
+        raw_response = resp.choices[0].message.content
+        logging.info("[ai_detect_types] model raw response: %s", raw_response)
+        result = json.loads(raw_response)
+        allowed = ['money', 'eligibility', 'district', 'ingredients', 'other']
+        def dedup_and_order(lst):
+            seen = set()
+            ordered = []
+            if 'money' in lst:
+                ordered.append('money')
+                seen.add('money')
+            for i in lst:
+                if i not in seen and i in allowed:
+                    ordered.append(i)
+                    seen.add(i)
+            return ordered
+        complaints = dedup_and_order(result.get('complaints', []))
+        info = dedup_and_order(result.get('info', []))
+        # Fallback: if there is a complaint message but complaints is empty, assign ['money'] if money keywords, else ['other']
+        if not complaints and complaint_indices:
+            logging.warning("[ai_detect_types] Fallback: complaints empty but complaint_indices present")
+            money_keywords = ['pasy', 'paise', 'money', 'amount', 'rupees']
+            for idx in complaint_indices:
+                content = chat[idx].get('content', '').lower()
+                if any(word in content for word in money_keywords):
+                    complaints = ['money']
+                    logging.warning("[ai_detect_types] Fallback: assigned ['money'] to complaints due to money keyword")
+                    break
+            if not complaints:
+                complaints = ['other']
+                logging.warning("[ai_detect_types] Fallback: assigned ['other'] to complaints")
+        logging.info("[ai_detect_types] FINAL complaints: %s, info: %s", complaints, info)
+        return {'complaints': complaints, 'info': info}
+    except Exception as e:
+        logging.error("[ai_detect_types] Exception: %s", str(e))
+        # Safe fallback: if there is user input, set info to ['other']
+        if chat and any(m.get('role') == 'user' and m.get('content','').strip() for m in chat):
+            return {'complaints': [], 'info': ['other']}
+        return {'complaints': [], 'info': []}
 
 # ─── Admin endpoints ───────────────────────────────────────────────────
 @app.route("/upload", methods=["POST"])
@@ -146,22 +198,35 @@ def start_toggle():
         sid = str(uuid.uuid4())
         histories[sid] = []
         last_active[sid] = datetime.now()
+        session_type_history[sid] = set()
         return jsonify({"started":True, "session_id":sid})
 
     chat     = histories.pop(sid, [])
     last_active.pop(sid, None)
     summary  = ai_summarize(chat)
-    # Determine session type
-    stype = session_types.get(sid, "info")
-    if stype == "complaint":
-        types = ai_detect_types(chat)
-        complaints = types.get("types", ["other"])
-        if not complaints:
-            complaints = ["other"]
-        info_requests = []
-    else:
-        complaints = []
-        info_requests = ["info"]
+    # Build session_types_map for ai_detect_types using stored session_type per message
+    session_types_map = {}
+    for idx, m in enumerate(chat):
+        if m.get('role') == 'user':
+            session_types_map[idx] = m.get('session_type', 'info')
+    # Categorize both complaints and info
+    detected_types = ai_detect_types(chat, session_types_map)
+    complaints = detected_types.get("complaints", [])
+    info = detected_types.get("info", [])
+    # Fallback: if both are empty and there is user input, set info to ['other']
+    if not complaints and not info and chat:
+        # Check if there is any user input in chat
+        if any(m.get('role') == 'user' and m.get('content','').strip() for m in chat):
+            info = ['other']
+    # Always use only allowed categories
+    allowed = ['money', 'eligibility', 'district', 'ingredients', 'other']
+    complaints = [c if c in allowed else 'other' for c in complaints]
+    info = [i if i in allowed else 'other' for i in info]
+    # Prioritize 'money' if present
+    if 'money' in complaints:
+        complaints = ['money'] + [c for c in complaints if c != 'money']
+    if 'money' in info:
+        info = ['money'] + [i for i in info if i != 'money']
     duration = str(len(chat))
 
     payload = {
@@ -171,7 +236,7 @@ def start_toggle():
       "duration":  duration,
       "types":     json.dumps({
                        "complaints":    complaints,
-                       "info_requests": info_requests
+                       "info": info
                    }, ensure_ascii=False),
       "chat":      json.dumps(chat, ensure_ascii=False)
     }
@@ -193,6 +258,8 @@ def start_toggle():
             json.dump(payload, f, ensure_ascii=False, indent=2)
         status = "saved_locally"
 
+    session_type_history.pop(sid, None)
+    session_types.pop(sid, None)
     return jsonify({"ended":True, "status":status})
 
 # ─── Chat route ────────────────────────────────────────────────────────
@@ -206,13 +273,17 @@ def chat():
         return jsonify(response="Please start a session first."), 400
 
     # Store session type if provided and not already set
-    if session_type and sid not in session_types:
+    if session_type:
         session_types[sid] = session_type
+        if sid not in session_type_history:
+            session_type_history[sid] = set()
+        session_type_history[sid].add(session_type)
 
     # Default to info if not set (for backward compatibility)
     stype = session_types.get(sid, "info")
 
-    histories[sid].append({"role":"user","content":prompt})
+    # Store the session_type with each user message
+    histories[sid].append({"role":"user","content":prompt, "session_type": session_type or stype})
 
     # Always load the full knowledge base
     try:
@@ -221,15 +292,33 @@ def chat():
     except Exception as e:
         full_knowledge = ""
 
+    # Build session_types_map for ai_detect_types using stored session_type per message
+    session_types_map = {}
+    for idx, m in enumerate(histories[sid]):
+        if m.get('role') == 'user':
+            session_types_map[idx] = m.get('session_type', 'info')
+    # Categorize both complaints and info
+    detected_types = ai_detect_types(histories[sid], session_types_map)
+    complaints = detected_types.get("complaints", [])
+    info = detected_types.get("info", [])
+    # Fallback: if both are empty and there is user input, set info to ['other']
+    if not complaints and not info and prompt.strip():
+        info = ['other']
+    # Always use only allowed categories
+    allowed = ['money', 'eligibility', 'district', 'ingredients', 'other']
+    complaints = [c if c in allowed else 'other' for c in complaints]
+    info = [i if i in allowed else 'other' for i in info]
+    # Prioritize 'money' if present
+    if 'money' in complaints:
+        complaints = ['money'] + [c for c in complaints if c != 'money']
+    if 'money' in info:
+        info = ['money'] + [i for i in info if i != 'money']
+
     if stype == "complaint":
-        # Extract complaint type
-        complaint_types = ai_detect_types(histories[sid]).get("types", ["other"])
-        if not complaint_types:
-            complaint_types = ["other"]
         # POST complaint type to backend endpoint
         payload = {
             "session_id": sid,
-            "complaint_types": complaint_types,
+            "complaint_types": complaints,
             "message": prompt
         }
         try:
@@ -244,15 +333,22 @@ def chat():
         return jsonify(response=None)
 
     # Info session: proceed as normal
+    # System prompt for language, direct answers, and knowledge base focus
+    system_p = (
+        "You are an assistant for the BISP Nashonuma program. Always answer user questions using the provided knowledge base. "
+        "If the answer is not clear, politely ask the user for clarification. Never refuse to help or say you cannot answer. Always relate your answer to the knowledge base content. "
+        "Detect the language of the user's input (English, Urdu, or Roman Urdu) and always reply in the same language. Always answer directly and do not ask counter-questions."
+    )
     if current_model == "huggingface":
         groq_url     = "https://api.groq.com/openai/v1/chat/completions"
         headers      = {
             "Content-Type":  "application/json",
             "Authorization": f"Bearer {GROQ_API_KEY}"
         }
-        system_p  = load_prompt(sid)
         knowledge = full_knowledge
-        msgs = [{"role": "system", "content": system_p}]
+        msgs = [
+            {"role": "system", "content": system_p}
+        ]
         if knowledge:
             msgs.append({"role": "system", "content": knowledge})
         msgs.append({"role": "user",   "content": prompt})
@@ -271,14 +367,13 @@ def chat():
             code  = groq_resp.status_code
             reply = f"[Groq error {code}] {groq_resp.text}"
     else:
-        system_p = load_prompt()
         # Always include full knowledge base as a system message
         context  = [
             {"role":"system","content":system_p},
             {"role":"system","content":full_knowledge}
         ] + histories[sid][-20:]
         oa_resp  = openai.ChatCompletion.create(
-                     model="gpt-3.5-turbo",
+                     model="gpt-4-turbo",
                      messages=context,
                      temperature=0.4
                    )
@@ -294,7 +389,7 @@ def chat():
                 "Return only the relevant excerpt, not the whole knowledge base."
             )
             kb_resp = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+                model="gpt-4-turbo",
                 messages=[
                     {"role": "system", "content": kb_prompt},
                     {"role": "user", "content": f"Knowledge Base:\n{full_knowledge}\nUser Question: {prompt}"}
@@ -333,7 +428,7 @@ def suggestions():
         user_content = f"Knowledge Base:\n{knowledge}\nUser Input: {user_input}"
     try:
         resp = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4-turbo",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_content}

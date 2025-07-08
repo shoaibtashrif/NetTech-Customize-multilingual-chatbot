@@ -355,6 +355,7 @@ async function sendMessage() {
     addBotMessageWithDetails(data.response || "No response.", data.kb_excerpt);
     fetchSuggestions(text);
   } else {
+    // Complaint mode: do not show any bot message
     fetchSuggestions(text);
   }
 }
