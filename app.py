@@ -43,9 +43,13 @@ last_active = {}   # sid → datetime
 session_types = {} # sid → 'complaint' or 'info'
 session_type_history = {} # sid → set of types used in session
 
+RECENT_LOGS = []
+MAX_LOGS = 100
+
 # ─── Helpers ───────────────────────────────────────────────────────────
 def now_str():
-    return datetime.now(ZoneInfo("Asia/Karachi")).isoformat(sep=" ")
+    # Return only date and time, no microseconds, no timezone offset
+    return datetime.now(ZoneInfo("Asia/Karachi")).strftime("%Y-%m-%d %H:%M:%S")
 
 def extract_text(f):
     return f.read().decode("utf-8", errors="ignore")
@@ -78,6 +82,20 @@ def ai_summarize(chat):
     )
     return resp.choices[0].message.content
 
+def log_to_ui(msg, level='info'):
+    global RECENT_LOGS
+    RECENT_LOGS.append(msg)
+    if len(RECENT_LOGS) > MAX_LOGS:
+        RECENT_LOGS = RECENT_LOGS[-MAX_LOGS:]
+    if level == 'info':
+        logging.info(msg)
+    elif level == 'warning':
+        logging.warning(msg)
+    elif level == 'error':
+        logging.error(msg)
+    else:
+        logging.info(msg)
+
 def ai_detect_types(chat, session_types_map=None):
     # Improved prompt for dual categorization with session type awareness and money priority
     system_prompt = (
@@ -105,8 +123,8 @@ def ai_detect_types(chat, session_types_map=None):
                 complaint_indices.append(idx)
         else:
             lines.append(f"{role}: {content}")
-    logging.info("[ai_detect_types] session_types_map: %s", pprint.pformat(session_types_map))
-    logging.info("[ai_detect_types] lines sent to model:\n%s", '\n'.join(lines))
+    log_to_ui(f"[ai_detect_types] session_types_map: {pprint.pformat(session_types_map)}")
+    log_to_ui(f"[ai_detect_types] lines sent to model:\n" + '\n'.join(lines))
     resp = openai.ChatCompletion.create(
       model="gpt-4-turbo",
       messages=[
@@ -117,7 +135,7 @@ def ai_detect_types(chat, session_types_map=None):
     )
     try:
         raw_response = resp.choices[0].message.content
-        logging.info("[ai_detect_types] model raw response: %s", raw_response)
+        log_to_ui(f"[ai_detect_types] model raw response: {raw_response}")
         result = json.loads(raw_response)
         allowed = ['money', 'eligibility', 'district', 'ingredients', 'other']
         def dedup_and_order(lst):
@@ -135,21 +153,21 @@ def ai_detect_types(chat, session_types_map=None):
         info = dedup_and_order(result.get('info', []))
         # Fallback: if there is a complaint message but complaints is empty, assign ['money'] if money keywords, else ['other']
         if not complaints and complaint_indices:
-            logging.warning("[ai_detect_types] Fallback: complaints empty but complaint_indices present")
+            log_to_ui("[ai_detect_types] Fallback: complaints empty but complaint_indices present", level='warning')
             money_keywords = ['pasy', 'paise', 'money', 'amount', 'rupees']
             for idx in complaint_indices:
                 content = chat[idx].get('content', '').lower()
                 if any(word in content for word in money_keywords):
                     complaints = ['money']
-                    logging.warning("[ai_detect_types] Fallback: assigned ['money'] to complaints due to money keyword")
+                    log_to_ui("[ai_detect_types] Fallback: assigned ['money'] to complaints due to money keyword", level='warning')
                     break
             if not complaints:
                 complaints = ['other']
-                logging.warning("[ai_detect_types] Fallback: assigned ['other'] to complaints")
-        logging.info("[ai_detect_types] FINAL complaints: %s, info: %s", complaints, info)
+                log_to_ui("[ai_detect_types] Fallback: assigned ['other'] to complaints", level='warning')
+        log_to_ui(f"[ai_detect_types] FINAL complaints: {complaints}, info: {info}")
         return {'complaints': complaints, 'info': info}
     except Exception as e:
-        logging.error("[ai_detect_types] Exception: %s", str(e))
+        log_to_ui(f"[ai_detect_types] Exception: {str(e)}", level='error')
         # Safe fallback: if there is user input, set info to ['other']
         if chat and any(m.get('role') == 'user' and m.get('content','').strip() for m in chat):
             return {'complaints': [], 'info': ['other']}
@@ -453,6 +471,10 @@ def suggestions():
             "Who is eligible for the program?",
             "How can I receive cash transfers?"
         ]})
+
+@app.route('/logs', methods=['GET'])
+def get_logs():
+    return jsonify({'logs': RECENT_LOGS[-MAX_LOGS:]})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

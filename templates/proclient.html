@@ -3,14 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urdu Chatbot (Client)</title>
+    <title>Urdu Chatbot (ProClient)</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -21,7 +16,6 @@
             align-items: center;
             padding: 20px;
         }
-
         .chat-container {
             width: 100%;
             max-width: 650px;
@@ -38,7 +32,6 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
         }
-
         .header-container {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
@@ -55,7 +48,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .header-container::before {
             content: '';
             position: absolute;
@@ -66,7 +58,6 @@
             background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
             pointer-events: none;
         }
-
         .header-container h1 {
             font-size: 22px;
             font-weight: 800;
@@ -74,7 +65,6 @@
             position: relative;
             z-index: 1;
         }
-
         #sessionBtn, #switchTypeBtn {
             background: rgba(255, 255, 255, 0.95);
             color: #667eea;
@@ -91,29 +81,22 @@
             z-index: 1;
             backdrop-filter: blur(10px);
         }
-
         #sessionBtn:hover, #switchTypeBtn:hover {
             background: rgba(255, 255, 255, 1);
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
-
         #switchTypeBtn.info {
             background: rgba(34, 197, 94, 0.1);
             color: #22c55e;
             border: 2px solid #22c55e;
         }
-
         #switchTypeBtn.complaint {
             background: rgba(239, 68, 68, 0.1);
             color: #ef4444;
             border: 2px solid #ef4444;
         }
-
-        #session-type-switch { 
-            display: none; 
-        }
-
+        #session-type-switch { display: none; }
         #chat-box {
             flex: 1;
             padding: 24px 20px 0 20px;
@@ -125,17 +108,14 @@
             scrollbar-width: thin;
             scrollbar-color: rgba(102, 126, 234, 0.3) transparent;
         }
-
         #chat-box::-webkit-scrollbar {
             width: 6px;
             background: transparent;
         }
-
         #chat-box::-webkit-scrollbar-thumb {
             background: rgba(102, 126, 234, 0.3);
             border-radius: 3px;
         }
-
         .user-message, .bot-message {
             margin: 0 0 8px 0;
             padding: 16px 20px;
@@ -149,18 +129,10 @@
             position: relative;
             animation: fadeInUp 0.4s ease;
         }
-
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
         .user-message {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
@@ -168,7 +140,6 @@
             border-bottom-right-radius: 8px;
             margin-left: auto;
         }
-
         .bot-message {
             background: #f8fafc;
             color: #1e293b;
@@ -176,7 +147,6 @@
             border-bottom-left-radius: 8px;
             border: 1px solid #e2e8f0;
         }
-
         #suggestions {
             display: flex;
             flex-direction: column;
@@ -190,7 +160,6 @@
             max-width: 85%;
             align-self: flex-end;
         }
-
         #suggestions button {
             padding: 12px 20px;
             border-radius: 18px;
@@ -208,14 +177,12 @@
             text-align: left;
             min-width: 200px;
         }
-
         #suggestions button:hover {
             background: #667eea;
             color: #fff;
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.25);
         }
-
         .input-container {
             display: flex;
             border-top: 1px solid #e2e8f0;
@@ -225,7 +192,6 @@
             gap: 12px;
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
         }
-
         #user-input {
             flex: 1;
             border: 2px solid #e2e8f0;
@@ -237,13 +203,11 @@
             transition: all 0.3s ease;
             font-family: inherit;
         }
-
         #user-input:focus {
             border-color: #667eea;
             background: #fff;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
-
         button.send-btn {
             padding: 14px 28px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -257,12 +221,10 @@
             transition: all 0.3s ease;
             font-family: inherit;
         }
-
         button.send-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
-
         #session-type-modal {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -273,7 +235,6 @@
             z-index: 9999;
             backdrop-filter: blur(8px);
         }
-
         #session-type-modal > div {
             background: #fff;
             padding: 32px 28px 28px 28px;
@@ -289,18 +250,10 @@
             justify-content: center;
             animation: modalFadeIn 0.3s ease;
         }
-
         @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9) translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            from { opacity: 0; transform: scale(0.9) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
-
         #session-type-modal .type-btn {
             margin: 0 12px;
             padding: 12px 32px;
@@ -312,31 +265,26 @@
             transition: all 0.3s ease;
             min-width: 120px;
         }
-
         #session-type-modal .type-btn.info {
             background: rgba(34, 197, 94, 0.1);
             color: #22c55e;
             border: 2px solid #22c55e;
         }
-
         #session-type-modal .type-btn.info:hover {
             background: #22c55e;
             color: #fff;
             transform: translateY(-2px);
         }
-
         #session-type-modal .type-btn.complaint {
             background: rgba(239, 68, 68, 0.1);
             color: #ef4444;
             border: 2px solid #ef4444;
         }
-
         #session-type-modal .type-btn.complaint:hover {
             background: #ef4444;
             color: #fff;
             transform: translateY(-2px);
         }
-
         #session-type-modal span {
             position: absolute;
             top: 12px;
@@ -346,128 +294,93 @@
             color: #94a3b8;
             transition: color 0.3s ease;
         }
-
         #session-type-modal span:hover {
             color: #64748b;
         }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            .chat-container {
-                height: 95vh;
-                max-height: none;
-                border-radius: 20px;
-            }
-            
-            .header-container {
-                padding: 20px 20px 16px 20px;
-                border-radius: 20px;
-            }
-            
-            .header-container h1 {
-                font-size: 18px;
-            }
-            
-            #sessionBtn, #switchTypeBtn {
-                padding: 8px 16px;
-                font-size: 13px;
-                margin-left: 6px;
-            }
-            
-            #chat-box {
-                padding: 20px 16px 0 16px;
-            }
-            
-            .user-message, .bot-message {
-                max-width: 90%;
-                font-size: 14px;
-                padding: 14px 18px;
-            }
-            
-            #suggestions {
-                max-width: 90%;
-            }
-            
-            #suggestions button {
-                padding: 10px 16px;
-                font-size: 13px;
-                min-width: 180px;
-            }
-            
-            .input-container {
-                padding: 16px 20px;
-            }
-            
-            #user-input {
-                padding: 12px 18px;
-                font-size: 14px;
-            }
-            
-            button.send-btn {
-                padding: 12px 24px;
-                font-size: 14px;
-            }
-            
-            #session-type-modal > div {
-                min-width: 260px;
-                padding: 28px 24px 24px 24px;
-            }
-            
-            #session-type-modal .type-btn {
-                padding: 10px 28px;
-                font-size: 15px;
-                min-width: 100px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .chat-container {
-                height: 100vh;
-                border-radius: 0;
-            }
-            
-            .header-container {
-                border-radius: 0;
-            }
-            
-            .user-message, .bot-message {
-                max-width: 95%;
-            }
-            
-            #suggestions {
-                max-width: 95%;
-            }
+        @media (max-width: 900px) {
+            body { padding: 4px; }
+            .chat-container { height: 95vh; max-height: none; border-radius: 20px; }
         }
     </style>
 </head>
-<body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-    <div class="chat-container">
-        <!-- Header with Session Button -->
-        <div class="header-container">
-            <h1>Urdu Chatbot</h1>
-            <div>
-                <button id="sessionBtn">Start Session</button>
+<body>
+    <div style="display: flex; flex-direction: row; gap: 24px; width: 100%; max-width: 1200px; justify-content: center; align-items: flex-start;">
+        <div style="display: flex; flex-direction: column; flex: 1;">
+            <button id="showLogsBtn" style="margin-bottom: 12px; align-self: flex-end; padding: 8px 18px; border-radius: 12px; background: #18181b; color: #a3e635; border: none; font-weight: 600; cursor: pointer;">Show Logs</button>
+            <div class="chat-container">
+                <div class="header-container">
+                    <h1>Urdu Chatbot</h1>
+                    <div>
+                        <button id="sessionBtn">Start Session</button>
+                    </div>
+                </div>
+                <div id="chat-box"></div>
+                <div id="session-type-switch"></div>
+                <div id="suggestions"></div>
+                <div class="input-container">
+                    <input type="text" id="user-input" placeholder="Type your message..." />
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
+                </div>
             </div>
         </div>
-        <!-- Chat Messages Area -->
-        <div id="chat-box">
-            <!-- Messages will be dynamically added here -->
-        </div>
-        <!-- Session Type Switch (always visible) -->
-        <div id="session-type-switch"><!-- Session type switch rendered here --></div>
-        <!-- Suggestions Area (always visible, just above input) -->
-        <div id="suggestions"><!-- Suggestions rendered here --></div>
-        <!-- Input Area -->
-        <div class="input-container">
-            <input type="text" id="user-input" placeholder="Type your message..." />
-            <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
+        <div id="log-box" style="flex: 1; min-width: 320px; max-width: 480px; height: 90vh; background: #18181b; color: #e5e7eb; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.18); overflow-y: auto; font-family: monospace; font-size: 14px; padding: 18px 16px; margin-top: 0; display: block;">
+            <div style="font-weight: bold; color: #a3e635; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                <span>Live Logs</span>
+                <button id="backToChatBtn" style="padding: 4px 14px; border-radius: 8px; background: #a3e635; color: #18181b; border: none; font-weight: 600; cursor: pointer; font-size: 13px;">Back to Chat</button>
+            </div>
+            <div id="log-entries"></div>
         </div>
     </div>
-    <!-- Load the real script.js with all features -->
     <script src="/static/script.js"></script>
+    <script>
+    function updateLogs() {
+        fetch('/logs').then(r => r.json()).then(data => {
+            const logDiv = document.getElementById('log-entries');
+            if (!logDiv) return;
+            logDiv.innerHTML = '';
+            (data.logs || []).forEach(line => {
+                const entry = document.createElement('div');
+                entry.textContent = line;
+                entry.style.marginBottom = '4px';
+                logDiv.appendChild(entry);
+            });
+            document.getElementById('log-box').scrollTop = document.getElementById('log-box').scrollHeight;
+        });
+    }
+    setInterval(updateLogs, 2000);
+    window.addEventListener('DOMContentLoaded', updateLogs);
+    document.addEventListener('DOMContentLoaded', function() {
+        const showLogsBtn = document.getElementById('showLogsBtn');
+        const logBox = document.getElementById('log-box');
+        const chatContainer = document.querySelector('.chat-container');
+        const backToChatBtn = document.getElementById('backToChatBtn');
+        showLogsBtn.addEventListener('click', function() {
+            logBox.style.display = 'block';
+            chatContainer.style.display = 'none';
+            showLogsBtn.style.display = 'none';
+        });
+        backToChatBtn.addEventListener('click', function() {
+            logBox.style.display = 'block';
+            chatContainer.style.display = 'flex';
+            showLogsBtn.style.display = 'inline-block';
+            if (window.innerWidth < 900) {
+                logBox.style.display = 'none';
+            }
+        });
+        function handleResize() {
+            if (window.innerWidth < 900) {
+                logBox.style.display = 'none';
+                chatContainer.style.display = 'flex';
+                showLogsBtn.style.display = 'inline-block';
+            } else {
+                logBox.style.display = 'block';
+                chatContainer.style.display = 'flex';
+                showLogsBtn.style.display = 'inline-block';
+            }
+        }
+        window.addEventListener('resize', handleResize);
+        handleResize();
+    });
+    </script>
 </body>
-</html>
+</html> 
