@@ -199,12 +199,13 @@ def upload_override():
             logging.error(f"Failed to save custom_knowledge.txt: {e}")
     return jsonify({"status":"override_uploaded"})
 
+# In /set_model, allow 'groq' as a valid model
 @app.route("/set_model", methods=["POST"])
 def set_model():
     global current_model
     data = request.get_json() or {}
     m = data.get("model")
-    if m not in ("openai", "huggingface"):
+    if m not in ("openai", "huggingface", "groq"):
         return jsonify(status="error", message="Invalid model"), 400
     current_model = m
     logging.info(f"Global model switched to: {current_model}")
@@ -294,7 +295,7 @@ def start_toggle():
     session_types.pop(sid, None)
     return jsonify({"ended":True, "status":status})
 
-# ─── Chat route ────────────────────────────────────────────────────────
+# In /chat, use Groq API if current_model == 'groq'
 @app.route("/chat", methods=["POST"])
 def chat():
     data   = request.get_json() or {}
@@ -389,6 +390,33 @@ def chat():
             "messages": msgs
         }
         logging.info(f"Groq request → URL: {groq_url}, model: {HF_MODEL_ID}")
+        groq_resp = requests.post(groq_url, headers=headers, json=payload, timeout=30)
+        logging.info(f"Groq response status: {groq_resp.status_code}")
+        try:
+            groq_resp.raise_for_status()
+            data  = groq_resp.json()
+            reply = data["choices"][0]["message"]["content"]
+        except requests.exceptions.HTTPError:
+            code  = groq_resp.status_code
+            reply = f"[Groq error {code}] {groq_resp.text}"
+    elif current_model == "groq":
+        groq_url     = "https://api.groq.com/openai/v1/chat/completions"
+        headers      = {
+            "Content-Type":  "application/json",
+            "Authorization": f"Bearer {GROQ_API_KEY}"
+        }
+        knowledge = full_knowledge
+        msgs = [
+            {"role": "system", "content": system_p}
+        ]
+        if knowledge:
+            msgs.append({"role": "system", "content": knowledge})
+        msgs.append({"role": "user",   "content": prompt})
+        payload = {
+            "model": "mixtral-8x7b-32768",
+            "messages": msgs
+        }
+        logging.info(f"Groq request → URL: {groq_url}, model: mixtral-8x7b-32768")
         groq_resp = requests.post(groq_url, headers=headers, json=payload, timeout=30)
         logging.info(f"Groq response status: {groq_resp.status_code}")
         try:
