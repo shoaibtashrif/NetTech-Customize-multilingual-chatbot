@@ -178,19 +178,34 @@ def ai_detect_types(chat, session_types_map=None):
 def upload_override():
     global global_prompt, global_knowledge
     if "promptFile" in request.files:
-        global_prompt = extract_text(request.files["promptFile"])
-        logging.info("Global prompt overridden.")
+        file = request.files["promptFile"]
+        text = extract_text(file)
+        global_prompt = text
+        try:
+            with open("system_prompt.txt", "w", encoding="utf8") as f:
+                f.write(text)
+            logging.info("Global prompt overridden and saved to system_prompt.txt.")
+        except Exception as e:
+            logging.error(f"Failed to save system_prompt.txt: {e}")
     if "knowledgeFile" in request.files:
-        global_knowledge = extract_text(request.files["knowledgeFile"])
-        logging.info("Global knowledge overridden.")
+        file = request.files["knowledgeFile"]
+        text = extract_text(file)
+        global_knowledge = text
+        try:
+            with open("custom_knowledge.txt", "w", encoding="utf8") as f:
+                f.write(text)
+            logging.info("Global knowledge overridden and saved to custom_knowledge.txt.")
+        except Exception as e:
+            logging.error(f"Failed to save custom_knowledge.txt: {e}")
     return jsonify({"status":"override_uploaded"})
 
+# In /set_model, allow 'groq' as a valid model
 @app.route("/set_model", methods=["POST"])
 def set_model():
     global current_model
     data = request.get_json() or {}
     m = data.get("model")
-    if m not in ("openai", "huggingface"):
+    if m not in ("openai", "huggingface", "groq"):
         return jsonify(status="error", message="Invalid model"), 400
     current_model = m
     logging.info(f"Global model switched to: {current_model}")
@@ -280,7 +295,7 @@ def start_toggle():
     session_types.pop(sid, None)
     return jsonify({"ended":True, "status":status})
 
-# ─── Chat route ────────────────────────────────────────────────────────
+# In /chat, use Groq API if current_model == 'groq'
 @app.route("/chat", methods=["POST"])
 def chat():
     data   = request.get_json() or {}
@@ -375,6 +390,33 @@ def chat():
             "messages": msgs
         }
         logging.info(f"Groq request → URL: {groq_url}, model: {HF_MODEL_ID}")
+        groq_resp = requests.post(groq_url, headers=headers, json=payload, timeout=30)
+        logging.info(f"Groq response status: {groq_resp.status_code}")
+        try:
+            groq_resp.raise_for_status()
+            data  = groq_resp.json()
+            reply = data["choices"][0]["message"]["content"]
+        except requests.exceptions.HTTPError:
+            code  = groq_resp.status_code
+            reply = f"[Groq error {code}] {groq_resp.text}"
+    elif current_model == "groq":
+        groq_url     = "https://api.groq.com/openai/v1/chat/completions"
+        headers      = {
+            "Content-Type":  "application/json",
+            "Authorization": f"Bearer {GROQ_API_KEY}"
+        }
+        knowledge = full_knowledge
+        msgs = [
+            {"role": "system", "content": system_p}
+        ]
+        if knowledge:
+            msgs.append({"role": "system", "content": knowledge})
+        msgs.append({"role": "user",   "content": prompt})
+        payload = {
+            "model": "mixtral-8x7b-32768",
+            "messages": msgs
+        }
+        logging.info(f"Groq request → URL: {groq_url}, model: mixtral-8x7b-32768")
         groq_resp = requests.post(groq_url, headers=headers, json=payload, timeout=30)
         logging.info(f"Groq response status: {groq_resp.status_code}")
         try:
