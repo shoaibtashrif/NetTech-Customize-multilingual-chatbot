@@ -9,7 +9,7 @@ The Benazir Income Support Programme (BISP) is implementing its flagship Conditi
 * **Demographics & Context**
   Pakistan has \~42 million adolescents. Despite a demographic dividend, poverty, low female education, limited water/sanitation, and gender norms hinder adolescent health.&#x20;
 * **Reproductive Health**
-  Median age at first birth remains 22 years. 8 % of girls 9–21 have begun childbearing (15 % among those without education), and 39 % of first births occur in this age group. Contraceptive prevalence is just 7 % for married adolescents (9–21 years). Adolescent fertility (44 / 1 000) is among the highest globally, and maternal mortality for 9–21 year‐olds is 194 / 100 000 live births vs. 166 / 100 000 national average .
+  Median age at first birth remains 22 years. 8 % of girls 13–19 have begun childbearing (15 % among those without education), and 39 % of first births occur in this age group. Contraceptive prevalence is just 7 % for married adolescents (13–19 years). Adolescent fertility (44 / 1 000) is among the highest globally, and maternal mortality for 13–19 year‐olds is 194 / 100 000 live births vs. 166 / 100 000 national average .
 * **Nutrition Status**
   Malnutrition is the third leading cause of DALYs among adolescents. 11.8 % of girls are underweight; 11.4 % are overweight. Over half (56.6 %) of adolescent girls are anemic, with higher rates among those from poorer or less‐educated families.&#x20;
 * **Barriers**
@@ -38,7 +38,7 @@ These pilots have been linked to improved school performance, energy levels and 
 
 ## 5. Secondary Objectives
 
-* Provide weekly iron-folic acid supplementation to 100 000 adolescent girls (9–21 years) in 6 targeted districts
+* Provide weekly iron-folic acid supplementation to 100 000 adolescent girls (13–19 years) in 6 targeted districts
 * Engage adolescent girls as agents of change to influence household and community nutrition behaviors&#x20;
 
 ---
@@ -63,7 +63,7 @@ These pilots have been linked to improved school performance, energy levels and 
 7. **Supply Chain Management**
    WFP stores IFA at district warehouses and distributes to centres; stock registers maintained.
 8. **Graduation/Exit**
-   Continues until final quarter or age 21, with compliance as graduation criterion .
+   Continues until final quarter or age 19, with compliance as graduation criterion .
 
 ---
 

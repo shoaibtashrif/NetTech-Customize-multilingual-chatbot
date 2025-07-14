@@ -1,0 +1,26 @@
+2025-07-04 22:34:39,250 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.153.67:5000
+2025-07-04 22:34:39,250 INFO [33mPress CTRL+C to quit[0m
+2025-07-04 22:34:42,841 INFO 127.0.0.1 - - [04/Jul/2025 22:34:42] "GET /client HTTP/1.1" 200 -
+2025-07-04 22:34:42,864 INFO 127.0.0.1 - - [04/Jul/2025 22:34:42] "GET /static/script.js HTTP/1.1" 200 -
+2025-07-04 22:34:42,873 INFO 127.0.0.1 - - [04/Jul/2025 22:34:42] "GET /quick_questions HTTP/1.1" 200 -
+2025-07-04 22:34:50,855 INFO 127.0.0.1 - - [04/Jul/2025 22:34:50] "POST /start_toggle HTTP/1.1" 200 -
+2025-07-04 22:34:50,874 INFO 127.0.0.1 - - [04/Jul/2025 22:34:50] "GET /quick_questions?session_id=c5403961-c0dd-4894-893c-d68cc722488c& HTTP/1.1" 200 -
+2025-07-04 22:34:56,627 INFO 127.0.0.1 - - [04/Jul/2025 22:34:56] "GET /quick_questions?session_id=c5403961-c0dd-4894-893c-d68cc722488c&type=info&lang=en&context=hlo& HTTP/1.1" 200 -
+2025-07-04 22:34:58,441 INFO 127.0.0.1 - - [04/Jul/2025 22:34:58] "POST /chat HTTP/1.1" 200 -
+2025-07-04 22:47:00,691 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.153.67:5000
+2025-07-04 22:47:00,691 INFO [33mPress CTRL+C to quit[0m
+2025-07-04 22:47:15,130 INFO 127.0.0.1 - - [04/Jul/2025 22:47:15] "GET /client HTTP/1.1" 200 -
+2025-07-04 22:47:30,633 INFO 127.0.0.1 - - [04/Jul/2025 22:47:30] "GET /client HTTP/1.1" 200 -
+2025-07-04 22:49:59,553 INFO [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.153.67:5000
+2025-07-04 22:49:59,553 INFO [33mPress CTRL+C to quit[0m
+2025-07-04 22:50:08,271 INFO 127.0.0.1 - - [04/Jul/2025 22:50:08] "GET /client HTTP/1.1" 200 -
+2025-07-04 22:50:19,059 INFO 127.0.0.1 - - [04/Jul/2025 22:50:19] "GET /client HTTP/1.1" 200 -
