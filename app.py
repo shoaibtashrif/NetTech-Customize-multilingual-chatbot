@@ -178,11 +178,25 @@ def ai_detect_types(chat, session_types_map=None):
 def upload_override():
     global global_prompt, global_knowledge
     if "promptFile" in request.files:
-        global_prompt = extract_text(request.files["promptFile"])
-        logging.info("Global prompt overridden.")
+        file = request.files["promptFile"]
+        text = extract_text(file)
+        global_prompt = text
+        try:
+            with open("system_prompt.txt", "w", encoding="utf8") as f:
+                f.write(text)
+            logging.info("Global prompt overridden and saved to system_prompt.txt.")
+        except Exception as e:
+            logging.error(f"Failed to save system_prompt.txt: {e}")
     if "knowledgeFile" in request.files:
-        global_knowledge = extract_text(request.files["knowledgeFile"])
-        logging.info("Global knowledge overridden.")
+        file = request.files["knowledgeFile"]
+        text = extract_text(file)
+        global_knowledge = text
+        try:
+            with open("custom_knowledge.txt", "w", encoding="utf8") as f:
+                f.write(text)
+            logging.info("Global knowledge overridden and saved to custom_knowledge.txt.")
+        except Exception as e:
+            logging.error(f"Failed to save custom_knowledge.txt: {e}")
     return jsonify({"status":"override_uploaded"})
 
 @app.route("/set_model", methods=["POST"])
