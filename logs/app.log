@@ -1,0 +1,221 @@
+2025-07-23 00:34:19,529 - BISP_Chatbot - INFO - Starting BISP Chatbot application
+2025-07-23 00:34:19,542 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.42.255.67:5000
+2025-07-23 00:34:19,542 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-23 00:34:25,675 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:25,679 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:25] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:25,785 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:25,790 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:25] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:27,775 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:27,777 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:27] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:28,300 - BISP_Chatbot - INFO - Incoming Request: GET /proclient
+2025-07-23 00:34:28,301 - BISP_Chatbot - INFO - Serving pro client page
+2025-07-23 00:34:28,321 - BISP_Chatbot - INFO - Outgoing Response: 200
+2025-07-23 00:34:28,323 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:28] "GET /proclient HTTP/1.1" 200 -
+2025-07-23 00:34:28,386 - BISP_Chatbot - INFO - Incoming Request: GET /static/script.js
+2025-07-23 00:34:28,402 - BISP_Chatbot - INFO - Outgoing Response: 304
+2025-07-23 00:34:28,403 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:28] "[36mGET /static/script.js HTTP/1.1[0m" 304 -
+2025-07-23 00:34:28,486 - BISP_Chatbot - INFO - Incoming Request: POST /suggestions
+2025-07-23 00:34:28,488 - BISP_Chatbot - DEBUG - Request JSON: {'input': ''}
+2025-07-23 00:34:28,490 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:28,491 - BISP_Chatbot - INFO - Generating suggestions for input: ...
+2025-07-23 00:34:28,494 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:28] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:28,494 - BISP_Chatbot - DEBUG - Predefined suggestions: ['Age requirement?', 'Registration criteria?', 'First visit process?']
+2025-07-23 00:34:28,496 - BISP_Chatbot - INFO - Final suggestions: ['Age requirement?', 'Registration criteria?', 'First visit process?']
+2025-07-23 00:34:28,497 - BISP_Chatbot - INFO - Outgoing Response: 200
+2025-07-23 00:34:28,497 - BISP_Chatbot - DEBUG - Response JSON: {'suggestions': ['Age requirement?', 'Registration criteria?', 'First visit process?']}
+2025-07-23 00:34:28,499 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:28] "POST /suggestions HTTP/1.1" 200 -
+2025-07-23 00:34:30,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:30,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:30] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:30,721 - BISP_Chatbot - INFO - Incoming Request: POST /start_toggle
+2025-07-23 00:34:30,722 - BISP_Chatbot - DEBUG - Request JSON: {'session_id': None}
+2025-07-23 00:34:30,722 - BISP_Chatbot - INFO - Toggle session called with session_id=None
+2025-07-23 00:34:30,723 - BISP_Chatbot - INFO - Started new session with ID: c34fdb7b-8006-4ddf-8648-5fa1efdd80c3
+2025-07-23 00:34:30,724 - BISP_Chatbot - INFO - Outgoing Response: 200
+2025-07-23 00:34:30,724 - BISP_Chatbot - DEBUG - Response JSON: {'session_id': 'c34fdb7b-8006-4ddf-8648-5fa1efdd80c3', 'started': True}
+2025-07-23 00:34:30,725 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:30] "POST /start_toggle HTTP/1.1" 200 -
+2025-07-23 00:34:32,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:32,482 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:32] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:34,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:34,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:34] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:34,939 - BISP_Chatbot - INFO - Incoming Request: POST /chat
+2025-07-23 00:34:34,940 - BISP_Chatbot - DEBUG - Request JSON: {'prompt': 'Age requirement?', 'session_id': 'c34fdb7b-8006-4ddf-8648-5fa1efdd80c3', 'session_type': 'info'}
+2025-07-23 00:34:34,940 - BISP_Chatbot - INFO - Chat request received for session: c34fdb7b-8006-4ddf-8648-5fa1efdd80c3
+2025-07-23 00:34:34,941 - BISP_Chatbot - INFO - Processing info type message: Age requirement?...
+2025-07-23 00:34:34,941 - BISP_Chatbot - DEBUG - Found direct match for question: age requirement
+2025-07-23 00:34:34,942 - BISP_Chatbot - INFO - Found matching question in knowledge base
+2025-07-23 00:34:34,942 - BISP_Chatbot - INFO - Outgoing Response: 200
+2025-07-23 00:34:34,943 - BISP_Chatbot - DEBUG - Response JSON: {'kb_excerpt': '', 'response': 'Age for this program is <hilight>13-19 years girls</hilight>'}
+2025-07-23 00:34:34,945 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:34] "POST /chat HTTP/1.1" 200 -
+2025-07-23 00:34:34,960 - BISP_Chatbot - INFO - Incoming Request: POST /suggestions
+2025-07-23 00:34:34,961 - BISP_Chatbot - DEBUG - Request JSON: {'input': 'Age requirement?'}
+2025-07-23 00:34:34,962 - BISP_Chatbot - INFO - Generating suggestions for input: age requirement?...
+2025-07-23 00:34:34,962 - BISP_Chatbot - DEBUG - Predefined suggestions: ['Age requirement?', 'District requirement?']
+2025-07-23 00:34:36,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:36,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:36] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:38,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:38,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:38] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:39,712 - BISP_Chatbot - DEBUG - AI generated suggestions: ['What is the age requirement for the BISP Nashonuma Programme?', 'What is the age group targeted in the adolescent health and nutrition interventions in Pakistan?', 'What is the age limit for the iron-folic acid supplementation program for adolescent girls in the targeted districts?']
+2025-07-23 00:34:39,712 - BISP_Chatbot - INFO - Final suggestions: ['Age requirement?', 'District requirement?', 'What is the age requirement for the BISP Nashonuma Programme?']
+2025-07-23 00:34:39,713 - BISP_Chatbot - INFO - Outgoing Response: 200
+2025-07-23 00:34:39,713 - BISP_Chatbot - DEBUG - Response JSON: {'suggestions': ['Age requirement?', 'District requirement?', 'What is the age requirement for the BISP Nashonuma Programme?']}
+2025-07-23 00:34:39,714 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:39] "POST /suggestions HTTP/1.1" 200 -
+2025-07-23 00:34:40,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:40,482 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:40] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:42,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:42,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:42] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:44,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:44,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:44] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:46,482 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:46,484 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:46] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:48,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:48,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:48] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:50,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:50,482 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:50] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:52,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:52,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:52] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:54,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:54,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:54] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:56,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:56,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:56] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:34:58,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:34:58,482 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:34:58] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:00,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:00,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:00] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:02,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:02,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:02] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:04,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:04,482 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:04] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:06,480 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:06,482 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:06] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:08,480 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:08,482 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:08] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:10,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:10,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:10] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:12,481 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:12,485 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:12] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:14,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:14,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:14] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:16,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:16,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:16] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:18,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:18,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:18] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:20,489 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:20,493 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:20] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:22,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:22,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:22] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:24,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:24,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:24] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:26,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:26,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:26] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:28,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:28,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:28] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:30,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:30,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:30] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:32,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:32,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:32] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:34,484 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:34,486 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:34] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:36,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:36,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:36] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:38,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:38,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:38] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:40,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:40,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:40] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:41,650 - BISP_Chatbot - INFO - Incoming Request: POST /chat
+2025-07-23 00:35:41,651 - BISP_Chatbot - DEBUG - Request JSON: {'prompt': 'District requirement?', 'session_id': 'c34fdb7b-8006-4ddf-8648-5fa1efdd80c3', 'session_type': 'complaint'}
+2025-07-23 00:35:41,651 - BISP_Chatbot - INFO - Chat request received for session: c34fdb7b-8006-4ddf-8648-5fa1efdd80c3
+2025-07-23 00:35:41,652 - BISP_Chatbot - INFO - Processing complaint type message: District requirement?...
+2025-07-23 00:35:41,652 - BISP_Chatbot - DEBUG - Found direct match for question: district requirement
+2025-07-23 00:35:41,652 - BISP_Chatbot - INFO - Found matching question in knowledge base
+2025-07-23 00:35:41,653 - BISP_Chatbot - INFO - Outgoing Response: 200
+2025-07-23 00:35:41,654 - BISP_Chatbot - DEBUG - Response JSON: {'kb_excerpt': '', 'response': 'Only these districts: <hilight>Neelam, Lasbela, Hub, Qambar Shahdadkot, Swat, Rajanpur, Jampur, Ghizer</hilight>'}
+2025-07-23 00:35:41,656 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:41] "POST /chat HTTP/1.1" 200 -
+2025-07-23 00:35:41,673 - BISP_Chatbot - INFO - Incoming Request: POST /suggestions
+2025-07-23 00:35:41,675 - BISP_Chatbot - DEBUG - Request JSON: {'input': 'District requirement?'}
+2025-07-23 00:35:41,676 - BISP_Chatbot - INFO - Generating suggestions for input: district requirement?...
+2025-07-23 00:35:41,676 - BISP_Chatbot - DEBUG - Predefined suggestions: ['Age requirement?', 'District requirement?']
+2025-07-23 00:35:42,484 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:42,487 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:42] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:44,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:44,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:44] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:46,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:46,482 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:46] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:47,087 - BISP_Chatbot - DEBUG - AI generated suggestions: ['What are the requirements for a district to be eligible for the BISP Nashonuma Programme?', 'How are districts selected for the implementation of the BISP Nashonuma Programme?', 'What role do district health facilities play in the BISP Nashonuma Programme?']
+2025-07-23 00:35:47,088 - BISP_Chatbot - INFO - Final suggestions: ['Age requirement?', 'District requirement?', 'What are the requirements for a district to be eligible for the BISP Nashonuma Programme?']
+2025-07-23 00:35:47,089 - BISP_Chatbot - INFO - Outgoing Response: 200
+2025-07-23 00:35:47,089 - BISP_Chatbot - DEBUG - Response JSON: {'suggestions': ['Age requirement?', 'District requirement?', 'What are the requirements for a district to be eligible for the BISP Nashonuma Programme?']}
+2025-07-23 00:35:47,090 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:47] "POST /suggestions HTTP/1.1" 200 -
+2025-07-23 00:35:48,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:48,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:48] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:50,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:50,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:50] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:52,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:52,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:52] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:54,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:54,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:54] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:56,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:56,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:56] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:35:58,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:35:58,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:35:58] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:00,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:00,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:00] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:02,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:02,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:02] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:04,224 - BISP_Chatbot - INFO - Incoming Request: POST /start_toggle
+2025-07-23 00:36:04,225 - BISP_Chatbot - DEBUG - Request JSON: {'session_id': 'c34fdb7b-8006-4ddf-8648-5fa1efdd80c3'}
+2025-07-23 00:36:04,225 - BISP_Chatbot - INFO - Toggle session called with session_id=c34fdb7b-8006-4ddf-8648-5fa1efdd80c3
+2025-07-23 00:36:04,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:04,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:04] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:06,481 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:06,483 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:06] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:07,259 - BISP_Chatbot - INFO - Ending session c34fdb7b-8006-4ddf-8648-5fa1efdd80c3 with 2 messages
+2025-07-23 00:36:07,259 - BISP_Chatbot - DEBUG - Detecting types for chat: ['assistant: Age for this program is <hilight>13-19 years girls</hilight>', 'assistant: Only these districts: <hilight>Neelam, Lasbela, Hub, Qambar Shahdadkot, Swat, Rajanpur, Jampur, Ghizer</hilight>']
+2025-07-23 00:36:08,480 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:08,482 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:08] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:09,434 - BISP_Chatbot - INFO - Detected message types - Complaints: [], Info: ['eligibility', 'district']
+2025-07-23 00:36:09,436 - BISP_Chatbot - INFO - Posting transcript payload for session c34fdb7b-8006-4ddf-8648-5fa1efdd80c3
+2025-07-23 00:36:10,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:10,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:10] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:11,096 - BISP_Chatbot - INFO - Transcript uploaded successfully: 200
+2025-07-23 00:36:11,098 - BISP_Chatbot - INFO - Outgoing Response: 200
+2025-07-23 00:36:11,098 - BISP_Chatbot - DEBUG - Response JSON: {'ended': True, 'status': 'uploaded'}
+2025-07-23 00:36:11,100 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:11] "POST /start_toggle HTTP/1.1" 200 -
+2025-07-23 00:36:12,480 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:12,483 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:12] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:14,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:14,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:14] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:16,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:16,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:16] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:18,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:18,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:18] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:20,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:20,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:20] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:22,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:22,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:22] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:24,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:24,482 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:24] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:26,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:26,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:26] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:28,482 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:28,485 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:28] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:30,508 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:30,516 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:30] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:32,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:32,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:32] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:34,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:34,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:34] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:36,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:36,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:36] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:38,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:38,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:38] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:40,479 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:40,482 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:40] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:42,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:42,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:42] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:44,481 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:44,485 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:44] "GET /logs HTTP/1.1" 200 -
+2025-07-23 00:36:46,478 - BISP_Chatbot - INFO - Fetching logs
+2025-07-23 00:36:46,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:46] "GET /logs HTTP/1.1" 200 -

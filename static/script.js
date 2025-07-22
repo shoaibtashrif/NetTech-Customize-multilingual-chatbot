@@ -427,3 +427,11 @@ function addBotMessageWithDetails(response, kbExcerpt) {
   chat.appendChild(msg);
   chat.scrollTop = chat.scrollHeight;
 }
+
+
+
+function formatResponse(text) {
+  // Convert hilight tags to spans
+  return text.replace(/<hilight>(.*?)<\/hilight>/g, 
+      '<span class="hilight">$1</span>');
+}
