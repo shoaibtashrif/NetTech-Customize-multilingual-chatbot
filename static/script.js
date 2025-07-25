@@ -15,11 +15,24 @@ let suggestionDebounce = null;
 const btn     = document.getElementById("sessionBtn");
 const sendBtn = document.getElementById("sendBtn");
 
+// Function to convert markdown to HTML
+function markdownToHtml(text) {
+  // Convert **text** to <strong>text</strong>
+  return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
+
 function addMessage(sender, content) {
   const chat = document.getElementById("chat-box");
   const msg  = document.createElement("div");
   msg.className = sender === "user" ? "message user-message" : sender === "bot" ? "message bot-message" : "message system-message";
-  msg.textContent = content;
+  
+  // Use innerHTML to render markdown formatting
+  if (sender === "bot") {
+    msg.innerHTML = markdownToHtml(content);
+  } else {
+    msg.textContent = content;
+  }
+  
   // Side-by-side alignment
   msg.style.display = 'inline-block';
   msg.style.maxWidth = '70%';
@@ -380,7 +393,7 @@ function addBotMessageWithDetails(response, kbExcerpt) {
 
   // Main response text
   const mainText = document.createElement('div');
-  mainText.textContent = response;
+  mainText.innerHTML = markdownToHtml(response);
   msg.appendChild(mainText);
 
   if (kbExcerpt && kbExcerpt.length > 10) {

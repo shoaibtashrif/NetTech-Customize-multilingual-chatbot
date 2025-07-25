@@ -1,6 +1,6 @@
 ## 1. BISP Nashonuma Programme
 
-The Benazir Income Support Programme (BISP) is implementing its flagship Conditional Cash Transfer–based Stunting Prevention Programme “Nashonuma” to break the intergenerational cycle of malnutrition in the poorest households. Launched in August 2020 in 14 districts (and ICT), and scaled up nationwide in December 2022, it targets pregnant & lactating women and children under two, delivering a comprehensive package of nutrition and health interventions through “Facilitation Centres” embedded at tehsil/taluka/district health facilities .
+The Benazir Income Support Programme (BISP) is implementing its flagship Conditional Cash Transfer–based Stunting Prevention Programme "Nashonuma" to break the intergenerational cycle of malnutrition in the poorest households. Launched in August 2020 in 14 districts (and ICT), and scaled up nationwide in December 2022, it targets pregnant & lactating women and children under two, delivering a comprehensive package of nutrition and health interventions through "Facilitation Centres" embedded at tehsil/taluka/district health facilities .
 
 ---
 
@@ -13,7 +13,7 @@ The Benazir Income Support Programme (BISP) is implementing its flagship Conditi
 * **Nutrition Status**
   Malnutrition is the third leading cause of DALYs among adolescents. 11.8 % of girls are underweight; 11.4 % are overweight. Over half (56.6 %) of adolescent girls are anemic, with higher rates among those from poorer or less‐educated families.&#x20;
 * **Barriers**
-  Cultural norms limit girls’ autonomy, control over food, and use of health services; mothers often make nutrition decisions.&#x20;
+  Cultural norms limit girls' autonomy, control over food, and use of health services; mothers often make nutrition decisions.&#x20;
 
 ---
 
@@ -48,7 +48,7 @@ These pilots have been linked to improved school performance, energy levels and 
 1. **Facilitation Centre Setup**
    Each district/tehsil hospital hosts a centre staffed and trained per BNP protocols.
 2. **Enrollment & Registration**
-   – Verify beneficiary via mother’s CNIC (synced with NSER/NADRA); adolescent’s B-form required.
+   – Verify beneficiary via mother's CNIC (synced with NSER/NADRA); adolescent's B-form required.
    – Issue registration booklet; record family composition and enter data into the application.
 3. **Anthropometry**
    Measure height & weight; record in booklet and system.
@@ -56,7 +56,7 @@ These pilots have been linked to improved school performance, energy levels and 
    Interactive group counselling for girls and mothers on healthy diets, IFA importance, hygiene and health-seeking.
 5. **Supplement Provision & Cash Transfer**
    – Administer first IFA tablet under staff supervision.
-   – On compliance verification, disburse Rs 2 000 per quarter via BISP payment, guiding use for daughter’s nutrition.
+   – On compliance verification, disburse Rs 2 000 per quarter via BISP payment, guiding use for daughter's nutrition.
 6. **Follow-up & Peer Support**
    – Monthly visits by social mobilizers/LHWs for adherence data.
    – LHWs counsel families; peer groups reinforce messaging in community.
@@ -77,8 +77,137 @@ These pilots have been linked to improved school performance, energy levels and 
 * **Schedule**
   – Once-weekly for 3 months, then continued weekly (36 weeks in Year 1; 52 weeks/year thereafter per July 29 2024 update).
 * **Missed Doses**
-  Take the missed tablet next day; if not feasible, resume on the following week’s scheduled day.
+  Take the missed tablet next day; if not feasible, resume on the following week's scheduled day.
 * **Side Effects & Guidance**
   Participants refer concerns to a doctor; protocols and calendar pasted in the registration card for self-recording .
+
+---
+
+## 8. FAQs – Adolescent Nutrition Program (ANP)
+
+### 1. What is the Adolescent Nutrition component of BNP?
+
+The Adolescent Nutrition component of the Benazir Nashonuma Program (BNP) focuses on improving the nutritional status of adolescent girls, especially those between the ages of 13 to 19 years, in targeted districts of Pakistan. This component is crucial for breaking the intergenerational cycle of malnutrition, reducing the risks of early pregnancy, and ensuring healthier future mothers.
+
+### 2. Who is eligible for this program?
+
+- Adolescent girls aged 13 years to 17 years, 11 months, and 29 days.
+- Must be registered as a BISP beneficiary or be part of the 8171 program (above PMT score).
+- At the time of registration, the girl must be unmarried. Once registered, she continues in the program even if her marital status changes later.
+
+### 3. What support is provided to adolescent girls under BNP?
+
+- Regular provision of IFA tablets to prevent and treat anemia
+- Balanced diet and healthy eating habits
+- Menstrual hygiene management
+- Physical activity
+- Reproductive health awareness
+- Counseling for healthy behaviors
+- Peer group sessions
+- Community awareness activities
+
+### 4. How can adolescent girls enroll in this program?
+
+Eligible girls (or their guardians) can visit the nearest BNP Facilitation Center (often located in RHCs, THQs, or DHQs) in Rajanpur for registration. FC Staff at the center record:
+- Basic personal details
+- Health information (weight, height, MUAC, etc.)
+- Records are maintained manually or via the BISP Nashonuma App.
+
+### 5. Is there any cost for participation?
+
+There's no fee for registration or services under BNP.
+
+### 6. Why is adolescent nutrition important?
+
+Adolescents (13–19 years) go through a phase of fast physical growth, hormonal changes, and brain development. They need extra nutrients to support this growth. Many adolescents, especially girls, suffer from anemia and micronutrient deficiencies. Good nutrition helps prevent these problems.
+
+### 7. Can school-going girls benefit from this program?
+
+The adolescent nutrition component of BNP is for all eligible adolescent girls (13–19 years), whether they are in school or out of school.
+
+### 8. How frequently do adolescents have to visit the center?
+
+Generally, adolescent girls enrolled in BNP are expected to visit the center after 3 months (Quarterly).
+
+### 9. Are boys included in the adolescent nutrition component?
+
+No, Boys are not included. Currently, the adolescent nutrition component of BNP mainly focuses on adolescent girls.
+
+### 10. What documents are required for registration?
+
+- B-Form of adolescent updated with Mother's CNIC and Mother's CNIC
+
+### 11. What if the adolescent girl is married?
+
+At the time of admission, the adolescent girl must be unmarried. However, if she gets married after enrollment and is willing to continue, she will remain eligible to receive services under the program.
+
+### 12. Objective of the Program
+
+Adolescence is a period of rapid growth requiring adequate nutrition for healthy physical and cognitive development. Poor nutrition during adolescence can lead to:
+- Anaemia
+- Stunted growth
+- Weak immunity
+- Poor academic performance
+- Complications in future pregnancies for girls
+
+### 13. Services Provided
+
+What services are provided under this program?
+- Nutrition counselling sessions
+- Iron Folic Acid (IFA) supplementation to prevent anaemia
+- Nutrition education on balanced diets and healthy lifestyles
+- Guidance on improving health and hygiene
+
+### 14. Program Process
+
+How does the ANP process work?
+
+1. **Arrival and Registration:**
+   - The adolescent arrives with her mother or caregiver at the Facilitation Centre (FC).
+   - Registration takes place at the registration desk.
+   - A token is issued for the process.
+
+2. **Group Sessions:**
+   - Adolescent girls attend in groups at the Facilitation Centre.
+   - Staff conduct awareness sessions about program objectives and services.
+
+3. **Service Delivery:**
+   - Program protocols are followed at the FC.
+   - Iron Folic Acid (IFA) supplements are provided and consumed at the centre under supervision.
+   - Staff educate beneficiaries on proper IFA consumption and schedule the next follow-up visit.
+   - Beneficiaries are also guided on how to withdraw any associated payments via designated agents.
+
+4. **Time Required:**
+   - Approximately 1 to 1.5 hours waiting time.
+   - Approximately 1 to 1.5 hours for service delivery at the Facilitation Centre.
+
+### 15. Special Situations
+
+**Can multiple sisters be enrolled at the same time?**
+- Yes, up to four sisters can be enrolled in the program simultaneously.
+
+**What happens if an adolescent's mother has passed away?**
+- The adolescent can choose whether to continue in the program or not. If yes, then we will give only IFAS.
+
+**What if a beneficiary moves from a district where ANP is not available?**
+This is currently a pilot project limited to the district of Rajanpur. If any BISP beneficiaries migrate to another district, they should visit the local BISP office to update their district of residence to help ensure continuity of program services wherever possible.
+
+### 16. Facilities at Facilitation Centres
+
+The following should be available at all Facilitation Centres:
+- IEC (Information, Education, Communication) materials
+- Disposable glasses
+- Session calendar
+- Social maps
+- CFM (Complaint and Feedback Mechanism) numbers
+- Emergency contact numbers
+
+### 17. Application/System Issues
+
+- Initially, some girls who have graduated from the program still appear in the due list.
+- Some beneficiaries who have exited the program also remain visible in the system's due list.
+- The application frequently shows errors, which are referred to the IT admin for resolution.
+- In some cases, the application allows skipping quarters prematurely.
+- The above PMT beneficeries account still has not been created even though they have graduated.
 
 
