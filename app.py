@@ -38,7 +38,16 @@ current_model = "openai"
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 CORS(app)
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+
+# Configure logging to write to both console and file
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler("logs/app.log"),
+        logging.StreamHandler()
+    ]
+)
 
 # ─── Global Overrides ──────────────────────────────────────────────────
 global_prompt    = None
@@ -47,11 +56,45 @@ global_knowledge = None
 # ─── In‐Memory Stores ──────────────────────────────────────────────────
 histories   = {}   # sid → list of {role,content}
 last_active = {}   # sid → datetime
-session_types = {} # sid → 'complaint' or 'info'
+session_types = {} # sid → 'info' only (removed complaint)
 session_type_history = {} # sid → set of types used in session
 
 RECENT_LOGS = []
 MAX_LOGS = 100
+
+# ─── Token Logging ─────────────────────────────────────────────────────
+def log_token_usage(model_name, input_tokens, output_tokens, total_cost=None):
+    """Log token usage for each API call"""
+    timestamp = now_str()
+    
+    # Calculate estimated cost if not provided
+    if not total_cost:
+        if "gpt-4" in model_name.lower():
+            # GPT-4 pricing: $0.03 per 1K input tokens, $0.06 per 1K output tokens
+            input_cost = (input_tokens / 1000) * 0.03
+            output_cost = (output_tokens / 1000) * 0.06
+            total_cost = input_cost + output_cost
+        elif "groq" in model_name.lower() or "llama" in model_name.lower():
+            # Groq pricing: $0.05 per 1M input tokens, $0.10 per 1M output tokens
+            input_cost = (input_tokens / 1000000) * 0.05
+            output_cost = (output_tokens / 1000000) * 0.10
+            total_cost = input_cost + output_cost
+        else:
+            total_cost = 0.0
+    
+    log_entry = f"TOKEN_USAGE [{timestamp}] {model_name}: input={input_tokens}, output={output_tokens}, cost=${total_cost:.6f}"
+    
+    # Log to UI (for real-time display)
+    log_to_ui(log_entry, 'info')
+    
+    # Log to file with detailed information
+    detailed_log = f"TOKEN_USAGE_DETAILED [{timestamp}] Model: {model_name}, Input Tokens: {input_tokens}, Output Tokens: {output_tokens}, Cost: ${total_cost:.6f}"
+    
+    # Write to app.log file
+    logging.info(detailed_log)
+    
+    # Also log to console for debugging
+    print(f"🔢 {detailed_log}")
 
 # ─── FAISS RAG Setup ──────────────────────────────────────────────────
 # FAISS index and knowledge chunks are persisted to disk (faiss_index.pkl, knowledge_chunks.pkl)
@@ -321,6 +364,10 @@ def ai_summarize(chat):
                     {"role":"user","content":"\n".join(f"{m['role']}: {m['content']}" for m in chat)}
                 ]
             )
+            # Log token usage
+            input_tokens = resp.usage.prompt_tokens
+            output_tokens = resp.usage.completion_tokens
+            log_token_usage("OpenAI GPT-4", input_tokens, output_tokens)
             return resp.choices[0].message.content
         except Exception as e:
             logging.error(f"OpenAI summarization failed: {e}")
@@ -351,6 +398,10 @@ def ai_summarize(chat):
         else:
             try:
                 data = resp.json()
+                # Log token usage for Groq
+                input_tokens = data.get("usage", {}).get("prompt_tokens", 0)
+                output_tokens = data.get("usage", {}).get("completion_tokens", 0)
+                log_token_usage("Groq Llama3-8B", input_tokens, output_tokens)
                 return data["choices"][0]["message"]["content"]
             except Exception as e:
                 logging.error(f"Groq summarization parsing failed: {e}")
@@ -374,50 +425,21 @@ def log_to_ui(msg, level='info'):
         logging.info(msg)
 
 def ai_detect_types(chat, session_types_map=None):
-    system_prompt = (
-        "Analyze each user message in the conversation and categorize it. Return ONLY a valid JSON object with this exact format: "
-        '{"complaints": [], "info": []} '
-        "Each user message should be categorized as one or more of these EXACT categories: 'money', 'eligibility', 'district', 'ingredients', or 'other'. "
-        "DO NOT use 'info' as a category - use 'other' instead. "
-        "If a message is about money (e.g., uses words like 'pasy', 'paise', 'money', 'amount', 'rupees', '2000', 'cash', 'transfer', 'benefits'), include 'money'. "
-        "If a message mentions districts (e.g., 'Neelam', 'Lasbela', 'Hub', 'Swat', 'Rajanpur', 'Qambar', 'Shahdadkot', 'Jampur', 'Ghizer'), include 'district'. "
-        "If a message mentions ingredients or medicines (e.g., 'folic acid', 'iron', 'IFA', 'tablets', 'medicine', 'supplement', 'vitamin'), include 'ingredients'. "
-        "If a message mentions eligibility or registration (e.g., 'who can', 'register', 'eligible', 'requirements', 'age', 'documents', 'CNIC', 'B-form'), include 'eligibility'. "
-        "If a message doesn't fit any of the above categories, use 'other'. "
-        "A message can have multiple categories. Return ONLY the JSON object, no other text or explanation."
-    )
+    """Simplified function that only handles info sessions - no complaints"""
+    log_to_ui(f"AI_DETECT_TYPES - Starting analysis of {len(chat)} messages (INFO ONLY)")
     
-    if session_types_map is None:
-        session_types_map = {}
+    # All sessions are now info sessions
+    info_categories = []
     
-    log_to_ui(f"AI_DETECT_TYPES - Starting analysis of {len(chat)} messages")
-    log_to_ui(f"AI_DETECT_TYPES - Session types map: {session_types_map}")
-    
-    # Process each user message individually
-    all_complaints = []
-    all_info = []
-    
+    # Process each user message to categorize it
     for idx, m in enumerate(chat):
         if m.get('role') == 'user':
             content = m.get('content', '')
-            stype = session_types_map.get(idx, 'info')
+            log_to_ui(f"AI_DETECT_TYPES - Processing message {idx}: '{content[:50]}...' (type: info)")
             
-            log_to_ui(f"AI_DETECT_TYPES - Processing message {idx}: '{content[:50]}...' (type: {stype})")
-            
-            # Create a single message conversation for individual analysis
-            single_message_conversation = [
-                {"role": "user", "content": content}
-            ]
-            
-            # Analyze this single message
-            single_result = analyze_single_message(single_message_conversation, stype, system_prompt)
-            
-            log_to_ui(f"AI_DETECT_TYPES - Message {idx} result: {single_result}")
-            
-            if stype == 'complaint':
-                all_complaints.extend(single_result)
-            else:
-                all_info.extend(single_result)
+            # Simple keyword-based categorization for info sessions
+            categories = categorize_info_message(content)
+            info_categories.extend(categories)
     
     # Remove duplicates while preserving order
     def dedup_and_order(lst):
@@ -432,160 +454,46 @@ def ai_detect_types(chat, session_types_map=None):
                 seen.add(i)
         return ordered
     
-    complaints = dedup_and_order(all_complaints)
-    info = dedup_and_order(all_info)
+    info = dedup_and_order(info_categories)
     
-    log_to_ui(f"AI_DETECT_TYPES - Final result - complaints: {complaints}, info: {info}")
-    return {'complaints': complaints, 'info': info}
+    # CRITICAL: Ensure we always have at least one category
+    if not info:
+        info = ['other']
+        log_to_ui(f"AI_DETECT_TYPES - No categories detected, defaulting to: {info}")
+    
+    log_to_ui(f"AI_DETECT_TYPES - Final result - info: {info}")
+    return {'complaints': [], 'info': info}
 
-def analyze_single_message(conversation, session_type, system_prompt):
-    """Analyze a single message and return its categories"""
-    lines = []
-    for m in conversation:
-        role = m.get('role')
-        content = m.get('content', '')
-        if role == 'user':
-            lines.append(f"user ({session_type}): {content}")
-        else:
-            lines.append(f"{role}: {content}")
+def categorize_info_message(content):
+    """Categorize a single info message"""
+    content_lower = content.lower()
+    categories = []
     
-    if current_model == "openai":
-        try:
-            resp = openai_client.chat.completions.create(
-                model="gpt-4",
-                messages=[
-                    {"role":"system","content": system_prompt},
-                    {"role":"user","content":"\n".join(lines)}
-                ],
-                temperature=0.3
-            )
-            result = json.loads(resp.choices[0].message.content)
-        except Exception as e:
-            logging.error(f"OpenAI categorization failed: {e}")
-            result = {"complaints": [], "info": []}
-    elif current_model == "groq":
-        groq_url = "https://api.groq.com/openai/v1/chat/completions"
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {GROQ_API_KEY}"
-        }
-        payload = {
-            "model": "llama3-8b-8192",
-            "messages": [
-                {"role":"system","content": system_prompt},
-                {"role":"user","content":"\n".join(lines)}
-            ],
-            "temperature": 0.3
-        }
-        
-        # Use retry logic for Groq API calls
-        resp = make_groq_request_with_retry(groq_url, headers, payload)
-        
-        if resp is None:
-            logging.error("Groq API request failed after all retries")
-            result = {"complaints": [], "info": []}
-        elif resp.status_code != 200:
-            logging.error(f"Groq categorization failed: {resp.status_code} - {resp.text}")
-            result = {"complaints": [], "info": []}
-        else:
-            try:
-                data = resp.json()
-                response_text = data["choices"][0]["message"]["content"].strip()
-                log_to_ui(f"AI_DETECT_TYPES - Groq response for message: {response_text}")
-                if response_text:
-                    try:
-                        # Try to extract JSON from the response if it's not pure JSON
-                        if response_text.startswith('{') and response_text.endswith('}'):
-                            parsed_json = json.loads(response_text)
-                        else:
-                            # Try to find JSON in the response
-                            import re
-                            json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
-                            if json_match:
-                                parsed_json = json.loads(json_match.group())
-                            else:
-                                raise ValueError("No JSON found in response")
-                        
-                        # Handle different JSON structures that Groq might return
-                        if isinstance(parsed_json, dict):
-                            if 'complaints' in parsed_json and 'info' in parsed_json:
-                                # Check if it's simple structure or complex structure
-                                if isinstance(parsed_json['info'], list) and len(parsed_json['info']) > 0:
-                                    if isinstance(parsed_json['info'][0], dict) and 'categories' in parsed_json['info'][0]:
-                                        # Complex structure with text and categories
-                                        complaints = []
-                                        info = []
-                                        for item in parsed_json.get('info', []):
-                                            if isinstance(item, dict) and 'categories' in item:
-                                                categories = item['categories']
-                                                if isinstance(categories, list):
-                                                    info.extend(categories)
-                                        for item in parsed_json.get('complaints', []):
-                                            if isinstance(item, dict) and 'categories' in item:
-                                                categories = item['categories']
-                                                if isinstance(categories, list):
-                                                    complaints.extend(categories)
-                                        result = {"complaints": complaints, "info": info}
-                                    else:
-                                        # Simple structure: {"complaints": [], "info": []}
-                                        result = parsed_json
-                                else:
-                                    # Simple structure: {"complaints": [], "info": []}
-                                    result = parsed_json
-                            else:
-                                # Fallback to simple structure
-                                result = {"complaints": [], "info": []}
-                        else:
-                            result = {"complaints": [], "info": []}
-                        
-                        log_to_ui(f"AI_DETECT_TYPES - Parsed result for message: {result}")
-                    except json.JSONDecodeError as e:
-                        logging.error(f"Groq JSON parsing failed: {e}, response: {response_text}")
-                        result = {"complaints": [], "info": []}
-                    except Exception as e:
-                        logging.error(f"Groq response processing failed: {e}")
-                        result = {"complaints": [], "info": []}
-                else:
-                    logging.error("Empty response from Groq")
-                    result = {"complaints": [], "info": []}
-            except Exception as e:
-                logging.error(f"Groq response parsing failed: {e}")
-                result = {"complaints": [], "info": []}
-    else:
-        # Fallback - simple keyword-based categorization
-        result = {"complaints": [], "info": []}
-        money_keywords = ['pasy', 'paise', 'money', 'amount', 'rupees', '2000', 'cash', 'transfer']
-        district_keywords = ['neelam', 'lasbela', 'hub', 'qambar', 'shahdadkot', 'swat', 'rajanpur', 'jampur', 'ghizer', 'district']
-        ingredients_keywords = ['folic acid', 'iron', 'ifa', 'tablets', 'medicine', 'supplement', 'vitamin']
-        eligibility_keywords = ['who can', 'register', 'eligible', 'requirements', 'cnic', 'b-form']
-        
-        for m in conversation:
-            if m.get('role') == 'user':
-                content = m.get('content', '').lower()
-                categories = []
-                
-                if any(word in content for word in money_keywords):
-                    categories.append('money')
-                if any(word in content for word in district_keywords):
-                    categories.append('district')
-                if any(word in content for word in ingredients_keywords):
-                    categories.append('ingredients')
-                if any(word in content for word in eligibility_keywords):
-                    categories.append('eligibility')
-                
-                if not categories:
-                    categories.append('other')
-                
-                if session_type == 'complaint':
-                    result['complaints'].extend(categories)
-                else:
-                    result['info'].extend(categories)
+    # Money-related keywords
+    money_keywords = ['pasy', 'paise', 'money', 'amount', 'rupees', '2000', 'cash', 'transfer', 'benefits']
+    if any(word in content_lower for word in money_keywords):
+        categories.append('money')
     
-    # Return categories based on session type
-    if session_type == 'complaint':
-        return result.get('complaints', [])
-    else:
-        return result.get('info', [])
+    # District-related keywords
+    district_keywords = ['neelam', 'lasbela', 'hub', 'qambar', 'shahdadkot', 'swat', 'rajanpur', 'jampur', 'ghizer', 'district']
+    if any(word in content_lower for word in district_keywords):
+        categories.append('district')
+    
+    # Ingredients/medicine keywords
+    ingredients_keywords = ['folic acid', 'iron', 'ifa', 'tablets', 'medicine', 'supplement', 'vitamin']
+    if any(word in content_lower for word in ingredients_keywords):
+        categories.append('ingredients')
+    
+    # Eligibility keywords
+    eligibility_keywords = ['who can', 'register', 'eligible', 'requirements', 'cnic', 'b-form', 'age']
+    if any(word in content_lower for word in eligibility_keywords):
+        categories.append('eligibility')
+    
+    # If no specific categories found, use 'other'
+    if not categories:
+        categories.append('other')
+    
+    return categories
 
 def find_matching_question(user_input):
     user_input = user_input.lower().strip()
@@ -745,42 +653,43 @@ def start_toggle():
     
     # Get final categorization for the entire session
     detected_types = ai_detect_types(chat, session_types_map)
-    complaints = detected_types.get("complaints", [])
     info = detected_types.get("info", [])
     
-    # Ensure every session has at least one category
-    if not complaints and not info and chat:
-        if any(m.get('role') == 'user' and m.get('content','').strip() for m in chat):
-            # Check if any messages were complaints
-            has_complaints = any(m.get('session_type') == 'complaint' for m in chat if m.get('role') == 'user')
-            if has_complaints:
-                complaints = ['other']
-            else:
-                info = ['other']
+    # CRITICAL: Ensure every session has at least one category
+    if not info:
+        info = ['other']
+        log_to_ui(f"SESSION_END - No categories detected, forcing default: {info}")
     
     # Validate and clean categories
     allowed = ['money', 'eligibility', 'district', 'ingredients', 'other']
-    complaints = [c if c in allowed else 'other' for c in complaints]
     info = [i if i in allowed else 'other' for i in info]
     
     # Ensure money is first if present
-    if 'money' in complaints:
-        complaints = ['money'] + [c for c in complaints if c != 'money']
     if 'money' in info:
         info = ['money'] + [i for i in info if i != 'money']
     
+    # FINAL SAFETY CHECK: Ensure we always have at least one category
+    if not info:
+        info = ['other']
+        log_to_ui(f"SESSION_END - Final safety check: forcing 'other' category")
+
     duration = str(len(chat))
 
     # Log the categorization results clearly
     log_to_ui(f"=== FINAL SESSION CATEGORIZATION ===")
     log_to_ui(f"Session ID: {sid}")
     log_to_ui(f"Total chat messages: {len(chat)}")
-    log_to_ui(f"User messages: {[m.get('content', '')[:50] for m in chat if m.get('role') == 'user']}")
+    user_messages = [m.get('content', '')[:50] for m in chat if m.get('role') == 'user']
+    log_to_ui(f"User messages: {user_messages}")
     log_to_ui(f"Session types map: {session_types_map}")
-    log_to_ui(f"Final complaints categories: {complaints}")
     log_to_ui(f"Final info categories: {info}")
     log_to_ui(f"Model used throughout: {current_model}")
     log_to_ui(f"=====================================")
+    
+    # Enhanced logging to app.log file for permanent record
+    logging.info(f"SESSION_END_DETAILED [{now_str()}] Session: {sid}, Messages: {len(chat)}, User: {user_messages}, Types: {info}, Model: {current_model}, Duration: {duration}, Total_User_Messages: {len(user_messages)}")
+    
+    print(f"SESSION_END - Session: {sid}, Messages: {len(chat)}, Types: {info}, Model: {current_model}")
 
     payload = {
       "tdatetime": now_str(),
@@ -788,7 +697,7 @@ def start_toggle():
       "summary":   summary,
       "duration":  duration,
       "types":     json.dumps({
-                       "complaints":    complaints,
+                       "complaints":    [],
                        "info": info
                    }, ensure_ascii=False),
       "chat":      json.dumps(chat, ensure_ascii=False)
@@ -796,7 +705,7 @@ def start_toggle():
     
     # Log what's being sent to API
     print(f"API PAYLOAD - Session: {sid}")
-    print(f"  Types being sent: complaints={complaints}, info={info}")
+    print(f"  Types being sent: complaints={[]}, info={info}")
     print(f"  Summary: {summary[:100]}...")
     print(f"  Duration: {duration}")
     print(f"  Model used: {current_model}")
@@ -835,7 +744,50 @@ def chat():
     # Check for matching question first
     matched_answer = find_matching_question(prompt)
     if matched_answer:
+        # Store the user message first for proper categorization
+        histories[sid].append({"role":"user","content":prompt, "session_type": "info"})
+        
+        # Categorize the message even for predefined answers
+        session_types_map = {len(histories[sid])-1: "info"}
+        detected_types = ai_detect_types(histories[sid], session_types_map)
+        info = detected_types.get("info", [])
+        
+        # CRITICAL: Ensure every message is categorized - if no categories found, use 'other'
+        if not info:
+            info = ['other']
+            log_to_ui(f"CHAT (PREDEFINED) - No categories detected, forcing default: {info}")
+        
+        # Validate and clean categories
+        allowed = ['money', 'eligibility', 'district', 'ingredients', 'other']
+        info = [i if i in allowed else 'other' for i in info]
+        
+        # Ensure money is first if present
+        if 'money' in info:
+            info = ['money'] + [i for i in info if i != 'money']
+        
+        # FINAL SAFETY CHECK: Ensure we always have at least one category
+        if not info:
+            info = ['other']
+            log_to_ui(f"CHAT (PREDEFINED) - Final safety check: forcing 'other' category")
+        
+        # Log categorization for predefined answers
+        log_to_ui(f"=== CHAT CATEGORIZATION (PREDEFINED) ===")
+        log_to_ui(f"Session ID: {sid}")
+        log_to_ui(f"User message: '{prompt}'")
+        log_to_ui(f"Session type: info")
+        log_to_ui(f"Detected types: {detected_types}")
+        log_to_ui(f"Final info: {info}")
+        log_to_ui(f"Model: predefined_kb")
+        log_to_ui(f"=========================================")
+        
+        # Enhanced logging to app.log file for permanent record
+        logging.info(f"PREDEFINED_ANSWER_DETAILED [{now_str()}] Session: {sid}, User: '{prompt[:100]}...', Types: {detected_types}, Final: {info}, Model: predefined_kb, Message_Length: {len(prompt)}")
+        
+        print(f"CHAT (PREDEFINED) - Session: {sid}, Message: '{prompt[:50]}...', Types: {detected_types}, Final: info={info}")
+        
+        # Store the assistant response
         histories[sid].append({"role":"assistant","content":matched_answer})
+        
         return jsonify(response=matched_answer, kb_excerpt="")
 
     # Store session type if provided
@@ -845,10 +797,12 @@ def chat():
             session_type_history[sid] = set()
         session_type_history[sid].add(session_type)
 
-    stype = session_types.get(sid, "info")
+    # All sessions are now info sessions
+    stype = "info"
+    session_types[sid] = stype
 
     # Store the session_type with each user message
-    histories[sid].append({"role":"user","content":prompt, "session_type": session_type or stype})
+    histories[sid].append({"role":"user","content":prompt, "session_type": stype})
 
     # Load knowledge base and get relevant chunks using FAISS
     try:
@@ -871,26 +825,25 @@ def chat():
             session_types_map[idx] = m.get('session_type', 'info')
     
     detected_types = ai_detect_types(histories[sid], session_types_map)
-    complaints = detected_types.get("complaints", [])
     info = detected_types.get("info", [])
     
-    # Ensure every message is categorized - if no categories found, use 'other'
-    if not complaints and not info and prompt.strip():
-        if stype == 'complaint':
-            complaints = ['other']
-        else:
-            info = ['other']
+    # CRITICAL: Ensure every message is categorized - if no categories found, use 'other'
+    if not info:
+        info = ['other']
+        log_to_ui(f"CHAT - No categories detected, forcing default: {info}")
     
     # Validate and clean categories
     allowed = ['money', 'eligibility', 'district', 'ingredients', 'other']
-    complaints = [c if c in allowed else 'other' for c in complaints]
     info = [i if i in allowed else 'other' for i in info]
     
     # Ensure money is first if present
-    if 'money' in complaints:
-        complaints = ['money'] + [c for c in complaints if c != 'money']
     if 'money' in info:
         info = ['money'] + [i for i in info if i != 'money']
+    
+    # FINAL SAFETY CHECK: Ensure we always have at least one category
+    if not info:
+        info = ['other']
+        log_to_ui(f"CHAT - Final safety check: forcing 'other' category")
     
     # Log what's being sent to backend
     log_to_ui(f"=== CHAT CATEGORIZATION ===")
@@ -898,28 +851,14 @@ def chat():
     log_to_ui(f"User message: '{prompt}'")
     log_to_ui(f"Session type: {stype}")
     log_to_ui(f"Detected types: {detected_types}")
-    log_to_ui(f"Final complaints: {complaints}")
     log_to_ui(f"Final info: {info}")
     log_to_ui(f"Model being used: {current_model}")
     log_to_ui(f"==========================")
     
-    print(f"CHAT - Session: {sid}, Message: '{prompt[:50]}...', Types: {detected_types}, Final: complaints={complaints}, info={info}, Model={current_model}")
-
-    if stype == "complaint":
-        payload = {
-            "session_id": sid,
-            "complaint_types": complaints,
-            "message": prompt
-        }
-        try:
-            res = requests.post(
-                "https://urdubot.nettechltd.com/api/complaints",
-                json=payload, timeout=10
-            )
-            res.raise_for_status()
-        except Exception as e:
-            logging.error(f"Complaint POST failed: {e}")
-        return jsonify(response=None)
+    # Enhanced logging to app.log file for permanent record
+    logging.info(f"CHAT_SESSION_DETAILED [{now_str()}] Session: {sid}, User: '{prompt[:100]}...', Types: {detected_types}, Final: {info}, Model: {current_model}, Message_Length: {len(prompt)}")
+    
+    print(f"CHAT - Session: {sid}, Message: '{prompt[:50]}...', Types: {detected_types}, Final: info={info}, Model={current_model}")
 
     # System prompt for language and direct answers
     system_p = (
@@ -970,6 +909,10 @@ def chat():
         else:
             try:
                 data = resp.json()
+                # Log token usage for Groq
+                input_tokens = data.get("usage", {}).get("prompt_tokens", 0)
+                output_tokens = data.get("usage", {}).get("completion_tokens", 0)
+                log_token_usage("Groq Llama3-8B", input_tokens, output_tokens)
                 reply = data["choices"][0]["message"]["content"]
             except Exception as e:
                 logging.error(f"Groq response parsing failed: {e}")
@@ -988,6 +931,10 @@ def chat():
                      messages=context,
                      temperature=0.4
                    )
+            # Log token usage for OpenAI
+            input_tokens = oa_resp.usage.prompt_tokens
+            output_tokens = oa_resp.usage.completion_tokens
+            log_token_usage("OpenAI GPT-4", input_tokens, output_tokens)
             reply = oa_resp.choices[0].message.content
         except Exception as e:
             logging.error(f"OpenAI API error: {e}")
@@ -1018,68 +965,57 @@ def suggestions():
         if len(suggestions) >= 3:
             break
     
-    # If we need more suggestions, use AI
-    if len(suggestions) < 3:
+    # If we need more suggestions, use Groq (much cheaper than OpenAI)
+    if len(suggestions) < 3 and GROQ_API_KEY:
         try:
             with open("custom_knowledge.txt", "r", encoding="utf8") as f:
                 knowledge = f.read()
             
+            # Optimize the prompt to be shorter and more focused
             system_prompt = (
-                "Given the following knowledge base and user input, suggest 2-3 related questions. "
-                "Return ONLY a plain English list of questions, one per line. "
-                "Do not include any introductory text like 'here are questions' or numbering. "
-                "Just return the questions directly."
+                "Suggest 2-3 related questions based on the knowledge base and user input. "
+                "Return ONLY questions, one per line, no extra text."
             )
-            user_content = f"Knowledge Base:\n{knowledge}\nUser Input: {user_input}"
             
-            if current_model == "openai":
-                try:
-                    resp = openai_client.chat.completions.create(
-                        model="gpt-4",
-                        messages=[
-                            {"role": "system", "content": system_prompt},
-                            {"role": "user", "content": user_content}
-                        ],
-                        temperature=0.5
-                    )
-                    text = resp.choices[0].message.content.strip()
-                except Exception as e:
-                    logging.error(f"OpenAI suggestion generation failed: {e}")
-                    text = ""
-            elif current_model == "groq":
-                groq_url = "https://api.groq.com/openai/v1/chat/completions"
-                headers = {
-                    "Content-Type": "application/json",
-                    "Authorization": f"Bearer {GROQ_API_KEY}"
-                }
-                payload = {
-                    "model": "llama3-8b-8192",
-                    "messages": [
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": user_content}
-                    ],
-                    "temperature": 0.5
-                }
-                
-                # Use retry logic for Groq API calls
-                resp = make_groq_request_with_retry(groq_url, headers, payload)
-                
-                if resp is None:
-                    logging.error("Groq suggestion generation failed after all retries")
-                    text = ""
-                elif resp.status_code != 200:
-                    logging.error(f"Groq suggestion generation failed: {resp.status_code} - {resp.text}")
-                    text = ""
-                else:
-                    try:
-                        data = resp.json()
-                        text = data["choices"][0]["message"]["content"].strip()
-                    except Exception as e:
-                        logging.error(f"Groq suggestion response parsing failed: {e}")
-                        text = ""
-            else:
-                # Fallback - use predefined suggestions
+            # Truncate knowledge to reduce tokens (limit to first 1000 chars)
+            truncated_knowledge = knowledge[:1000] + "..." if len(knowledge) > 1000 else knowledge
+            user_content = f"Knowledge: {truncated_knowledge}\nUser: {user_input}"
+            
+            groq_url = "https://api.groq.com/openai/v1/chat/completions"
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {GROQ_API_KEY}"
+            }
+            payload = {
+                "model": "llama3-8b-8192",
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_content}
+                ],
+                "temperature": 0.5,
+                "max_tokens": 100  # Limit output tokens
+            }
+            
+            # Use retry logic for Groq API calls
+            resp = make_groq_request_with_retry(groq_url, headers, payload)
+            
+            if resp is None:
+                logging.error("Groq suggestion generation failed after all retries")
                 text = ""
+            elif resp.status_code != 200:
+                logging.error(f"Groq suggestion generation failed: {resp.status_code} - {resp.text}")
+                text = ""
+            else:
+                try:
+                    data = resp.json()
+                    # Log token usage for Groq suggestions
+                    input_tokens = data.get("usage", {}).get("prompt_tokens", 0)
+                    output_tokens = data.get("usage", {}).get("completion_tokens", 0)
+                    log_token_usage("Groq Llama3-8B (suggestions)", input_tokens, output_tokens)
+                    text = data["choices"][0]["message"]["content"].strip()
+                except Exception as e:
+                    logging.error(f"Groq suggestion response parsing failed: {e}")
+                    text = ""
             
             if text:
                 # Filter out unwanted text and clean suggestions

@@ -209,13 +209,3 @@
 2025-07-23 00:36:34,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:34] "GET /logs HTTP/1.1" 200 -
 2025-07-23 00:36:36,479 - BISP_Chatbot - INFO - Fetching logs
 2025-07-23 00:36:36,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:36] "GET /logs HTTP/1.1" 200 -
-2025-07-23 00:36:38,479 - BISP_Chatbot - INFO - Fetching logs
-2025-07-23 00:36:38,481 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:38] "GET /logs HTTP/1.1" 200 -
-2025-07-23 00:36:40,479 - BISP_Chatbot - INFO - Fetching logs
-2025-07-23 00:36:40,482 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:40] "GET /logs HTTP/1.1" 200 -
-2025-07-23 00:36:42,478 - BISP_Chatbot - INFO - Fetching logs
-2025-07-23 00:36:42,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:42] "GET /logs HTTP/1.1" 200 -
-2025-07-23 00:36:44,481 - BISP_Chatbot - INFO - Fetching logs
-2025-07-23 00:36:44,485 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:44] "GET /logs HTTP/1.1" 200 -
-2025-07-23 00:36:46,478 - BISP_Chatbot - INFO - Fetching logs
-2025-07-23 00:36:46,480 - werkzeug - INFO - 127.0.0.1 - - [23/Jul/2025 00:36:46] "GET /logs HTTP/1.1" 200 -
