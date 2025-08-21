@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urdu Chatbot (Client)</title>
+    <title>Support Bot</title>
     <style>
+        /* General Reset */
         * {
             margin: 0;
             padding: 0;
@@ -12,471 +13,276 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f7;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            height: 100vh;
+            color: #333;
         }
 
         .chat-container {
-            width: 100%;
-            max-width: 650px;
-            height: 90vh;
-            max-height: 900px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 8px 25px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            height: 80%;
             display: flex;
             flex-direction: column;
+            border-radius: 15px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
         }
 
         .header-container {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            padding: 24px 28px 20px 28px;
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            border-top-left-radius: 24px;
-            border-top-right-radius: 24px;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
-            pointer-events: none;
         }
 
         .header-container h1 {
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            position: relative;
-            z-index: 1;
+            font-size: 18px;
         }
 
-        #sessionBtn, #switchTypeBtn {
-            background: rgba(255, 255, 255, 0.95);
-            color: #667eea;
+        #sessionBtn {
+            padding: 8px 16px;
+            background-color: white;
+            color: #007bff;
             border: none;
-            border-radius: 16px;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 600;
+            border-radius: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            margin-left: 8px;
-            position: relative;
-            z-index: 1;
-            backdrop-filter: blur(10px);
+            font-size: 14px;
+            transition: background-color 0.3s ease;
         }
 
-        #sessionBtn:hover, #switchTypeBtn:hover {
-            background: rgba(255, 255, 255, 1);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        #switchTypeBtn.info {
-            background: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
-            border: 2px solid #22c55e;
-        }
-
-        #switchTypeBtn.complaint {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border: 2px solid #ef4444;
-        }
-
-        #session-type-switch { 
-            display: none; 
+        #sessionBtn:hover {
+            background-color: #e0e0e0;
         }
 
         #chat-box {
             flex: 1;
-            padding: 24px 20px 0 20px;
+            padding: 15px;
             overflow-y: auto;
-            background: transparent;
+            background-color: #f9f9f9;
+            scroll-behavior: smooth;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(102, 126, 234, 0.3) transparent;
         }
 
         #chat-box::-webkit-scrollbar {
             width: 6px;
-            background: transparent;
         }
 
         #chat-box::-webkit-scrollbar-thumb {
-            background: rgba(102, 126, 234, 0.3);
-            border-radius: 3px;
+            background-color: #bbb;
+            border-radius: 5px;
         }
 
         .user-message, .bot-message {
-            margin: 0 0 8px 0;
-            padding: 16px 20px;
-            border-radius: 20px;
-            font-size: 15px;
-            max-width: 80%;
-            word-break: break-word;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin: 8px 0;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: 75%;
+            word-wrap: break-word;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             display: inline-block;
-            line-height: 1.6;
-            position: relative;
-            animation: fadeInUp 0.4s ease;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .user-message {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
+            background-color: #007bff;
+            color: white;
             align-self: flex-end;
-            border-bottom-right-radius: 8px;
+            animation: fadeInRight 0.3s ease;
             margin-left: auto;
+            border-bottom-right-radius: 4px;
         }
 
         .bot-message {
-            background: #f8fafc;
-            color: #1e293b;
+            background-color: #e9ecef;
+            color: #333;
             align-self: flex-start;
-            border-bottom-left-radius: 8px;
-            border: 1px solid #e2e8f0;
+            animation: fadeInLeft 0.3s ease;
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
         }
 
-        #suggestions {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin: 0 0 0 0;
-            justify-content: flex-end;
-            align-items: flex-end;
-            flex-wrap: nowrap;
-            position: relative;
-            z-index: 2;
-            max-width: 85%;
-            align-self: flex-end;
+        .retrieved-info {
+            background: #fffbe6;
+            color: #856404;
+            border: 1px solid #ffe58f;
+            border-radius: 8px;
+            padding: 6px 10px;
+            margin-bottom: 6px;
+            font-size: 13px;
         }
 
-        #suggestions button {
-            padding: 12px 20px;
+        .quick-btn {
+            background: linear-gradient(90deg, #ff9800 0%, #ffc107 100%);
+            color: #222;
+            border: none;
             border-radius: 18px;
-            border: 2px solid #667eea;
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-            font-weight: 600;
+            padding: 8px 18px;
+            margin: 4px 6px 4px 0;
             font-size: 14px;
             cursor: pointer;
-            margin-bottom: 0px;
-            margin-right: 0px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.15);
-            white-space: normal;
-            text-align: left;
-            min-width: 200px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+            transition: background 0.2s;
+        }
+        .quick-btn:hover {
+            background: linear-gradient(90deg, #ffc107 0%, #ff9800 100%);
         }
 
-        #suggestions button:hover {
-            background: #667eea;
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.25);
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .input-container {
             display: flex;
-            border-top: 1px solid #e2e8f0;
-            padding: 20px 24px;
-            background: #fff;
+            border-top: 1px solid #ddd;
+            padding: 10px 15px;
+            background-color: white;
             align-items: center;
-            gap: 12px;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
         }
 
         #user-input {
             flex: 1;
-            border: 2px solid #e2e8f0;
-            border-radius: 20px;
-            padding: 14px 20px;
-            font-size: 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            padding: 10px 15px;
+            font-size: 14px;
             outline: none;
-            background: #f8fafc;
-            transition: all 0.3s ease;
-            font-family: inherit;
+            transition: border-color 0.3s ease;
         }
 
         #user-input:focus {
-            border-color: #667eea;
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #007bff;
         }
 
         button.send-btn {
-            padding: 14px 28px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
             border: none;
-            border-radius: 20px;
-            font-size: 15px;
-            font-weight: 600;
+            border-radius: 25px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-            transition: all 0.3s ease;
-            font-family: inherit;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
         }
 
         button.send-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            background-color: #0056b3;
         }
 
-        #session-type-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            backdrop-filter: blur(8px);
-        }
-
-        #session-type-modal > div {
-            background: #fff;
-            padding: 32px 28px 28px 28px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            min-width: 280px;
-            min-height: 120px;
-            position: relative;
+        /* Suggested Questions Styling - Simple & Clean */
+        #suggestions {
             display: flex;
             flex-direction: column;
+            gap: 8px;
+            align-items: stretch;
+        }
+
+        #suggestions button {
+            background: #f8f9fa;
+            color: #495057;
+            border: 1px solid #dee2e6;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            line-height: 1.4;
+            white-space: normal;
+            word-wrap: break-word;
+            min-height: 44px;
+            display: flex;
             align-items: center;
-            justify-content: center;
-            animation: modalFadeIn 0.3s ease;
         }
 
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9) translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+        #suggestions button:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+            color: #212529;
         }
 
-        #session-type-modal .type-btn {
-            margin: 0 12px;
-            padding: 12px 32px;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s ease;
-            min-width: 120px;
+        #suggestions button:active {
+            background: #dee2e6;
         }
 
-        #session-type-modal .type-btn.info {
-            background: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
-            border: 2px solid #22c55e;
+        /* Suggestions Container - Simple */
+        .suggestions-container {
+            margin: 15px 0 20px 0;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
-        #session-type-modal .type-btn.info:hover {
-            background: #22c55e;
-            color: #fff;
-            transform: translateY(-2px);
+        .suggestions-container h3 {
+            display: none; /* Remove the heading */
         }
-
-        #session-type-modal .type-btn.complaint {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border: 2px solid #ef4444;
-        }
-
-        #session-type-modal .type-btn.complaint:hover {
-            background: #ef4444;
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-        #session-type-modal span {
-            position: absolute;
-            top: 12px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #94a3b8;
-            transition: color 0.3s ease;
-        }
-
-        #session-type-modal span:hover {
-            color: #64748b;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            .chat-container {
-                height: 95vh;
-                max-height: none;
-                border-radius: 20px;
-            }
-            
-            .header-container {
-                padding: 20px 20px 16px 20px;
-                border-radius: 20px;
-            }
-            
-            .header-container h1 {
-                font-size: 18px;
-            }
-            
-            #sessionBtn, #switchTypeBtn {
-                padding: 8px 16px;
-                font-size: 13px;
-                margin-left: 6px;
-            }
-            
-            #chat-box {
-                padding: 20px 16px 0 16px;
-            }
-            
-            .user-message, .bot-message {
-                max-width: 90%;
-                font-size: 14px;
-                padding: 14px 18px;
-            }
-            
-            #suggestions {
-                max-width: 90%;
-            }
-            
-            #suggestions button {
-                padding: 10px 16px;
-                font-size: 13px;
-                min-width: 180px;
-            }
-            
-            .input-container {
-                padding: 16px 20px;
-            }
-            
-            #user-input {
-                padding: 12px 18px;
-                font-size: 14px;
-            }
-            
-            button.send-btn {
-                padding: 12px 24px;
-                font-size: 14px;
-            }
-            
-            #session-type-modal > div {
-                min-width: 260px;
-                padding: 28px 24px 24px 24px;
-            }
-            
-            #session-type-modal .type-btn {
-                padding: 10px 28px;
-                font-size: 15px;
-                min-width: 100px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .chat-container {
-                height: 100vh;
-                border-radius: 0;
-            }
-            
-            .header-container {
-                border-radius: 0;
-            }
-            
-            .user-message, .bot-message {
-                max-width: 95%;
-            }
-            
-            #suggestions {
-                max-width: 95%;
-            }
-        }
-
-
-
-        .hilight {
-    background-color: #FFF9C4;
-    font-weight: bold;
-    padding: 0 2px;
-    border-radius: 3px;
-}
     </style>
 </head>
-<body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+<body>
     <div class="chat-container">
         <!-- Header with Session Button -->
         <div class="header-container">
-            <h1>Urdu Chatbot</h1>
-            <div>
+            <h1>Urdu Chatbot (Client)</h1>
             <button id="sessionBtn">Start Session</button>
-            </div>
         </div>
+
         <!-- Chat Messages Area -->
         <div id="chat-box">
             <!-- Messages will be dynamically added here -->
         </div>
-        <!-- Session Type Switch (always visible) -->
-        <div id="session-type-switch"><!-- Session type switch rendered here --></div>
-        <!-- Suggestions Area (always visible, just above input) -->
-        <div id="suggestions"><!-- Suggestions rendered here --></div>
+
+        <!-- Suggested Questions Section - Right above input box -->
+        <section id="suggestions-container" class="suggestions-container">
+            <div id="suggestions"></div>
+        </section>
+
         <!-- Input Area -->
         <div class="input-container">
-            <input type="text" id="user-input" placeholder="Type your message..." />
+            <input type="text" id="user-input" placeholder="Type your message..." onkeypress="handleKeyPress(event)" />
             <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
         </div>
     </div>
-    <!-- Load the real script.js with all features -->
+
     <script src="/static/script.js"></script>
+    <script>
+        // Handle Enter key press
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+    </script>
 </body>
 </html>

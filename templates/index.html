@@ -15,8 +15,8 @@
       <h3>Override Prompt & Knowledge (Admin)</h3>
       <div class="file-inputs">
         <div class="file-input">
-          <label for="promptFile">Prompt File</label>
-          <input type="file" id="promptFile" accept=".txt,.pdf,.docx"/>
+          <!-- <label for="promptFile">Prompt File</label>
+          <input type="file" id="promptFile" accept=".txt,.pdf,.docx"/> -->
         </div>
         <div class="file-input">
           <label for="knowledgeFile">Knowledge File</label>
@@ -26,20 +26,36 @@
       <button onclick="uploadFiles()">Upload Overrides</button>
     </section>
 
-    <!-- Admin Model Selector -->
-    <section class="admin-model-section">
-      <h3>Admin: Select Model Backend</h3>
-      <select id="model-picker">
-        <option value="openai" selected>OpenAI GPT-3.5</option>
-        <option value="huggingface">Hugging Face</option>
-      </select>
-      <button onclick="applyModel()">Apply Model</button>
+    <!-- Token Usage Display -->
+    <section class="token-section">
+      <h3>Token Usage</h3>
+      <div id="token-display">
+        <div class="token-item">
+          <span class="token-label">Total Input:</span>
+          <span id="total-input-tokens" class="token-count">0</span>
+        </div>
+        <div class="token-item">
+          <span class="token-label">Total Output:</span>
+          <span id="total-output-tokens" class="token-count">0</span>
+        </div>
+        <div class="token-item">
+          <span class="token-label">Last API Call:</span>
+          <span id="last-api-tokens" class="token-count">-</span>
+        </div>
+      </div>
     </section>
 
     <!-- Chat Section -->
     <section class="chat-container">
       <header><h1>Chat with Urdu Bot</h1></header>
+      
       <section id="chat-box" class="chat-box"></section>
+
+      <!-- Suggested Questions Section - Right above input box -->
+      <section id="suggestions-container" class="suggestions-container">
+        <h3>Quick Questions</h3>
+        <div id="suggestions"></div>
+      </section>
 
       <div class="input-container">
         <input type="text" id="user-input" placeholder="اپنا پیغام درج کریں..." />

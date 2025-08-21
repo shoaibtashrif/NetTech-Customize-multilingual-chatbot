@@ -9,17 +9,83 @@ const ENDPOINT = {
 };
 
 let sessionId = null;
-let sessionType = null; // 'complaint' or 'info'
+let sessionType = "info"; // Always 'info' - no complaints
 let hasAskedSessionType = false;
 let suggestionDebounce = null;
+let totalInputTokens = 0;
+let totalOutputTokens = 0;
 const btn     = document.getElementById("sessionBtn");
 const sendBtn = document.getElementById("sendBtn");
+
+function updateTokenDisplay(inputTokens, outputTokens, modelName) {
+  if (inputTokens) totalInputTokens += inputTokens;
+  if (outputTokens) totalOutputTokens += outputTokens;
+  
+  // Update display
+  const totalInputElement = document.getElementById('total-input-tokens');
+  const totalOutputElement = document.getElementById('total-output-tokens');
+  const lastApiElement = document.getElementById('last-api-tokens');
+  
+  if (totalInputElement) totalInputElement.textContent = totalInputTokens.toLocaleString();
+  if (totalOutputElement) totalOutputElement.textContent = totalOutputTokens.toLocaleString();
+  if (lastApiElement) {
+    lastApiElement.textContent = `${inputTokens || 0} → ${outputTokens || 0}`;
+    lastApiElement.title = `Model: ${modelName}`;
+  }
+  
+  // Log to console for debugging
+  console.log(`Token Usage: ${inputTokens || 0} input, ${outputTokens || 0} output (${modelName})`);
+}
+
+function monitorTokenUsage() {
+  // Check logs every 2 seconds for token usage
+  setInterval(async () => {
+    try {
+      const response = await fetch('/logs');
+      const data = await response.json();
+      
+      // Look for the latest token usage log
+      const tokenLogs = data.logs.filter(log => log.includes('TOKEN_USAGE'));
+      if (tokenLogs.length > 0) {
+        const latestTokenLog = tokenLogs[tokenLogs.length - 1];
+        
+        // Parse token usage from log format: "TOKEN_USAGE [timestamp] Model: input=X, output=Y"
+        const match = latestTokenLog.match(/input=(\d+), output=(\d+)/);
+        if (match) {
+          const inputTokens = parseInt(match[1]);
+          const outputTokens = parseInt(match[2]);
+          
+          // Extract model name
+          const modelMatch = latestTokenLog.match(/TOKEN_USAGE \[.*?\] (.*?): input=/);
+          const modelName = modelMatch ? modelMatch[1] : 'Unknown';
+          
+          updateTokenDisplay(inputTokens, outputTokens, modelName);
+        }
+      }
+    } catch (error) {
+      console.log('Error monitoring token usage:', error);
+    }
+  }, 2000);
+}
+
+// Function to convert markdown to HTML
+function markdownToHtml(text) {
+  // Convert **text** to <strong>text</strong>
+  return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
 
 function addMessage(sender, content) {
   const chat = document.getElementById("chat-box");
   const msg  = document.createElement("div");
   msg.className = sender === "user" ? "message user-message" : sender === "bot" ? "message bot-message" : "message system-message";
-  msg.textContent = content;
+  
+  // Use innerHTML to render markdown formatting
+  if (sender === "bot") {
+    msg.innerHTML = markdownToHtml(content);
+  } else {
+    msg.textContent = content;
+  }
+  
   // Side-by-side alignment
   msg.style.display = 'inline-block';
   msg.style.maxWidth = '70%';
@@ -67,7 +133,7 @@ btn.addEventListener("click", async () => {
   if (data.started) {
     sessionId = data.session_id;
     // Reset session type for new session
-    sessionType = null;
+    sessionType = "info";
     hasAskedSessionType = false;
     addMessage("system", `Session started: ${sessionId}`);
     btn.textContent = "End Session";
@@ -77,7 +143,7 @@ btn.addEventListener("click", async () => {
     document.getElementById("chat-box").innerHTML = "";
     sessionId = null;
     // Reset session type when session ends
-    sessionType = null;
+    sessionType = "info";
     hasAskedSessionType = false;
     btn.textContent = "Start Session";
   }
@@ -96,201 +162,49 @@ async function uploadFiles() {
   alert(data.status);
 }
 
-async function applyModel() {
-  const m = document.getElementById("model-picker").value;
-  const resp = await fetch(ENDPOINT.SETMDL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ model: m })
-  });
-  const data = await resp.json();
-  if (data.status === "ok") {
-    alert("Model switched to: " + data.model);
-  } else {
-    alert("Error: " + data.message);
-  }
-}
-
 function showSessionTypeModal(callback) {
-  // Create modal
-  const modal = document.createElement('div');
-  modal.id = 'session-type-modal';
-  modal.style.position = 'fixed';
-  modal.style.top = '0';
-  modal.style.left = '0';
-  modal.style.width = '100vw';
-  modal.style.height = '100vh';
-  modal.style.background = 'rgba(0,0,0,0.4)';
-  modal.style.display = 'flex';
-  modal.style.justifyContent = 'center';
-  modal.style.alignItems = 'center';
-  modal.style.zIndex = '9999';
-
-  const box = document.createElement('div');
-  box.style.background = '#fff';
-  box.style.padding = '24px 24px 20px 24px';
-  box.style.borderRadius = '16px';
-  box.style.boxShadow = '0 4px 32px rgba(0,0,0,0.18)';
-  box.style.textAlign = 'center';
-  box.style.minWidth = '220px';
-  box.style.minHeight = '80px';
-  box.style.display = 'flex';
-  box.style.flexDirection = 'column';
-  box.style.alignItems = 'center';
-  box.style.justifyContent = 'center';
-
-  const label = document.createElement('div');
-  label.textContent = 'Is this a Complaint or Info?';
-  label.style.fontSize = '17px';
-  label.style.marginBottom = '18px';
-  label.style.fontWeight = '600';
-  box.appendChild(label);
-
-  const btnComplaint = document.createElement('button');
-  btnComplaint.textContent = 'Complaint';
-  btnComplaint.className = 'type-btn complaint';
-  btnComplaint.onclick = () => {
-    sessionType = 'complaint';
-    hasAskedSessionType = true;
-    document.body.removeChild(modal);
-    renderSwitchTypeBtn();
-    if (callback) callback('complaint');
-  };
-  const btnInfo = document.createElement('button');
-  btnInfo.textContent = 'Info';
-  btnInfo.className = 'type-btn info';
-  btnInfo.onclick = () => {
-    sessionType = 'info';
-    hasAskedSessionType = true;
-    document.body.removeChild(modal);
-    renderSwitchTypeBtn();
-    if (callback) callback('info');
-  };
-  box.appendChild(btnComplaint);
-  box.appendChild(btnInfo);
-
-  // Add a close button
-  const closeBtn = document.createElement('span');
-  closeBtn.textContent = '×';
-  closeBtn.style.position = 'absolute';
-  closeBtn.style.top = '10px';
-  closeBtn.style.right = '18px';
-  closeBtn.style.fontSize = '22px';
-  closeBtn.style.cursor = 'pointer';
-  closeBtn.onclick = () => {
-    document.body.removeChild(modal);
-  };
-  box.appendChild(closeBtn);
-
-  modal.appendChild(box);
-  document.body.appendChild(modal);
+  // All sessions are now info sessions - no modal needed
+  if (callback) callback('info');
 }
 
 function renderSwitchTypeBtn() {
-  let btn = document.getElementById('switchTypeBtn');
-  const header = document.querySelector('.header-container');
-  if (!btn) {
-    btn = document.createElement('button');
-    btn.id = 'switchTypeBtn';
-    header.appendChild(btn);
-  }
-  if (sessionType === 'info') {
-    btn.textContent = 'Switch to Complaint';
-    btn.className = 'complaint';
-    btn.onclick = () => {
-      sessionType = 'complaint';
-      renderSwitchTypeBtn();
-    };
-  } else {
-    btn.textContent = 'Switch to Info';
-    btn.className = 'info';
-    btn.onclick = () => {
-      sessionType = 'info';
-      renderSwitchTypeBtn();
-    };
-  }
+  // No switching needed - always info
+  return;
 }
 
 function ensureSessionType(cb) {
-  if (sessionType) return cb(sessionType);
-  if (!hasAskedSessionType) {
-    showSessionTypeModal(cb);
-  } else {
-    // fallback
-    cb('info');
-  }
+  // Always return info
+  return cb('info');
 }
 
 function addSessionTypeSwitch() {
-  let switchDiv = document.getElementById('session-type-switch');
-  if (!switchDiv) {
-    switchDiv = document.createElement('div');
-    switchDiv.id = 'session-type-switch';
-    document.querySelector('.chat-container').insertBefore(switchDiv, document.querySelector('.chat-container').firstChild.nextSibling);
-  }
-  switchDiv.innerHTML = '';
-  const label = document.createElement('span');
-  label.textContent = 'Session type:';
-  label.style.fontSize = '13px';
-  label.style.marginRight = '6px';
-  switchDiv.appendChild(label);
-  ['info', 'complaint'].forEach(type => {
-    const btn = document.createElement('button');
-    btn.textContent = type.charAt(0).toUpperCase() + type.slice(1);
-    btn.className = sessionType === type ? 'selected' : '';
-    btn.style.padding = '4px 14px';
-    btn.style.borderRadius = '14px';
-    btn.style.border = sessionType === type ? '2px solid #007bff' : '1.5px solid #bbb';
-    btn.style.background = sessionType === type ? '#e3f0ff' : '#f5f7fa';
-    btn.style.color = sessionType === type ? '#007bff' : '#333';
-    btn.style.fontSize = '13px';
-    btn.style.cursor = 'pointer';
-    btn.style.marginRight = '6px';
-    btn.onclick = () => {
-      sessionType = type;
-      hasAskedSessionType = true;
-      addSessionTypeSwitch();
-    };
-    switchDiv.appendChild(btn);
-  });
-  switchDiv.style.borderBottom = '1px solid #e0eafc';
-  switchDiv.style.paddingBottom = '6px';
-  switchDiv.style.marginBottom = '8px';
+  // No session type switching needed
+  return;
 }
 
 function renderSuggestions(suggestions) {
+  console.log('renderSuggestions called with:', suggestions);
   let sugDiv = document.getElementById('suggestions');
   if (!sugDiv) {
-    sugDiv = document.createElement('div');
-    sugDiv.id = 'suggestions';
-    // Insert suggestions just after the last user message
-    const chatBox = document.getElementById('chat-box');
-    let lastUserMsg = null;
-    for (let i = chatBox.children.length - 1; i >= 0; i--) {
-      if (chatBox.children[i].classList.contains('user-message')) {
-        lastUserMsg = chatBox.children[i];
-        break;
-      }
-    }
-    if (lastUserMsg && lastUserMsg.nextSibling) {
-      chatBox.insertBefore(sugDiv, lastUserMsg.nextSibling);
-    } else if (lastUserMsg) {
-      chatBox.appendChild(sugDiv);
-    } else {
-      chatBox.appendChild(sugDiv);
-    }
+    console.error('Suggestions container not found');
+    return;
   }
+  
+  console.log('Found suggestions container, rendering...');
   sugDiv.innerHTML = '';
   if (!suggestions || suggestions.length === 0) {
     const msg = document.createElement('div');
     msg.textContent = 'No quick questions available.';
     msg.style.color = '#888';
     msg.style.fontSize = '14px';
-    msg.style.margin = '6px 0 0 8px';
+    msg.style.textAlign = 'center';
+    msg.style.padding = '20px';
     sugDiv.appendChild(msg);
     return;
   }
-  (suggestions || []).slice(0,3).forEach(s => {
+  
+  console.log(`Rendering ${suggestions.length} suggestions`);
+  (suggestions || []).slice(0,6).forEach((s, index) => {
     let clean = s.replace(/[`\[\]{}"']/g, '').trim();
     const btn = document.createElement('button');
     btn.textContent = clean;
@@ -299,17 +213,26 @@ function renderSuggestions(suggestions) {
       document.getElementById('user-input').focus();
     };
     sugDiv.appendChild(btn);
+    console.log(`Added suggestion ${index + 1}:`, clean);
   });
+  
+  console.log('Suggestions rendering complete');
 }
 
 async function fetchSuggestions(input) {
-  const resp = await fetch('/suggestions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ input })
-  });
-  const data = await resp.json();
-  renderSuggestions(data.suggestions);
+  console.log('fetchSuggestions called with input:', input);
+  try {
+    const resp = await fetch('/suggestions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ input })
+    });
+    const data = await resp.json();
+    console.log('Suggestions API response:', data);
+    renderSuggestions(data.suggestions);
+  } catch (error) {
+    console.error('Error fetching suggestions:', error);
+  }
 }
 
 function setupSuggestionInputListener() {
@@ -317,17 +240,34 @@ function setupSuggestionInputListener() {
   input.addEventListener('input', function() {
     if (suggestionDebounce) clearTimeout(suggestionDebounce);
     suggestionDebounce = setTimeout(() => {
-      fetchSuggestions(input.value);
-    }, 350);
+      // Only fetch suggestions if user has typed at least 3 characters
+      // This reduces unnecessary API calls and saves tokens
+      if (input.value.length >= 3) {
+        fetchSuggestions(input.value);
+      }
+    }, 1000); // Increased delay from 350ms to 1000ms to reduce API calls
   });
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  fetchSuggestions('');
+  // Don't fetch suggestions on page load - save tokens!
+  // fetchSuggestions('');  // REMOVED - was costing 2400+ tokens per page load
+  
+  // Show default suggestions without API calls
+  showDefaultSuggestions();
+  
   setupSuggestionInputListener();
-  renderSwitchTypeBtn();
-  addSessionTypeSwitch();
+  monitorTokenUsage(); // Start monitoring token usage
 });
+
+function showDefaultSuggestions() {
+  const defaultSuggestions = [
+    "What is the age requirement?",
+    "How much is the cash transfer?",
+    "What documents are needed?"
+  ];
+  renderSuggestions(defaultSuggestions);
+}
 
 async function sendMessage() {
   const input = document.getElementById("user-input");
@@ -337,11 +277,11 @@ async function sendMessage() {
     addMessage("bot","Please start a session first.");
     return;
   }
-  // Always ask for session type on first message of each session
-  if (!sessionType || !hasAskedSessionType) {
-    showSessionTypeModal(() => sendMessage());
-    return;
-  }
+  
+  // All sessions are info sessions
+  sessionType = "info";
+  hasAskedSessionType = true;
+  
   addMessage("user", text);
   input.value = "";
 
@@ -351,13 +291,10 @@ async function sendMessage() {
     body: JSON.stringify({ prompt: text, session_id: sessionId, session_type: sessionType })
   });
   const data = await resp.json();
-  if (sessionType === 'info') {
-    addBotMessageWithDetails(data.response || "No response.", data.kb_excerpt);
-    fetchSuggestions(text);
-  } else {
-    // Complaint mode: do not show any bot message
-    fetchSuggestions(text);
-  }
+  
+  // Always show bot message since all sessions are info
+  addBotMessageWithDetails(data.response || "No response.", data.kb_excerpt);
+  fetchSuggestions(text);
 }
 
 function addBotMessageWithDetails(response, kbExcerpt) {
@@ -380,7 +317,7 @@ function addBotMessageWithDetails(response, kbExcerpt) {
 
   // Main response text
   const mainText = document.createElement('div');
-  mainText.textContent = response;
+  mainText.innerHTML = markdownToHtml(response);
   msg.appendChild(mainText);
 
   if (kbExcerpt && kbExcerpt.length > 10) {
