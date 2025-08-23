@@ -4,70 +4,244 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Urdu Chatbot</title>
+  <title>Urdu Chatbot Admin Panel</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
   <div class="main-container">
+    <!-- Header Section -->
+    <header class="admin-header">
+      <h1>Urdu Chatbot Admin Panel</h1>
+      <p>Knowledge Base Management & System Control</p>
+    </header>
 
-    <!-- Admin Upload Overrides -->
-    <section class="upload-section">
-      <h3>Override Prompt & Knowledge (Admin)</h3>
-      <div class="file-inputs">
-        <div class="file-input">
-          <!-- <label for="promptFile">Prompt File</label>
-          <input type="file" id="promptFile" accept=".txt,.pdf,.docx"/> -->
-        </div>
-        <div class="file-input">
-          <label for="knowledgeFile">Knowledge File</label>
-          <input type="file" id="knowledgeFile" accept=".txt,.pdf,.docx"/>
-        </div>
-      </div>
-      <button onclick="uploadFiles()">Upload Overrides</button>
-    </section>
-
-    <!-- Token Usage Display -->
-    <section class="token-section">
-      <h3>Token Usage</h3>
-      <div id="token-display">
-        <div class="token-item">
-          <span class="token-label">Total Input:</span>
-          <span id="total-input-tokens" class="token-count">0</span>
-        </div>
-        <div class="token-item">
-          <span class="token-label">Total Output:</span>
-          <span id="total-output-tokens" class="token-count">0</span>
-        </div>
-        <div class="token-item">
-          <span class="token-label">Last API Call:</span>
-          <span id="last-api-tokens" class="token-count">-</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Chat Section -->
-    <section class="chat-container">
-      <header><h1>Chat with Urdu Bot</h1></header>
+    <!-- Knowledge Base Management Section -->
+    <section class="admin-section">
+      <h2>Knowledge Base Management</h2>
       
-      <section id="chat-box" class="chat-box"></section>
-
-      <!-- Suggested Questions Section - Right above input box -->
-      <section id="suggestions-container" class="suggestions-container">
-        <h3>Quick Questions</h3>
-        <div id="suggestions"></div>
-      </section>
-
-      <div class="input-container">
-        <input type="text" id="user-input" placeholder="اپنا پیغام درج کریں..." />
-        <button id="sendBtn" onclick="sendMessage()" disabled>Send</button>
+      <!-- File Upload Controls -->
+      <div class="upload-controls">
+        <div class="upload-group">
+          <h3>Single File Upload</h3>
+          <input type="file" id="knowledgeFile" accept=".txt,.pdf,.doc,.docx,.xls,.xlsx"/>
+          <button onclick="uploadSingleFile()" class="btn btn-primary">Upload Single File</button>
+        </div>
+        
+        <div class="upload-group">
+          <h3>Multiple Files Upload</h3>
+          <input type="file" id="knowledgeFiles" accept=".txt,.pdf,.doc,.docx,.xls,.xlsx" multiple/>
+          <button onclick="uploadMultipleFiles()" class="btn btn-primary">Upload Multiple Files</button>
+        </div>
       </div>
-
-      <div class="session-controls">
-        <button id="sessionBtn">Start Session</button>
+      
+      <!-- File Management -->
+      <div class="file-management">
+        <div class="file-header">
+          <h3>Current Knowledge Base Files</h3>
+          <div class="file-actions">
+            <button onclick="refreshFileList()" class="btn btn-secondary">Refresh</button>
+            <button onclick="clearAllFiles()" class="btn btn-danger">Clear All</button>
+          </div>
+        </div>
+        <div id="file-list">
+          <p>Loading files...</p>
+        </div>
       </div>
     </section>
 
+    <!-- Prompt Management Section -->
+    <section class="admin-section">
+      <h2>System Prompt Management</h2>
+      
+      <!-- Prompt Upload -->
+      <div class="prompt-upload">
+        <h3>Upload New System Prompt</h3>
+        <div class="prompt-input-wrapper">
+          <input type="file" id="systemPromptFile" accept=".txt"/>
+          <button onclick="uploadSystemPrompt()" class="btn btn-primary">Upload System Prompt</button>
+        </div>
+        <p class="prompt-info">Upload a .txt file to replace the current system prompt. This will affect how the chatbot responds to all users.</p>
+      </div>
+      
+      <!-- Current Prompt Display -->
+      <div class="current-prompt">
+        <h3>Current System Prompt</h3>
+        <div class="prompt-preview">
+          <p>Click "View Current Prompt" to see the active system prompt</p>
+          <button onclick="viewCurrentPrompt()" class="btn btn-secondary">View Current Prompt</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- System Monitoring Section -->
+    <section class="admin-section">
+      <h2>System Monitoring</h2>
+      
+      <!-- Token Usage Display -->
+      <div class="token-section">
+        <h3>Token Usage & Costs</h3>
+        <div id="token-display" class="token-grid">
+          <div class="token-item">
+            <span class="token-label">Total Input Tokens:</span>
+            <span id="total-input-tokens" class="token-count">0</span>
+          </div>
+          <div class="token-item">
+            <span class="token-label">Total Output Tokens:</span>
+            <span id="total-output-tokens" class="token-count">0</span>
+          </div>
+          <div class="token-item">
+            <span class="token-label">Last API Call:</span>
+            <span id="last-api-tokens" class="token-count">-</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chat Testing Section -->
+    <section class="admin-section">
+      <h2>Chat Testing & Development</h2>
+      
+      <!-- Chat Interface -->
+      <div class="chat-container">
+        <div class="chat-header">
+          <h3>Test Chat Interface</h3>
+          <div class="session-controls">
+            <button id="sessionBtn" class="btn btn-success">Start Session</button>
+          </div>
+        </div>
+        
+        <div id="chat-box" class="chat-box"></div>
+
+        <!-- Suggested Questions -->
+        <div class="suggestions-container">
+          <h4>Quick Test Questions</h4>
+          <div id="suggestions" class="suggestions-grid"></div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-container">
+          <input type="text" id="user-input" placeholder="Type your test message here..." />
+          <button id="sendBtn" onclick="sendMessage()" disabled class="btn btn-primary">Send</button>
+        </div>
+      </div>
+    </section>
   </div>
+  
   <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script>
+    // Prompt management functionality
+    function uploadSystemPrompt() {
+      const fileInput = document.getElementById('systemPromptFile');
+      const file = fileInput.files[0];
+      
+      if (!file) {
+        alert('Please select a file first');
+        return;
+      }
+      
+      if (file.type !== 'text/plain' && !file.name.endsWith('.txt')) {
+        alert('Please select a .txt file');
+        return;
+      }
+      
+      const formData = new FormData();
+      formData.append('prompt_file', file);
+      
+      fetch('/upload_prompt', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          alert('System prompt updated successfully!');
+          fileInput.value = '';
+        } else {
+          alert('Error updating prompt: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating prompt');
+      });
+    }
+    
+    function viewCurrentPrompt() {
+      fetch('/get_prompt')
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          // Create a modal to display the prompt
+          const modal = document.createElement('div');
+          modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+          `;
+          
+          const content = document.createElement('div');
+          content.style.cssText = `
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+            position: relative;
+          `;
+          
+          const closeBtn = document.createElement('button');
+          closeBtn.textContent = '×';
+          closeBtn.style.cssText = `
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+          `;
+          closeBtn.onclick = () => document.body.removeChild(modal);
+          
+          const title = document.createElement('h3');
+          title.textContent = 'Current System Prompt';
+          title.style.marginBottom = '15px';
+          
+          const promptText = document.createElement('pre');
+          promptText.style.cssText = `
+            white-space: pre-wrap;
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #e1e8ed;
+            max-height: 400px;
+            overflow-y: auto;
+          `;
+          promptText.textContent = data.prompt;
+          
+          content.appendChild(closeBtn);
+          content.appendChild(title);
+          content.appendChild(promptText);
+          modal.appendChild(content);
+          document.body.appendChild(modal);
+        } else {
+          alert('Error loading prompt: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error loading prompt');
+      });
+    }
+  </script>
 </body>
 </html>

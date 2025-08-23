@@ -372,3 +372,162 @@ function formatResponse(text) {
   return text.replace(/<hilight>(.*?)<\/hilight>/g, 
       '<span class="hilight">$1</span>');
 }
+
+// File management functions
+async function uploadSingleFile() {
+  const fileInput = document.getElementById('knowledgeFile');
+  const file = fileInput.files[0];
+  
+  if (!file) {
+    alert('Please select a file first.');
+    return;
+  }
+  
+  const formData = new FormData();
+  formData.append('knowledgeFile', file);
+  
+  try {
+    const response = await fetch('/upload', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const result = await response.json();
+    if (result.status === 'override_uploaded') {
+      alert('File uploaded successfully!');
+      refreshFileList();
+      fileInput.value = ''; // Clear input
+    } else {
+      alert('Upload failed: ' + (result.message || 'Unknown error'));
+    }
+  } catch (error) {
+    console.error('Upload error:', error);
+    alert('Upload failed: ' + error.message);
+  }
+}
+
+async function uploadMultipleFiles() {
+  const fileInput = document.getElementById('knowledgeFiles');
+  const files = fileInput.files;
+  
+  if (files.length === 0) {
+    alert('Please select files first.');
+    return;
+  }
+  
+  const formData = new FormData();
+  for (let i = 0; i < files.length; i++) {
+    formData.append('knowledgeFiles', files[i]);
+  }
+  
+  try {
+    const response = await fetch('/upload', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const result = await response.json();
+    if (result.status === 'files_uploaded') {
+      const successCount = result.uploaded_files.filter(f => f.status === 'success').length;
+      alert(`Successfully uploaded ${successCount} out of ${result.total_files} files!`);
+      refreshFileList();
+      fileInput.value = ''; // Clear input
+    } else {
+      alert('Upload failed: ' + (result.message || 'Unknown error'));
+    }
+  } catch (error) {
+    console.error('Upload error:', error);
+    alert('Upload failed: ' + error.message);
+  }
+}
+
+async function refreshFileList() {
+  const fileListDiv = document.getElementById('file-list');
+  fileListDiv.innerHTML = '<p>Loading files...</p>';
+  
+  try {
+    const response = await fetch('/files');
+    const result = await response.json();
+    
+    if (result.status === 'success') {
+      if (result.files.length === 0) {
+        fileListDiv.innerHTML = '<p>No files in knowledge base.</p>';
+        return;
+      }
+      
+      let html = '<div class="file-list">';
+      result.files.forEach(file => {
+        html += `
+          <div class="file-item">
+            <div class="file-info">
+              <span class="file-name">${file.name}</span>
+              <span class="file-type">${file.type.toUpperCase()}</span>
+              <span class="file-size">${(file.size / 1024).toFixed(1)} KB</span>
+              <span class="chunk-count">${file.chunk_count} chunks</span>
+              <span class="upload-date">${file.upload_date}</span>
+            </div>
+            <button onclick="deleteFile('${file.file_id}')" class="delete-btn">Delete</button>
+          </div>
+        `;
+      });
+      html += '</div>';
+      fileListDiv.innerHTML = html;
+    } else {
+      fileListDiv.innerHTML = '<p>Error loading files: ' + result.message + '</p>';
+    }
+  } catch (error) {
+    console.error('Error loading files:', error);
+    fileListDiv.innerHTML = '<p>Error loading files: ' + error.message + '</p>';
+  }
+}
+
+async function deleteFile(fileId) {
+  if (!confirm('Are you sure you want to delete this file? This action cannot be undone.')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch(`/files/${fileId}`, {
+      method: 'DELETE'
+    });
+    
+    const result = await response.json();
+    if (result.status === 'success') {
+      alert('File deleted successfully!');
+      refreshFileList();
+    } else {
+      alert('Delete failed: ' + result.message);
+    }
+  } catch (error) {
+    console.error('Delete error:', error);
+    alert('Delete failed: ' + error.message);
+  }
+}
+
+async function clearAllFiles() {
+  if (!confirm('Are you sure you want to clear ALL files from the knowledge base? This action cannot be undone and will remove all knowledge chunks.')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch('/files/clear', {
+      method: 'POST'
+    });
+    
+    const result = await response.json();
+    if (result.status === 'success') {
+      alert('All files cleared successfully!');
+      refreshFileList();
+    } else {
+      alert('Clear failed: ' + result.message);
+    }
+  } catch (error) {
+    console.error('Clear error:', error);
+    alert('Clear failed: ' + error.message);
+  }
+}
+
+// Load file list when page loads
+document.addEventListener('DOMContentLoaded', function() {
+  refreshFileList();
+});

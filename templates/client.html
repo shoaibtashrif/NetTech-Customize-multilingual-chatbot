@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Support Bot</title>
+    <title>Urdu Chatbot</title>
     <style>
-        /* General Reset */
         * {
             margin: 0;
             padding: 0;
@@ -253,7 +252,7 @@
     <div class="chat-container">
         <!-- Header with Session Button -->
         <div class="header-container">
-            <h1>Urdu Chatbot (Client)</h1>
+            <h1>Urdu Chatbot</h1>
             <button id="sessionBtn">Start Session</button>
         </div>
 
@@ -264,19 +263,19 @@
 
         <!-- Suggested Questions Section - Right above input box -->
         <section id="suggestions-container" class="suggestions-container">
+            <h3>Quick Questions</h3>
             <div id="suggestions"></div>
         </section>
 
         <!-- Input Area -->
         <div class="input-container">
-            <input type="text" id="user-input" placeholder="Type your message..." onkeypress="handleKeyPress(event)" />
+            <input type="text" id="user-input" placeholder="اپنا پیغام درج کریں..." onkeypress="handleKeyPress(event)" />
             <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
         </div>
     </div>
-
+    
     <script src="/static/script.js"></script>
     <script>
-        // Handle Enter key press
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();

@@ -1,213 +1,458 @@
-## 1. BISP Nashonuma Programme
-
-The Benazir Income Support Programme (BISP) is implementing its flagship Conditional Cash Transfer–based Stunting Prevention Programme "Nashonuma" to break the intergenerational cycle of malnutrition in the poorest households. Launched in August 2020 in 14 districts (and ICT), and scaled up nationwide in December 2022, it targets pregnant & lactating women and children under two, delivering a comprehensive package of nutrition and health interventions through "Facilitation Centres" embedded at tehsil/taluka/district health facilities .
-
----
-
-## 2. Adolescent Health and Nutrition in Pakistan
-
-* **Demographics & Context**
-  Pakistan has \~42 million adolescents. Despite a demographic dividend, poverty, low female education, limited water/sanitation, and gender norms hinder adolescent health.&#x20;
-* **Reproductive Health**
-  Median age at first birth remains 22 years. 8 % of girls 13–19 have begun childbearing (15 % among those without education), and 39 % of first births occur in this age group. Contraceptive prevalence is just 7 % for married adolescents (13–19 years). Adolescent fertility (44 / 1 000) is among the highest globally, and maternal mortality for 13–19 year‐olds is 194 / 100 000 live births vs. 166 / 100 000 national average .
-* **Nutrition Status**
-  Malnutrition is the third leading cause of DALYs among adolescents. 11.8 % of girls are underweight; 11.4 % are overweight. Over half (56.6 %) of adolescent girls are anemic, with higher rates among those from poorer or less‐educated families.&#x20;
-* **Barriers**
-  Cultural norms limit girls' autonomy, control over food, and use of health services; mothers often make nutrition decisions.&#x20;
-
----
-
-## 3. Current Interventions on Adolescent Girls
-
-There are few pilot nutrition interventions—no large‐scale programmes. Pilots focus on micronutrient deficiencies, including:
-
-* Screening malnourished girls for anemia
-* School-based WASH and menstrual hygiene management
-* Biannual deworming and distribution of iron & folic acid or multi-micronutrient supplements
-* Preconception care integrated into adolescent outreach
-
-These pilots have been linked to improved school performance, energy levels and reproductive outcomes. Multi-micronutrient trials in Sindh will inform future policy .
-
----
-
-## 4. Primary Objectives
-
-* Contribute to reduction of anemia among adolescent girls in BISP Kafalat households&#x20;
-
----
-
-## 5. Secondary Objectives
-
-* Provide weekly iron-folic acid supplementation to 100 000 adolescent girls (13–19 years) in 6 targeted districts
-* Engage adolescent girls as agents of change to influence household and community nutrition behaviors&#x20;
-
----
-
-## 6. Process Flow
-
-1. **Facilitation Centre Setup**
-   Each district/tehsil hospital hosts a centre staffed and trained per BNP protocols.
-2. **Enrollment & Registration**
-   – Verify beneficiary via mother's CNIC (synced with NSER/NADRA); adolescent's B-form required.
-   – Issue registration booklet; record family composition and enter data into the application.
-3. **Anthropometry**
-   Measure height & weight; record in booklet and system.
-4. **Awareness Session**
-   Interactive group counselling for girls and mothers on healthy diets, IFA importance, hygiene and health-seeking.
-5. **Supplement Provision & Cash Transfer**
-   – Administer first IFA tablet under staff supervision.
-   – On compliance verification, disburse Rs 2 000 per quarter via BISP payment, guiding use for daughter's nutrition.
-6. **Follow-up & Peer Support**
-   – Monthly visits by social mobilizers/LHWs for adherence data.
-   – LHWs counsel families; peer groups reinforce messaging in community.
-7. **Supply Chain Management**
-   WFP stores IFA at district warehouses and distributes to centres; stock registers maintained.
-8. **Graduation/Exit**
-   Continues until final quarter or age 19, with compliance as graduation criterion .
-
----
-
-## 7. Supplementation Protocols
-
-* **Awareness & First Dose**
-  Combined with the first quarter awareness session.
-* **Dosage**
-  – Iron: 60 mg elemental
-  – Folic acid: 2 800 μg (2.8 mg)
-* **Schedule**
-  – Once-weekly for 3 months, then continued weekly (36 weeks in Year 1; 52 weeks/year thereafter per July 29 2024 update).
-* **Missed Doses**
-  Take the missed tablet next day; if not feasible, resume on the following week's scheduled day.
-* **Side Effects & Guidance**
-  Participants refer concerns to a doctor; protocols and calendar pasted in the registration card for self-recording .
-
----
-
-## 8. FAQs – Adolescent Nutrition Program (ANP)
-
-### 1. What is the Adolescent Nutrition component of BNP?
-
-The Adolescent Nutrition component of the Benazir Nashonuma Program (BNP) focuses on improving the nutritional status of adolescent girls, especially those between the ages of 13 to 19 years, in targeted districts of Pakistan. This component is crucial for breaking the intergenerational cycle of malnutrition, reducing the risks of early pregnancy, and ensuring healthier future mothers.
-
-### 2. Who is eligible for this program?
-
-- Adolescent girls aged 13 years to 17 years, 11 months, and 29 days.
-- Must be registered as a BISP beneficiary or be part of the 8171 program (above PMT score).
-- At the time of registration, the girl must be unmarried. Once registered, she continues in the program even if her marital status changes later.
-
-### 3. What support is provided to adolescent girls under BNP?
-
-- Regular provision of IFA tablets to prevent and treat anemia
-- Balanced diet and healthy eating habits
-- Menstrual hygiene management
-- Physical activity
-- Reproductive health awareness
-- Counseling for healthy behaviors
-- Peer group sessions
-- Community awareness activities
-
-### 4. How can adolescent girls enroll in this program?
-
-Eligible girls (or their guardians) can visit the nearest BNP Facilitation Center (often located in RHCs, THQs, or DHQs) in Rajanpur for registration. FC Staff at the center record:
-- Basic personal details
-- Health information (weight, height, MUAC, etc.)
-- Records are maintained manually or via the BISP Nashonuma App.
-
-### 5. Is there any cost for participation?
-
-There's no fee for registration or services under BNP.
-
-### 6. Why is adolescent nutrition important?
-
-Adolescents (13–19 years) go through a phase of fast physical growth, hormonal changes, and brain development. They need extra nutrients to support this growth. Many adolescents, especially girls, suffer from anemia and micronutrient deficiencies. Good nutrition helps prevent these problems.
-
-### 7. Can school-going girls benefit from this program?
-
-The adolescent nutrition component of BNP is for all eligible adolescent girls (13–19 years), whether they are in school or out of school.
-
-### 8. How frequently do adolescents have to visit the center?
-
-Generally, adolescent girls enrolled in BNP are expected to visit the center after 3 months (Quarterly).
-
-### 9. Are boys included in the adolescent nutrition component?
-
-No, Boys are not included. Currently, the adolescent nutrition component of BNP mainly focuses on adolescent girls.
-
-### 10. What documents are required for registration?
-
-- B-Form of adolescent updated with Mother's CNIC and Mother's CNIC
-
-### 11. What if the adolescent girl is married?
-
-At the time of admission, the adolescent girl must be unmarried. However, if she gets married after enrollment and is willing to continue, she will remain eligible to receive services under the program.
-
-### 12. Objective of the Program
-
-Adolescence is a period of rapid growth requiring adequate nutrition for healthy physical and cognitive development. Poor nutrition during adolescence can lead to:
-- Anaemia
-- Stunted growth
-- Weak immunity
-- Poor academic performance
-- Complications in future pregnancies for girls
-
-### 13. Services Provided
-
-What services are provided under this program?
-- Nutrition counselling sessions
-- Iron Folic Acid (IFA) supplementation to prevent anaemia
-- Nutrition education on balanced diets and healthy lifestyles
-- Guidance on improving health and hygiene
-
-### 14. Program Process
-
-How does the ANP process work?
-
-1. **Arrival and Registration:**
-   - The adolescent arrives with her mother or caregiver at the Facilitation Centre (FC).
-   - Registration takes place at the registration desk.
-   - A token is issued for the process.
-
-2. **Group Sessions:**
-   - Adolescent girls attend in groups at the Facilitation Centre.
-   - Staff conduct awareness sessions about program objectives and services.
-
-3. **Service Delivery:**
-   - Program protocols are followed at the FC.
-   - Iron Folic Acid (IFA) supplements are provided and consumed at the centre under supervision.
-   - Staff educate beneficiaries on proper IFA consumption and schedule the next follow-up visit.
-   - Beneficiaries are also guided on how to withdraw any associated payments via designated agents.
-
-4. **Time Required:**
-   - Approximately 1 to 1.5 hours waiting time.
-   - Approximately 1 to 1.5 hours for service delivery at the Facilitation Centre.
-
-### 15. Special Situations
-
-**Can multiple sisters be enrolled at the same time?**
-- Yes, up to four sisters can be enrolled in the program simultaneously.
-
-**What happens if an adolescent's mother has passed away?**
-- The adolescent can choose whether to continue in the program or not. If yes, then we will give only IFAS.
-
-**What if a beneficiary moves from a district where ANP is not available?**
-This is currently a pilot project limited to the district of Rajanpur. If any BISP beneficiaries migrate to another district, they should visit the local BISP office to update their district of residence to help ensure continuity of program services wherever possible.
-
-### 16. Facilities at Facilitation Centres
-
-The following should be available at all Facilitation Centres:
-- IEC (Information, Education, Communication) materials
-- Disposable glasses
-- Session calendar
-- Social maps
-- CFM (Complaint and Feedback Mechanism) numbers
-- Emergency contact numbers
-
-### 17. Application/System Issues
-
-- Initially, some girls who have graduated from the program still appear in the due list.
-- Some beneficiaries who have exited the program also remain visible in the system's due list.
-- The application frequently shows errors, which are referred to the IT admin for resolution.
-- In some cases, the application allows skipping quarters prematurely.
-- The above PMT beneficeries account still has not been created even though they have graduated.
-
-
+===================================DEEPGRAM NOISE====================================
+(PICKS UP ALL THE NOISE AND SENDS IT AS FINAL TRANSCRIPT TO THE CHATBOT, NOISE CAUSES THE CALL TO END)
+2025-08-18 14:14:39 - INFO - final :  i want to book an appointment
+2025-08-18 14:14:39 - INFO - STT_LATENCY: DEEPGRAM | websocket_latency: 1988.21ms | session: CAe24c2a7e3f2ed2611371598af041334f
+2025-08-18 14:14:39 - INFO - STTU: Received final transcript: "i want to book an appointment"
+2025-08-18 14:14:39 - INFO - CHEKING HOT NODE FOR NODE: opt_intent_extraction, result is : False
+2025-08-18 14:14:39 - INFO - incoking classifier
+2025-08-18 14:14:39 - ERROR - in classifier, returning Default True
+2025-08-18 14:14:39 - INFO - moved on after time out or finish
+RESTARTING
+SKIP INTERRUPTION
+2025-08-18 14:14:39 - INFO - STT_LATENCY: DEEPGRAM | processing_latency: 62.95ms | session: CAe24c2a7e3f2ed2611371598af041334f
+2025-08-18 14:14:44 - INFO - StreamHandlerU : decrement logcheck_node_trials  | Tried to fetch the node from the trails dict : 4
+2025-08-18 14:14:44 - INFO - StreamHandlerU : decrement logcheck_node_trials  | Decrement the value for this node opt_intent_extraction to : 3
+2025-08-18 14:14:44 - INFO - StreamHandlerU: Finished streaming all chunks for this turn.
+2025-08-18 14:14:44 - INFO - StreamHandlerU: Updated current_node to "opt_intent_extraction".
+2025-08-18 14:14:48 - INFO - final :  just a moment ago
+2025-08-18 14:14:48 - INFO - STT_LATENCY: DEEPGRAM | websocket_latency: 1996.97ms | session: CAe24c2a7e3f2ed2611371598af041334f
+2025-08-18 14:14:48 - INFO - STTU: Received final transcript: "just a moment ago"
+2025-08-18 14:14:48 - INFO - STT_LATENCY: DEEPGRAM | processing_latency: 2.78ms | session: CAe24c2a7e3f2ed2611371598af041334f
+2025-08-18 14:14:48 - INFO - LLMU: Received transcription: "just a moment ago "
+2025-08-18 14:14:48 - INFO - LLMU check_node_trials | transfer message : I want to make sure you get the best assistance possible.  Let me transfer you to the VOICE MAIL
+2025-08-18 14:14:48 - INFO - LLMU check_node_trials  | for node opt_intent_extraction, has 3 left
+2025-08-18 14:14:48 - INFO - LLMU check_node_trials  | It's chill we still got some left
+2025-08-18 14:14:48 - INFO - LLMU: zero_trails_flag for session CAe24c2a7e3f2ed2611371598af041334f: False
+2025-08-18 14:14:48 - INFO - LLMU: Sending to chatbot API: "just a moment ago "
+2025-08-18 14:14:49 - INFO - interim :  is the time i want to
+2025-08-18 14:14:49 - INFO - STTU : Interruption Detected : Pausing & discarding LLM output if any
+2025-08-18 14:14:50 - INFO - interim :  is the time i want to book an appointment
+2025-08-18 14:14:50 - INFO - STTU : Interruption Detected : Pausing & discarding LLM output if any
+2025-08-18 14:14:51 - INFO - final :  i want to book an appointment
+2025-08-18 14:14:51 - INFO - STT_LATENCY: DEEPGRAM | websocket_latency: 1994.69ms | session: CAe24c2a7e3f2ed2611371598af041334f
+2025-08-18 14:14:51 - INFO - STTU: Received final transcript: "i want to book an appointment"
+2025-08-18 14:14:51 - INFO - CHEKING HOT NODE FOR NODE: , result is : False
+2025-08-18 14:14:51 - INFO - incoking classifier
+2025-08-18 14:14:51 - ERROR - in classifier, returning Default True
+2025-08-18 14:14:51 - INFO - moved on after time out or finish
+2025-08-18 14:14:51 - INFO - STTU: Concatenated transcript due to interruption: "just a moment ago  i want to book an appointment"
+RESTARTING
+EMPTYING TTS-OUTPUT QUEUE
+EMPTYING LLM-TTS QUEUE
+EMPTYING OUTPUT-APP QUEUE
+DONE Flushing the queues
+Handled the restart
+2025-08-18 14:14:51 - INFO - STT_LATENCY: DEEPGRAM | processing_latency: 63.56ms | session: CAe24c2a7e3f2ed2611371598af041334f
+2025-08-18 14:14:53 - INFO - LLMU: Chatbot API responded in 4.52s with status 200
+2025-08-18 14:14:53 - INFO - LLMU: Chatbot returned 200 OK → body: {"message":["How can I assist you with your appointment today?"],"thread_id":"CAe24c2a7e3f2ed2611371598af041334f","current_node":"opt_intent_extraction","current_node_type":"reading_back","transfer":false,"end_flag":false}
+2025-08-18 14:14:53 - INFO - LLMU: Updated next_node to 'opt_intent_extraction'.
+2025-08-18 14:14:53 - INFO - LLMU decrement_node_trials | Node opt_intent_extraction trials decreased to 2
+2025-08-18 14:14:53 - INFO - LLMU: Interrupted by user while preparing response; discarding LLM output.
+2025-08-18 14:14:53 - INFO - LLMU: Received transcription: "just a moment ago  i want to book an appointment"
+2025-08-18 14:14:53 - INFO - LLMU check_node_trials | transfer message : I want to make sure you get the best assistance possible.  Let me transfer you to the VOICE MAIL
+2025-08-18 14:14:53 - INFO - LLMU check_node_trials  | for node opt_intent_extraction, has 2 left
+2025-08-18 14:14:53 - INFO - LLMU check_node_trials  | It's chill we still got some left
+2025-08-18 14:14:53 - INFO - LLMU: zero_trails_flag for session CAe24c2a7e3f2ed2611371598af041334f: False
+2025-08-18 14:14:53 - INFO - LLMU: Sending to chatbot API: "just a moment ago  i want to book an appointment"
+2025-08-18 14:14:56 - INFO - final :  in ukraine
+2025-08-18 14:14:56 - INFO - STT_LATENCY: DEEPGRAM | websocket_latency: 1977.15ms | session: CAe24c2a7e3f2ed2611371598af041334f
+2025-08-18 14:14:56 - INFO - STTU: Received final transcript: "in ukraine"
+2025-08-18 14:14:56 - INFO - invoking classifier
+2025-08-18 14:14:56 - ERROR - in classifier, returning Default True
+2025-08-18 14:14:56 - INFO - classifier finishes no time out
+2025-08-18 14:14:56 - INFO - STTU: Concatenated transcript due to interruption: "just a moment ago  i want to book an appointment in ukraine"
+RESTARTING
+EMPTYING TTS-OUTPUT QUEUE
+EMPTYING LLM-TTS QUEUE
+EMPTYING OUTPUT-APP QUEUE
+DONE Flushing the queues
+Handled the restart
+2025-08-18 14:14:56 - INFO - STT_LATENCY: DEEPGRAM | processing_latency: 57.30ms | session: CAe24c2a7e3f2ed2611371598af041334f
+2025-08-18 14:14:57 - INFO - interim :  but mister trump has said a great
+2025-08-18 14:14:58 - INFO - LLMU: Chatbot API responded in 5.31s with status 200
+2025-08-18 14:14:58 - INFO - LLMU: Chatbot returned 200 OK → body: {"message":["Do you have the requisition form for your appointment with you?"],"thread_id":"CAe24c2a7e3f2ed2611371598af041334f","current_node":"collect_service_number","current_node_type":"collection","transfer":false,"end_flag":false}
+2025-08-18 14:14:58 - INFO - LLMU: Updated next_node to 'collect_service_number'.
+2025-08-18 14:14:58 - INFO - LLMU decrement_node_trials | Node collect_service_number trials decreased to 3
+2025-08-18 14:14:58 - INFO - LLMU: Interrupted by user while preparing response; discarding LLM output.
+2025-08-18 14:14:58 - INFO - LLMU: Received transcription: "just a moment ago  i want to book an appointment in ukraine"
+2025-08-18 14:14:58 - INFO - LLMU check_node_trials | transfer message : I'm having difficulty understanding which service you need.  Let me transfer you to the VOICE MAIL
+2025-08-18 14:14:58 - INFO - LLMU check_node_trials  | for node collect_service_number, has 3 left
+2025-08-18 14:14:58 - INFO - LLMU check_node_trials  | It's chill we still got some left
+2025-08-18 14:14:58 - INFO - LLMU: zero_trails_flag for session CAe24c2a7e3f2ed2611371598af041334f: False
+2025-08-18 14:14:58 - INFO - LLMU: Sending to chatbot API: "just a moment ago  i want to book an appointment in ukraine"
+2025-08-18 14:15:01 - INFO - LLMU: Chatbot API responded in 3.09s with status 200
+2025-08-18 14:15:01 - INFO - LLMU: Chatbot returned 200 OK → body: {"message":["I'm sorry, but we are unable to book appointments for locations outside of our clinic's area. Could you clarify if you still need assistance with booking an appointment at our clinic? If so, do you have the requisition form for your appointment with you?"],"thread_id":"CAe24c2a7e3f2ed2611371598af041334f","current_node":"collect_service_number","current_node_type":"collection","transfer":false,"end_flag":false}
+2025-08-18 14:15:01 - INFO - LLMU: Updated next_node to 'collect_service_number'.
+2025-08-18 14:15:01 - INFO - LLMU decrement_node_trials | Node collect_service_number trials decreased to 2
+2025-08-18 14:15:01 - INFO - LLMU: LLM response ready; next node: collect_service_number
+2025-08-18 14:15:01 - INFO - 33.0
+2025-08-18 14:15:01 - INFO - TTSU: Received text from input queue: "I'm sorry, but we are unable to book appointments for locations outside of our clinic's area. Could you clarify if you still need assistance with booking an appointment at our clinic? If so, do you have the requisition form for your appointment with you?"
+2025-08-18 14:15:01 - INFO - TTSU: Logged 'GOT IN TTS' to performance pipeline.
+2025-08-18 14:15:01 - INFO - TTSU: Starting process_sentence for text: "I'm sorry, but we are unable to book appointments for locations outside of our clinic's area. Could you clarify if you still need assistance with booking an appointment at our clinic? If so, do you have the requisition form for your appointment with you?"
+2025-08-18 14:15:01 - INFO - TTSU: WebSocket connection established to ElevenLabs API.
+2025-08-18 14:15:01 - INFO - TTSU: Sent initial handshake payload to TTS API.
+2025-08-18 14:15:01 - INFO - TTSU: Sent text for synthesis: "I'm sorry, but we are unable to book appointments for locations outside of our clinic's area. Could you clarify if you still need assistance with booking an appointment at our clinic? If so, do you have the requisition form for your appointment with you?"
+2025-08-18 14:15:02 - INFO - interim :  all state department corresponded on basis
+2025-08-18 14:15:02 - INFO - STTU : Interruption Detected : Pausing & discarding LLM output if any
+2025-08-18 14:15:02 - INFO - StreamHandlerU: Interruption active, delaying output.
+2025-08-18 14:15:02 - INFO - TTSU: Sent final buffered audio to output queue.
+2025-08-18 14:15:02 - INFO - TTSU: Completed process_sentence in 1.08s.
+2025-08-18 14:15:04 - INFO - interim :  isolated
+2025-08-18 14:15:04 - INFO - STTU : Interruption Detected : Pausing & discarding LLM output if any
+2025-08-18 14:15:04 - INFO - StreamHandlerU: Interruption active, delaying output.
+2025-08-18 14:15:05 - INFO - final :  i selected no door
+2025-08-18 14:15:05 - INFO - STT_LATENCY: DEEPGRAM | websocket_latency: 2001.65ms | session: CAe24c2a7e3f2ed2611371598af041334f
+2025-08-18 14:15:05 - INFO - STTU: Received final transcript: "i selected no door"
+2025-08-18 14:15:05 - INFO - CHEKING HOT NODE FOR NODE: collect_service_number, result is : True
+2025-08-18 14:15:05 - INFO - CHEKING HOT # WORD # FOR NODE: collect_service_number, result is : True
+2025-08-18 14:15:05 - INFO - STTU : PASSED HOT NODE CONDITIONS -> BUT enough data & hot node & hot word
+RESTARTING
+EMPTYING TTS-OUTPUT QUEUE
+EMPTYING LLM-TTS QUEUE
+EMPTYING OUTPUT-APP QUEUE
+DONE Flushing the queues
+Handled the restart
+2025-08-18 14:15:05 - INFO - STT_LATENCY: DEEPGRAM | processing_latency: 210.63ms | session: CAe24c2a7e3f2ed2611371598af041334f
+2025-08-18 14:15:05 - INFO - LLMU: Received transcription: "i selected no door "
+2025-08-18 14:15:05 - INFO - LLMU check_node_trials | transfer message : I'm having difficulty understanding which service you need.  Let me transfer you to the VOICE MAIL
+2025-08-18 14:15:05 - INFO - LLMU check_node_trials  | for node collect_service_number, has 2 left
+2025-08-18 14:15:05 - INFO - LLMU check_node_trials  | It's chill we still got some left
+2025-08-18 14:15:05 - INFO - LLMU: zero_trails_flag for session CAe24c2a7e3f2ed2611371598af041334f: False
+2025-08-18 14:15:05 - INFO - LLMU: Sending to chatbot API: "i selected no door "
+2025-08-18 14:15:06 - INFO - interim :  this was a
+2025-08-18 14:15:06 - INFO - STTU : Interruption Detected : Pausing & discarding LLM output if any
+2025-08-18 14:15:07 - INFO - interim :  this was a red carpet where
+2025-08-18 14:15:07 - INFO - STTU : Interruption Detected : Pausing & discarding LLM output if any
+2025-08-18 14:15:07 - INFO - StreamHandlerU: Finished streaming all chunks for this turn.
+2025-08-18 14:15:07 - INFO - StreamHandlerU: Updated current_node to "collect_service_number".
+2025-08-18 14:15:08 - INFO - final :  this was a red carpet welcome
+2025-08-18 14:15:08 - INFO - STT_LATENCY: DEEPGRAM | websocket_latency: 1992.12ms | session: CAe24c2a7e3f2ed2611371598af041334f
+2025-08-18 14:15:08 - INFO - STTU: Received final transcript: "this was a red carpet welcome"
+2025-08-18 14:15:08 - INFO - CHEKING HOT NODE FOR NODE: , result is : False
+
+
+
+
+
+
+
+===================================GOOGLE NOISE====================================
+(PICKS UP THE NOISE, BUT IN THE FINAL TRANSCRIPT SENDS ONLY THE USER’s DIALOGUE)
+2025-08-18 14:09:22 - INFO - final :   I want to book an appointment.
+2025-08-18 14:09:22 - INFO - STT_LATENCY: GOOGLE | websocket_latency: 1997.40ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:09:22 - INFO - STTU: Received final transcript: " I want to book an appointment."
+2025-08-18 14:09:22 - INFO - CHEKING HOT NODE FOR NODE: opt_intent_extraction, result is : False
+2025-08-18 14:09:22 - INFO - incoking classifier
+2025-08-18 14:09:22 - ERROR - in classifier, returning Default True
+2025-08-18 14:09:22 - INFO - moved on after time out or finish
+2025-08-18 14:09:22 - INFO - STTU: Concatenated transcript due to interruption: "Important to listen to.   The following.  I want to book an appointment."
+RESTARTING
+SKIP INTERRUPTION
+2025-08-18 14:09:22 - INFO - STT_LATENCY: GOOGLE | processing_latency: 66.28ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:09:30 - INFO - StreamHandlerU : decrement logcheck_node_trials  | Tried to fetch the node from the trails dict : 4
+2025-08-18 14:09:30 - INFO - StreamHandlerU : decrement logcheck_node_trials  | Decrement the value for this node opt_intent_extraction to : 3
+2025-08-18 14:09:30 - INFO - StreamHandlerU: Finished streaming all chunks for this turn.
+2025-08-18 14:09:30 - INFO - StreamHandlerU: Updated current_node to "opt_intent_extraction".
+2025-08-18 14:09:34 - INFO - interim :   I,
+2025-08-18 14:09:34 - INFO - interim :   I want to.
+2025-08-18 14:09:35 - INFO - interim :   I want to book.
+2025-08-18 14:09:35 - INFO - interim :   I
+2025-08-18 14:09:35 - INFO - interim :   want to book.
+2025-08-18 14:09:35 - INFO - interim :   I want to
+2025-08-18 14:09:35 - INFO - interim :   book an
+2025-08-18 14:09:35 - INFO - interim :   I want to
+2025-08-18 14:09:35 - INFO - interim :   book an appointment.
+2025-08-18 14:09:35 - INFO - interim :   I want to book
+2025-08-18 14:09:35 - INFO - interim :   an appointment.
+2025-08-18 14:09:35 - INFO - interim :   I want to book an
+2025-08-18 14:09:35 - INFO - interim :   appointment.
+2025-08-18 14:09:36 - INFO - interim :   I want to book an appointment.
+2025-08-18 14:09:36 - INFO - final :   I want to book an appointment.
+2025-08-18 14:09:36 - INFO - STT_LATENCY: GOOGLE | websocket_latency: 2002.79ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:09:36 - INFO - STTU: Received final transcript: " I want to book an appointment."
+2025-08-18 14:09:36 - INFO - STT_LATENCY: GOOGLE | processing_latency: 2.79ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:09:36 - INFO - LLMU: Received transcription: " I want to book an appointment. "
+2025-08-18 14:09:36 - INFO - LLMU check_node_trials | transfer message : I want to make sure you get the best assistance possible.  Let me transfer you to the VOICE MAIL
+2025-08-18 14:09:36 - INFO - LLMU check_node_trials  | for node opt_intent_extraction, has 3 left
+2025-08-18 14:09:36 - INFO - LLMU check_node_trials  | It's chill we still got some left
+2025-08-18 14:09:36 - INFO - LLMU: zero_trails_flag for session CAbdfeef032b6a81ec2e2942e7cac81aab: False
+2025-08-18 14:09:36 - INFO - LLMU: Sending to chatbot API: " I want to book an appointment. "
+2025-08-18 14:09:41 - INFO - LLMU: Chatbot API responded in 4.50s with status 200
+2025-08-18 14:09:41 - INFO - LLMU: Chatbot returned 200 OK → body: {"message":["Do you have the requisition form with you for your appointment?"],"thread_id":"CAbdfeef032b6a81ec2e2942e7cac81aab","current_node":"collect_service_number","current_node_type":"collection","transfer":false,"end_flag":false}
+2025-08-18 14:09:41 - INFO - LLMU: Updated next_node to 'collect_service_number'.
+2025-08-18 14:09:41 - INFO - LLMU decrement_node_trials | Node collect_service_number trials decreased to 3
+2025-08-18 14:09:41 - INFO - LLMU: LLM response ready; next node: collect_service_number
+2025-08-18 14:09:41 - INFO - 24.75
+2025-08-18 14:09:41 - INFO - TTSU: Received text from input queue: "Do you have the requisition form with you for your appointment?"
+2025-08-18 14:09:41 - INFO - TTSU: Logged 'GOT IN TTS' to performance pipeline.
+2025-08-18 14:09:41 - INFO - TTSU: Starting process_sentence for text: "Do you have the requisition form with you for your appointment?"
+2025-08-18 14:09:41 - INFO - TTSU: WebSocket connection established to ElevenLabs API.
+2025-08-18 14:09:41 - INFO - TTSU: Sent initial handshake payload to TTS API.
+2025-08-18 14:09:41 - INFO - TTSU: Sent text for synthesis: "Do you have the requisition form with you for your appointment?"
+2025-08-18 14:09:41 - INFO - TTSU: Sent final buffered audio to output queue.
+2025-08-18 14:09:41 - INFO - TTSU: Completed process_sentence in 0.48s.
+2025-08-18 14:09:44 - INFO - StreamHandlerU : decrement logcheck_node_trials  | Tried to fetch the node from the trails dict : 3
+2025-08-18 14:09:44 - INFO - StreamHandlerU : decrement logcheck_node_trials  | Decrement the value for this node collect_service_number to : 2
+2025-08-18 14:09:44 - INFO - StreamHandlerU: Finished streaming all chunks for this turn.
+2025-08-18 14:09:44 - INFO - StreamHandlerU: Updated current_node to "collect_service_number".
+2025-08-18 14:09:45 - INFO - interim :   I selected.
+2025-08-18 14:09:46 - INFO - interim :   For.
+2025-08-18 14:09:46 - INFO - interim :   For this.
+2025-08-18 14:09:46 - INFO - interim :   For
+2025-08-18 14:09:46 - INFO - interim :   this.
+2025-08-18 14:09:47 - INFO - interim :   for
+2025-08-18 14:09:47 - INFO - interim :   this was,
+2025-08-18 14:09:47 - INFO - interim :   for this
+2025-08-18 14:09:47 - INFO - interim :   was,
+2025-08-18 14:09:47 - INFO - interim :   for this
+2025-08-18 14:09:47 - INFO - interim :   was a,
+2025-08-18 14:09:47 - INFO - interim :   for this was
+2025-08-18 14:09:47 - INFO - interim :   a,
+2025-08-18 14:09:47 - INFO - interim :   For this was
+2025-08-18 14:09:47 - INFO - interim :   a great.
+2025-08-18 14:09:48 - INFO - interim :   For this was a red carpet. Yeah.
+2025-08-18 14:09:48 - INFO - interim :   Yeah, I do.
+2025-08-18 14:09:48 - INFO - interim :   For this was a red carpet. Yeah, I do.
+2025-08-18 14:09:48 - INFO - interim :   Yeah, I do.
+2025-08-18 14:09:48 - INFO - interim :   For this was a red carpet. Yeah, I do have
+2025-08-18 14:09:49 - INFO - interim :   yeah, I do have
+2025-08-18 14:09:49 - INFO - interim :   For this was a red carpet. Yeah, I do have a
+2025-08-18 14:09:49 - INFO - interim :   Yeah, I do have a
+2025-08-18 14:09:49 - INFO - interim :   Yeah, I do have a question.
+2025-08-18 14:09:49 - INFO - interim :   Yeah, I do have a requisition.
+2025-08-18 14:09:49 - INFO - interim :   Yeah, I do have a requisition for
+2025-08-18 14:09:49 - INFO - interim :   Yeah, I do have a
+2025-08-18 14:09:49 - INFO - interim :   requisition for
+2025-08-18 14:09:50 - INFO - interim :   Yeah, I do have a requisition
+2025-08-18 14:09:50 - INFO - interim :   for
+2025-08-18 14:09:50 - INFO - interim :   Yeah, I do have a requisition for
+2025-08-18 14:09:51 - INFO - final :   Yeah, I do have a requisition for
+2025-08-18 14:09:51 - INFO - STT_LATENCY: GOOGLE | websocket_latency: 1986.63ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:09:51 - INFO - STTU: Received final transcript: " Yeah, I do have a requisition for"
+2025-08-18 14:09:51 - INFO - STT_LATENCY: GOOGLE | processing_latency: 3.10ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:09:51 - INFO - LLMU: Received transcription: " Yeah, I do have a requisition for "
+2025-08-18 14:09:51 - INFO - LLMU check_node_trials | transfer message : I'm having difficulty understanding which service you need.  Let me transfer you to the VOICE MAIL
+2025-08-18 14:09:51 - INFO - LLMU check_node_trials  | for node collect_service_number, has 2 left
+2025-08-18 14:09:51 - INFO - LLMU check_node_trials  | It's chill we still got some left
+2025-08-18 14:09:51 - INFO - LLMU: zero_trails_flag for session CAbdfeef032b6a81ec2e2942e7cac81aab: False
+2025-08-18 14:09:51 - INFO - LLMU: Sending to chatbot API: " Yeah, I do have a requisition for "
+2025-08-18 14:09:53 - INFO - LLMU: Chatbot API responded in 2.39s with status 200
+2025-08-18 14:09:53 - INFO - LLMU: Chatbot returned 200 OK → body: {"message":["Could you please tell me all the services that are listed on the requisition form?"],"thread_id":"CAbdfeef032b6a81ec2e2942e7cac81aab","current_node":"collect_services","current_node_type":"collection","transfer":false,"end_flag":false}
+2025-08-18 14:09:53 - INFO - LLMU: Updated next_node to 'collect_services'.
+2025-08-18 14:09:53 - INFO - LLMU decrement_node_trials | Node collect_services trials decreased to 3
+2025-08-18 14:09:53 - INFO - LLMU: LLM response ready; next node: collect_services
+2025-08-18 14:09:53 - INFO - 25.75
+2025-08-18 14:09:53 - INFO - TTSU: Received text from input queue: "Could you please tell me all the services that are listed on the requisition form?"
+2025-08-18 14:09:53 - INFO - TTSU: Logged 'GOT IN TTS' to performance pipeline.
+2025-08-18 14:09:53 - INFO - TTSU: Starting process_sentence for text: "Could you please tell me all the services that are listed on the requisition form?"
+2025-08-18 14:09:53 - INFO - TTSU: WebSocket connection established to ElevenLabs API.
+2025-08-18 14:09:53 - INFO - TTSU: Sent initial handshake payload to TTS API.
+2025-08-18 14:09:53 - INFO - TTSU: Sent text for synthesis: "Could you please tell me all the services that are listed on the requisition form?"
+2025-08-18 14:09:54 - INFO - TTSU: Sent final buffered audio to output queue.
+2025-08-18 14:09:54 - INFO - TTSU: Completed process_sentence in 0.41s.
+2025-08-18 14:09:57 - INFO - StreamHandlerU : decrement logcheck_node_trials  | Tried to fetch the node from the trails dict : 3
+2025-08-18 14:09:57 - INFO - StreamHandlerU : decrement logcheck_node_trials  | Decrement the value for this node collect_services to : 2
+2025-08-18 14:09:57 - INFO - StreamHandlerU: Finished streaming all chunks for this turn.
+2025-08-18 14:09:57 - INFO - StreamHandlerU: Updated current_node to "collect_services".
+2025-08-18 14:10:00 - INFO - interim :   r.
+2025-08-18 14:10:00 - INFO - interim :   Russ.
+2025-08-18 14:10:00 - INFO - interim :   Russian.
+2025-08-18 14:10:01 - INFO - interim :   you.
+2025-08-18 14:10:01 - INFO - interim :   you.
+2025-08-18 14:10:02 - INFO - interim :   You
+2025-08-18 14:10:02 - INFO - interim :   yeah.
+2025-08-18 14:10:02 - INFO - interim :   You yeah.
+2025-08-18 14:10:02 - INFO - interim :   You. Yeah.
+2025-08-18 14:10:02 - INFO - interim :   It's
+2025-08-18 14:10:02 - INFO - interim :   You. Yeah.
+2025-08-18 14:10:02 - INFO - interim :   It's an
+2025-08-18 14:10:03 - INFO - interim :   You. Yeah.
+2025-08-18 14:10:03 - INFO - interim :   It's
+2025-08-18 14:10:03 - INFO - interim :   You. Yeah.
+2025-08-18 14:10:03 - INFO - interim :   It's an
+2025-08-18 14:10:03 - INFO - interim :   You, yeah, it's
+2025-08-18 14:10:03 - INFO - interim :   an ult.
+2025-08-18 14:10:03 - INFO - interim :   you. Yeah. It's
+2025-08-18 14:10:03 - INFO - interim :   an Ultra.
+2025-08-18 14:10:03 - INFO - interim :   you. Yeah, it's an
+2025-08-18 14:10:03 - INFO - interim :   ultrasound.
+2025-08-18 14:10:04 - INFO - interim :   you. Yeah, it's an
+2025-08-18 14:10:04 - INFO - interim :   ultrasound for
+2025-08-18 14:10:04 - INFO - interim :   you. Yeah, it's an
+2025-08-18 14:10:04 - INFO - interim :   ultrasound for my
+2025-08-18 14:10:04 - INFO - interim :   you. Yeah, it's an ultrasound
+2025-08-18 14:10:04 - INFO - interim :   for my left.
+2025-08-18 14:10:04 - INFO - interim :   you. Yeah, it's an ultrasound
+2025-08-18 14:10:04 - INFO - interim :   for my
+2025-08-18 14:10:04 - INFO - interim :   you. Yeah, it's an ultrasound
+2025-08-18 14:10:04 - INFO - interim :   for my left.
+2025-08-18 14:10:04 - INFO - interim :   you. Yeah, it's an ultrasound for
+2025-08-18 14:10:04 - INFO - interim :   my left.
+2025-08-18 14:10:04 - INFO - interim :   you. Yeah, it's an ultrasound for my
+2025-08-18 14:10:04 - INFO - interim :   left knee.
+2025-08-18 14:10:05 - INFO - interim :   you. Yeah, it's an ultrasound for my left
+2025-08-18 14:10:05 - INFO - interim :   knee.
+2025-08-18 14:10:05 - INFO - final :   you. Yeah, it's an ultrasound for my left knee.
+2025-08-18 14:10:05 - INFO - STT_LATENCY: GOOGLE | websocket_latency: 1991.53ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:10:05 - INFO - STTU: Received final transcript: " you. Yeah, it's an ultrasound for my left knee."
+2025-08-18 14:10:05 - INFO - STT_LATENCY: GOOGLE | processing_latency: 6.18ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:10:05 - INFO - LLMU: Received transcription: " you. Yeah, it's an ultrasound for my left knee. "
+2025-08-18 14:10:05 - INFO - LLMU check_node_trials | transfer message : I want to make sure we book the right service for you.  Let me transfer you to the VOICE MAIL
+2025-08-18 14:10:05 - INFO - LLMU check_node_trials  | for node collect_services, has 2 left
+2025-08-18 14:10:05 - INFO - LLMU check_node_trials  | It's chill we still got some left
+2025-08-18 14:10:05 - INFO - LLMU: zero_trails_flag for session CAbdfeef032b6a81ec2e2942e7cac81aab: False
+2025-08-18 14:10:05 - INFO - LLMU: Sending to chatbot API: " you. Yeah, it's an ultrasound for my left knee. "
+2025-08-18 14:10:10 - INFO - LLMU: Chatbot API responded in 5.01s with status 200
+2025-08-18 14:10:10 - INFO - LLMU: Chatbot returned 200 OK → body: {"message":["So, to confirm your only required service is Left knee Ultrasound?"],"thread_id":"CAbdfeef032b6a81ec2e2942e7cac81aab","current_node":"determine_service","current_node_type":"reading_back","transfer":false,"end_flag":false}
+2025-08-18 14:10:10 - INFO - LLMU: Updated next_node to 'determine_service'.
+2025-08-18 14:10:10 - INFO - LLMU decrement_node_trials | Node determine_service trials decreased to 5
+2025-08-18 14:10:10 - INFO - LLMU: LLM response ready; next node: determine_service
+2025-08-18 14:10:10 - INFO - 24.75
+2025-08-18 14:10:10 - INFO - TTSU: Received text from input queue: "So, to confirm your only required service is Left knee Ultrasound?"
+2025-08-18 14:10:10 - INFO - TTSU: Logged 'GOT IN TTS' to performance pipeline.
+2025-08-18 14:10:10 - INFO - TTSU: Starting process_sentence for text: "So, to confirm your only required service is Left knee Ultrasound?"
+2025-08-18 14:10:11 - INFO - TTSU: WebSocket connection established to ElevenLabs API.
+2025-08-18 14:10:11 - INFO - TTSU: Sent initial handshake payload to TTS API.
+2025-08-18 14:10:11 - INFO - TTSU: Sent text for synthesis: "So, to confirm your only required service is Left knee Ultrasound?"
+2025-08-18 14:10:11 - INFO - TTSU: Sent final buffered audio to output queue.
+2025-08-18 14:10:11 - INFO - TTSU: Completed process_sentence in 0.42s.
+2025-08-18 14:10:14 - INFO - StreamHandlerU : decrement logcheck_node_trials  | Tried to fetch the node from the trails dict : 5
+2025-08-18 14:10:14 - INFO - StreamHandlerU : decrement logcheck_node_trials  | Decrement the value for this node determine_service to : 4
+2025-08-18 14:10:14 - INFO - StreamHandlerU: Finished streaming all chunks for this turn.
+2025-08-18 14:10:14 - INFO - StreamHandlerU: Updated current_node to "determine_service".
+2025-08-18 14:10:19 - INFO - interim :   Uh,
+2025-08-18 14:10:19 - INFO - interim :   Uh, yeah.
+2025-08-18 14:10:19 - INFO - interim :   Uh
+2025-08-18 14:10:19 - INFO - interim :   yeah. That is
+2025-08-18 14:10:19 - INFO - interim :   Uh,
+2025-08-18 14:10:19 - INFO - interim :   yeah. That
+2025-08-18 14:10:19 - INFO - interim :   Uh
+2025-08-18 14:10:19 - INFO - interim :   yeah. That is
+2025-08-18 14:10:19 - INFO - interim :   Uh yeah.
+2025-08-18 14:10:19 - INFO - interim :   That is
+2025-08-18 14:10:20 - INFO - interim :   Uh yeah. That
+2025-08-18 14:10:20 - INFO - interim :   is
+2025-08-18 14:10:20 - INFO - interim :   Uh yeah. That is
+2025-08-18 14:10:20 - INFO - interim :   Uh yeah, that is
+2025-08-18 14:10:20 - INFO - interim :   correct.
+2025-08-18 14:10:21 - INFO - interim :   Uh yeah, that is correct.
+2025-08-18 14:10:21 - INFO - final :   Uh yeah, that is correct.
+2025-08-18 14:10:21 - INFO - STT_LATENCY: GOOGLE | websocket_latency: 1997.31ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:10:21 - INFO - STTU: Received final transcript: " Uh yeah, that is correct."
+2025-08-18 14:10:21 - INFO - STT_LATENCY: GOOGLE | processing_latency: 2.87ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:10:21 - INFO - LLMU: Received transcription: " Uh yeah, that is correct. "
+2025-08-18 14:10:21 - INFO - LLMU check_node_trials | transfer message : I want to make sure you get the best assistance possible.  Let me transfer you to the VOICE MAIL
+2025-08-18 14:10:21 - INFO - LLMU check_node_trials  | for node determine_service, has 4 left
+2025-08-18 14:10:21 - INFO - LLMU check_node_trials  | It's chill we still got some left
+2025-08-18 14:10:21 - INFO - LLMU: zero_trails_flag for session CAbdfeef032b6a81ec2e2942e7cac81aab: False
+2025-08-18 14:10:21 - INFO - LLMU: Sending to chatbot API: " Uh yeah, that is correct. "
+2025-08-18 14:10:25 - INFO - LLMU: Chatbot API responded in 3.96s with status 200
+2025-08-18 14:10:25 - INFO - LLMU: Chatbot returned 200 OK → body: {"message":["Can I confirm that Four. Zero. Three. Seven. Four. Four. Four. One. Three. Three. is the best number to reach you regarding this booking"],"thread_id":"CAbdfeef032b6a81ec2e2942e7cac81aab","current_node":"confirm_phone_number","current_node_type":"confirmation","transfer":false,"end_flag":false}
+2025-08-18 14:10:25 - INFO - LLMU: Updated next_node to 'confirm_phone_number'.
+2025-08-18 14:10:25 - INFO - LLMU decrement_node_trials | Node confirm_phone_number trials decreased to 3
+2025-08-18 14:10:25 - INFO - LLMU: WAIT NODE BEHAVIOUR - flushing input queue before speaking
+2025-08-18 14:10:25 - INFO - LLMU: WAIT NODE BEHAVIOUR - will not check for interruption
+2025-08-18 14:10:25 - INFO - LLMU: LLM response ready; next node: confirm_phone_number
+2025-08-18 14:10:25 - INFO - LLMU: Waiting for agent to finish speaking (wait-node).
+2025-08-18 14:10:25 - INFO - TTSU: Received text from input queue: "Can I confirm that Four. Zero. Three. Seven. Four. Four. Four. One. Three. Three. is the best number to reach you regarding this booking"
+2025-08-18 14:10:25 - INFO - TTSU: Logged 'GOT IN TTS' to performance pipeline.
+2025-08-18 14:10:25 - INFO - TTSU: Starting process_sentence for text: "Can I confirm that Four. Zero. Three. Seven. Four. Four. Four. One. Three. Three. is the best number to reach you regarding this booking"
+2025-08-18 14:10:26 - INFO - TTSU: WebSocket connection established to ElevenLabs API.
+2025-08-18 14:10:26 - INFO - TTSU: Sent initial handshake payload to TTS API.
+2025-08-18 14:10:26 - INFO - TTSU: Sent text for synthesis: "Can I confirm that Four. Zero. Three. Seven. Four. Four. Four. One. Three. Three. is the best number to reach you regarding this booking"
+2025-08-18 14:10:26 - INFO - LLMU: Agent speaking flag is: True
+2025-08-18 14:10:26 - INFO - TTSU: Sent final buffered audio to output queue.
+2025-08-18 14:10:26 - INFO - TTSU: Completed process_sentence in 0.62s.
+2025-08-18 14:10:32 - INFO - StreamHandlerU : decrement logcheck_node_trials  | Tried to fetch the node from the trails dict : 3
+2025-08-18 14:10:32 - INFO - StreamHandlerU : decrement logcheck_node_trials  | Decrement the value for this node confirm_phone_number to : 2
+2025-08-18 14:10:32 - INFO - StreamHandlerU: Finished streaming all chunks for this turn.
+2025-08-18 14:10:32 - INFO - StreamHandlerU: Updated current_node to "confirm_phone_number".
+2025-08-18 14:10:33 - INFO - LLMU: Wait-node speaking complete; flushing input queue.
+2025-08-18 14:10:33 - INFO - 28.0
+2025-08-18 14:10:37 - INFO - interim :   Yeah.
+2025-08-18 14:10:37 - INFO - interim :   Yeah, correct.
+2025-08-18 14:10:37 - INFO - interim :   Yeah,
+2025-08-18 14:10:37 - INFO - interim :   correct.
+2025-08-18 14:10:38 - INFO - interim :   Yeah, correct.
+2025-08-18 14:10:39 - INFO - final :   Yeah, correct.
+2025-08-18 14:10:39 - INFO - STT_LATENCY: GOOGLE | websocket_latency: 1989.59ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:10:39 - INFO - STTU: Received final transcript: " Yeah, correct."
+2025-08-18 14:10:39 - INFO - STT_LATENCY: GOOGLE | processing_latency: 2.53ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:10:39 - INFO - LLMU: Received transcription: " Yeah, correct. "
+2025-08-18 14:10:39 - INFO - LLMU check_node_trials | transfer message : I want to make sure you get the best assistance possible.  Let me transfer you to the VOICE MAIL
+2025-08-18 14:10:39 - INFO - LLMU check_node_trials  | for node confirm_phone_number, has 2 left
+2025-08-18 14:10:39 - INFO - LLMU check_node_trials  | It's chill we still got some left
+2025-08-18 14:10:39 - INFO - LLMU: zero_trails_flag for session CAbdfeef032b6a81ec2e2942e7cac81aab: False
+2025-08-18 14:10:40 - INFO - LLMU: Sending to chatbot API: " Yeah, correct. "
+2025-08-18 14:10:40 - INFO - final :
+2025-08-18 14:10:40 - INFO - STT_LATENCY: GOOGLE | websocket_latency: 1990.30ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:10:40 - INFO - STTU: Received final transcript: ""
+2025-08-18 14:10:40 - INFO - STTU: Ignored the transcription :
+2025-08-18 14:10:43 - INFO - LLMU: Chatbot API responded in 3.96s with status 200
+2025-08-18 14:10:43 - INFO - LLMU: Chatbot returned 200 OK → body: {"message":["Was your  health card issued in Nova Scotia"],"thread_id":"CAbdfeef032b6a81ec2e2942e7cac81aab","current_node":"ask_province","current_node_type":"reading_back","transfer":false,"end_flag":false}
+2025-08-18 14:10:43 - INFO - LLMU: Updated next_node to 'ask_province'.
+2025-08-18 14:10:43 - INFO - LLMU decrement_node_trials | Node ask_province trials decreased to 3
+2025-08-18 14:10:43 - INFO - LLMU: LLM response ready; next node: ask_province
+2025-08-18 14:10:43 - INFO - 24.0
+2025-08-18 14:10:43 - INFO - TTSU: Received text from input queue: "Was your  health card issued in Nova Scotia"
+2025-08-18 14:10:43 - INFO - TTSU: Logged 'GOT IN TTS' to performance pipeline.
+2025-08-18 14:10:43 - INFO - TTSU: Starting process_sentence for text: "Was your  health card issued in Nova Scotia"
+2025-08-18 14:10:44 - INFO - TTSU: WebSocket connection established to ElevenLabs API.
+2025-08-18 14:10:44 - INFO - TTSU: Sent initial handshake payload to TTS API.
+2025-08-18 14:10:44 - INFO - TTSU: Sent text for synthesis: "Was your  health card issued in Nova Scotia"
+2025-08-18 14:10:44 - INFO - TTSU: Sent final buffered audio to output queue.
+2025-08-18 14:10:44 - INFO - TTSU: Completed process_sentence in 0.34s.
+2025-08-18 14:10:46 - INFO - StreamHandlerU : decrement logcheck_node_trials  | Tried to fetch the node from the trails dict : 3
+2025-08-18 14:10:46 - INFO - StreamHandlerU : decrement logcheck_node_trials  | Decrement the value for this node ask_province to : 2
+2025-08-18 14:10:46 - INFO - StreamHandlerU: Finished streaming all chunks for this turn.
+2025-08-18 14:10:46 - INFO - StreamHandlerU: Updated current_node to "ask_province".
+2025-08-18 14:10:46 - INFO - final :
+2025-08-18 14:10:46 - INFO - STT_LATENCY: GOOGLE | websocket_latency: 1988.51ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:10:46 - INFO - STTU: Received final transcript: ""
+2025-08-18 14:10:46 - INFO - STTU: Ignored the transcription :
+2025-08-18 14:10:48 - INFO - final :
+2025-08-18 14:10:48 - INFO - STT_LATENCY: GOOGLE | websocket_latency: 1990.49ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:10:48 - INFO - STTU: Received final transcript: ""
+2025-08-18 14:10:48 - INFO - STTU: Ignored the transcription :
+2025-08-18 14:10:49 - INFO - final :
+2025-08-18 14:10:49 - INFO - STT_LATENCY: GOOGLE | websocket_latency: 1982.14ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:10:49 - INFO - STTU: Received final transcript: ""
+2025-08-18 14:10:49 - INFO - STTU: Ignored the transcription :
+2025-08-18 14:10:52 - INFO - interim :  The.
+2025-08-18 14:10:53 - INFO - interim :  Are.
+2025-08-18 14:10:53 - INFO - interim :  The.
+2025-08-18 14:10:53 - INFO - interim :  The.
+2025-08-18 14:10:54 - INFO - interim :  SC.
+2025-08-18 14:10:54 - INFO - interim :  SC.
+2025-08-18 14:10:55 - INFO - interim :  and,
+2025-08-18 14:10:56 - INFO - interim :  and,
+2025-08-18 14:10:56 - INFO - interim :  uh,
+2025-08-18 14:10:56 - INFO - interim :  uh, I
+2025-08-18 14:10:56 - INFO - interim :  Uh, I don't.
+2025-08-18 14:10:56 - INFO - interim :  Uh, I don't have.
+2025-08-18 14:10:57 - INFO - interim :  Uh,
+2025-08-18 14:10:57 - INFO - interim :   I don't have.
+2025-08-18 14:10:57 - INFO - interim :  Uh, I
+2025-08-18 14:10:57 - INFO - interim :   don't have.
+2025-08-18 14:10:57 - INFO - interim :  uh, I don't
+2025-08-18 14:10:57 - INFO - interim :   have any
+2025-08-18 14:10:57 - INFO - interim :  uh, I don't have
+2025-08-18 14:10:57 - INFO - interim :   any
+2025-08-18 14:10:57 - INFO - interim :  Uh, I don't have
+2025-08-18 14:10:57 - INFO - interim :   any help.
+2025-08-18 14:10:57 - INFO - interim :  Uh, I don't have any
+2025-08-18 14:10:57 - INFO - interim :   help.
+2025-08-18 14:10:58 - INFO - interim :  Uh, I don't have any help.
+2025-08-18 14:10:58 - INFO - final :  Uh, I don't have any help.
+2025-08-18 14:10:58 - INFO - STT_LATENCY: GOOGLE | websocket_latency: 1982.87ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:10:58 - INFO - STTU: Received final transcript: "Uh, I don't have any help."
+2025-08-18 14:10:58 - INFO - STT_LATENCY: GOOGLE | processing_latency: 3.19ms | session: CAbdfeef032b6a81ec2e2942e7cac81aab
+2025-08-18 14:10:59 - INFO - LLMU: Received transcription: "Uh, I don't have any help. "
+2025-08-18 14:10:59 - INFO - LLMU check_node_trials | transfer message : I want to make sure you get the best assistance possible.  Let me transfer you to the VOICE MAIL
+2025-08-18 14:10:59 - INFO - LLMU check_node_trials  | for node ask_province, has 2 left
+2025-08-18 14:10:59 - INFO - LLMU check_node_trials  | It's chill we still got some left
+2025-08-18 14:10:59 - INFO - LLMU: zero_trails_flag for session CAbdfeef032b6a81ec2e2942e7cac81aab: False
+2025-08-18 14:10:59 - INFO - LLMU: Sending to chatbot API: "Uh, I don't have any help. "
+2025-08-18 14:11:01 - INFO - LLMU: Chatbot API responded in 2.18s with status 200
+2025-08-18 14:11:01 - INFO - LLMU: Chatbot returned 200 OK → body: {"message":["Which province was your health card issued in?"],"thread_id":"CAbdfeef032b6a81ec2e2942e7cac81aab","current_node":"ask_province","current_node_type":"reading_back","transfer":false,"end_flag":false}
+2025-08-18 14:11:01 - INFO - LLMU: Updated next_node to 'ask_province'.

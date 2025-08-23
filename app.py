@@ -100,11 +100,12 @@ def log_token_usage(model_name, input_tokens, output_tokens, total_cost=None):
 # FAISS index and knowledge chunks are persisted to disk (faiss_index.pkl, knowledge_chunks.pkl)
 # This means the RAG system maintains its knowledge base across app restarts
 faiss_index = None
-knowledge_chunks = []
+knowledge_chunks = []  # List of chunk dictionaries: {text, file_id, file_name, file_type, chunk_index}
+file_metadata = {}     # file_id -> {name, type, upload_date, size}
 embedding_model = None
 
 def initialize_faiss():
-    global faiss_index, embedding_model
+    global faiss_index, embedding_model, knowledge_chunks, file_metadata
     try:
         # Load pre-trained sentence transformer model
         embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -114,24 +115,47 @@ def initialize_faiss():
             with open('faiss_index.pkl', 'rb') as f:
                 faiss_index = pickle.load(f)
             with open('knowledge_chunks.pkl', 'rb') as f:
-                knowledge_chunks = pickle.load(f)
-            logging.info(f"Loaded existing FAISS index with {len(knowledge_chunks)} chunks")
+                loaded_chunks = pickle.load(f)
+            
+            # Handle backward compatibility
+            if loaded_chunks and isinstance(loaded_chunks[0], dict):
+                # New format with metadata
+                knowledge_chunks = loaded_chunks
+                # Load file metadata if exists
+                if os.path.exists('file_metadata.pkl'):
+                    with open('file_metadata.pkl', 'rb') as f:
+                        file_metadata = pickle.load(f)
+                else:
+                    file_metadata = {}
+            else:
+                # Old format - convert to new format
+                knowledge_chunks = [{"text": chunk, "file_id": "legacy", "file_name": "custom_knowledge.txt", "file_type": "txt", "chunk_index": i} for i, chunk in enumerate(loaded_chunks)]
+                file_metadata = {"legacy": {"name": "custom_knowledge.txt", "type": "txt", "upload_date": "2024-01-01", "size": 0}}
+            
+            logging.info(f"Loaded existing FAISS index with {len(knowledge_chunks)} chunks from {len(file_metadata)} files")
         else:
             # Create new index
             dimension = embedding_model.get_sentence_embedding_dimension()
             faiss_index = faiss.IndexFlatIP(dimension)
+            knowledge_chunks = []
+            file_metadata = {}
             logging.info("Created new FAISS index")
     except Exception as e:
         logging.error(f"FAISS initialization failed: {e}")
+        # Fallback to empty state
+        faiss_index = None
+        knowledge_chunks = []
+        file_metadata = {}
 
-def chunk_knowledge(text: str, chunk_size: int = 500, overlap: int = 50) -> List[str]:
-    """Split knowledge base into overlapping chunks"""
+def chunk_knowledge(text: str, file_id: str, file_name: str, file_type: str, chunk_size: int = 500, overlap: int = 50) -> List[Dict[str, Any]]:
+    """Split knowledge base into overlapping chunks with metadata"""
     if not text.strip():
         return []
     
     chunks = []
     sentences = re.split(r'[.!?]+', text)
     current_chunk = ""
+    chunk_index = 0
     
     for sentence in sentences:
         sentence = sentence.strip()
@@ -142,38 +166,82 @@ def chunk_knowledge(text: str, chunk_size: int = 500, overlap: int = 50) -> List
             current_chunk += sentence + ". "
         else:
             if current_chunk:
-                chunks.append(current_chunk.strip())
+                chunks.append({
+                    "text": current_chunk.strip(),
+                    "file_id": file_id,
+                    "file_name": file_name,
+                    "file_type": file_type,
+                    "chunk_index": chunk_index
+                })
+                chunk_index += 1
             current_chunk = sentence + ". "
     
     if current_chunk:
-        chunks.append(current_chunk.strip())
+        chunks.append({
+            "text": current_chunk.strip(),
+            "file_id": file_id,
+            "file_name": file_name,
+            "file_type": file_type,
+            "chunk_index": chunk_index
+        })
     
     return chunks
 
-def update_faiss_index(knowledge_text: str):
+def update_faiss_index(knowledge_text: str, file_id: str = None, file_name: str = None, file_type: str = None, replace_all: bool = False):
     """Update FAISS index with new knowledge base"""
-    global faiss_index, knowledge_chunks
+    global faiss_index, knowledge_chunks, file_metadata
     
     if not embedding_model:
         initialize_faiss()
     
-    # Create chunks
-    chunks = chunk_knowledge(knowledge_text)
-    if not chunks:
+    # If replace_all is True, clear everything and start fresh
+    if replace_all:
+        knowledge_chunks = []
+        file_metadata = {}
+        if faiss_index:
+            faiss_index.reset()
+    
+    # Create chunks with metadata
+    if file_id and file_name and file_type:
+        new_chunks = chunk_knowledge(knowledge_text, file_id, file_name, file_type)
+        # Add file metadata
+        file_metadata[file_id] = {
+            "name": file_name,
+            "type": file_type,
+            "upload_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "size": len(knowledge_text)
+        }
+    else:
+        # Legacy support - create chunks with default metadata
+        file_id = "legacy"
+        file_name = "custom_knowledge.txt"
+        file_type = "txt"
+        new_chunks = chunk_knowledge(knowledge_text, file_id, file_name, file_type)
+        file_metadata[file_id] = {
+            "name": file_name,
+            "type": file_type,
+            "upload_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "size": len(knowledge_text)
+        }
+    
+    if not new_chunks:
         return
     
-    # Create embeddings
-    embeddings = embedding_model.encode(chunks)
+    # Add new chunks to existing ones
+    knowledge_chunks.extend(new_chunks)
+    
+    # Create embeddings for all chunks
+    chunk_texts = [chunk["text"] for chunk in knowledge_chunks]
+    embeddings = embedding_model.encode(chunk_texts)
     
     # Update index
     if faiss_index is None:
         dimension = embedding_model.get_sentence_embedding_dimension()
         faiss_index = faiss.IndexFlatIP(dimension)
     
-    # Clear existing data and add new
+    # Clear existing data and add all chunks
     faiss_index.reset()
     faiss_index.add(embeddings.astype('float32'))
-    knowledge_chunks = chunks
     
     # Save to disk
     try:
@@ -181,13 +249,15 @@ def update_faiss_index(knowledge_text: str):
             pickle.dump(faiss_index, f)
         with open('knowledge_chunks.pkl', 'wb') as f:
             pickle.dump(knowledge_chunks, f)
-        logging.info(f"Updated FAISS index with {len(chunks)} chunks")
+        with open('file_metadata.pkl', 'wb') as f:
+            pickle.dump(file_metadata, f)
+        logging.info(f"Updated FAISS index with {len(knowledge_chunks)} total chunks from {len(file_metadata)} files")
     except Exception as e:
         logging.error(f"Failed to save FAISS index: {e}")
 
-def search_knowledge(query: str, top_k: int = 3) -> List[str]:
-    """Search knowledge base using FAISS"""
-    global faiss_index, knowledge_chunks
+def search_knowledge(query: str, top_k: int = 3) -> List[Dict[str, Any]]:
+    """Search knowledge base using FAISS and return chunks with metadata"""
+    global faiss_index, knowledge_chunks, embedding_model
     
     if not faiss_index or not knowledge_chunks or not embedding_model:
         return []
@@ -199,16 +269,90 @@ def search_knowledge(query: str, top_k: int = 3) -> List[str]:
         # Search
         scores, indices = faiss_index.search(query_embedding.astype('float32'), top_k)
         
-        # Return relevant chunks
+        # Return relevant chunks with metadata
         results = []
-        for idx in indices[0]:
+        for i, idx in enumerate(indices[0]):
             if idx < len(knowledge_chunks):
-                results.append(knowledge_chunks[idx])
+                chunk = knowledge_chunks[idx].copy()
+                chunk["similarity_score"] = float(scores[0][i])
+                results.append(chunk)
         
         return results
     except Exception as e:
         logging.error(f"FAISS search failed: {e}")
         return []
+
+def delete_file_from_knowledge(file_id: str) -> bool:
+    """Delete a file from the knowledge base and rebuild FAISS index"""
+    global faiss_index, knowledge_chunks, file_metadata
+    
+    if file_id not in file_metadata:
+        logging.warning(f"File ID {file_id} not found in knowledge base")
+        return False
+    
+    try:
+        # Remove chunks from this file
+        knowledge_chunks = [chunk for chunk in knowledge_chunks if chunk["file_id"] != file_id]
+        
+        # Remove file metadata
+        deleted_file = file_metadata.pop(file_id)
+        
+        # Rebuild FAISS index with remaining chunks
+        if knowledge_chunks:
+            chunk_texts = [chunk["text"] for chunk in knowledge_chunks]
+            embeddings = embedding_model.encode(chunk_texts)
+            
+            # Create new index
+            dimension = embedding_model.get_sentence_embedding_dimension()
+            faiss_index = faiss.IndexFlatIP(dimension)
+            faiss_index.add(embeddings.astype('float32'))
+            
+            # Save updated index
+            with open('faiss_index.pkl', 'wb') as f:
+                pickle.dump(faiss_index, f)
+            with open('knowledge_chunks.pkl', 'wb') as f:
+                pickle.dump(knowledge_chunks, f)
+            with open('file_metadata.pkl', 'wb') as f:
+                pickle.dump(file_metadata, f)
+            
+            logging.info(f"Deleted file '{deleted_file['name']}' and rebuilt index with {len(knowledge_chunks)} chunks from {len(file_metadata)} files")
+        else:
+            # No chunks left, reset everything
+            faiss_index = None
+            with open('faiss_index.pkl', 'wb') as f:
+                pickle.dump(None, f)
+            with open('knowledge_chunks.pkl', 'wb') as f:
+                pickle.dump([], f)
+            with open('file_metadata.pkl', 'wb') as f:
+                pickle.dump({}, f)
+            logging.info("Deleted all files, reset knowledge base")
+        
+        return True
+        
+    except Exception as e:
+        logging.error(f"Failed to delete file {file_id}: {e}")
+        return False
+
+def get_knowledge_base_files() -> List[Dict[str, Any]]:
+    """Get list of all files in the knowledge base with metadata"""
+    global file_metadata
+    
+    files = []
+    for file_id, metadata in file_metadata.items():
+        # Count chunks for this file
+        chunk_count = len([chunk for chunk in knowledge_chunks if chunk["file_id"] == file_id])
+        
+        file_info = {
+            "file_id": file_id,
+            "name": metadata["name"],
+            "type": metadata["type"],
+            "upload_date": metadata["upload_date"],
+            "size": metadata["size"],
+            "chunk_count": chunk_count
+        }
+        files.append(file_info)
+    
+    return files
 
 # ─── Program Q&A Knowledge Base ───────────────────────────────────────
 PROGRAM_QA = {
@@ -465,35 +609,96 @@ def ai_detect_types(chat, session_types_map=None):
     return {'complaints': [], 'info': info}
 
 def categorize_info_message(content):
-    """Categorize a single info message"""
-    content_lower = content.lower()
-    categories = []
-    
-    # Money-related keywords
-    money_keywords = ['pasy', 'paise', 'money', 'amount', 'rupees', '2000', 'cash', 'transfer', 'benefits']
-    if any(word in content_lower for word in money_keywords):
-        categories.append('money')
-    
-    # District-related keywords
-    district_keywords = ['neelam', 'lasbela', 'hub', 'qambar', 'shahdadkot', 'swat', 'rajanpur', 'jampur', 'ghizer', 'district']
-    if any(word in content_lower for word in district_keywords):
-        categories.append('district')
-    
-    # Ingredients/medicine keywords
-    ingredients_keywords = ['folic acid', 'iron', 'ifa', 'tablets', 'medicine', 'supplement', 'vitamin']
-    if any(word in content_lower for word in ingredients_keywords):
-        categories.append('ingredients')
-    
-    # Eligibility keywords
-    eligibility_keywords = ['who can', 'register', 'eligible', 'requirements', 'cnic', 'b-form', 'age']
-    if any(word in content_lower for word in eligibility_keywords):
-        categories.append('eligibility')
-    
-    # If no specific categories found, use 'other'
-    if not categories:
-        categories.append('other')
-    
-    return categories
+    """Categorize a single info message using AI instead of unreliable keywords"""
+    try:
+        # Create a simple categorization prompt for the LLM
+        categorization_prompt = f"""
+        Categorize this message into ONE category:
+        
+        - money: Cash, payments, benefits, financial assistance
+        - eligibility: Registration, requirements, criteria, age limits
+        - district: Locations, areas, addresses, where to go
+        - ingredients: Medicine, supplements, IFA tablets, vitamins
+        - other: Any other questions
+
+        Message: "{content}"
+        
+        Return ONLY the category name.
+        """
+
+        if current_model == "groq":
+            # Use Groq for categorization (cheaper)
+            groq_url = "https://api.groq.com/openai/v1/chat/completions"
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {GROQ_API_KEY}"
+            }
+            payload = {
+                "model": "llama3-8b-8192",
+                "messages": [
+                    {"role": "system", "content": "You are a categorization expert. Return only the category name."},
+                    {"role": "user", "content": categorization_prompt}
+                ],
+                "temperature": 0.1,
+                "max_tokens": 20
+            }
+            
+            resp = make_groq_request_with_retry(groq_url, headers, payload)
+            if resp and resp.status_code == 200:
+                data = resp.json()
+                category = data["choices"][0]["message"]["content"].strip().lower()
+                
+                # Log token usage for categorization
+                input_tokens = data.get("usage", {}).get("prompt_tokens", 0)
+                output_tokens = data.get("usage", {}).get("completion_tokens", 0)
+                log_token_usage("Groq Llama3-8B (categorization)", input_tokens, output_tokens)
+                
+                # Validate category
+                valid_categories = ['money', 'eligibility', 'district', 'ingredients', 'other']
+                if category in valid_categories:
+                    return [category]
+                else:
+                    logging.warning(f"AI returned invalid category: {category}, defaulting to 'other'")
+                    return ['other']
+            else:
+                logging.error("Groq categorization failed, defaulting to 'other'")
+                return ['other']
+                
+        else:
+            # Use OpenAI for categorization
+            try:
+                response = openai_client.chat.completions.create(
+                    model="gpt-4",
+                    messages=[
+                        {"role": "system", "content": "You are a categorization expert. Return only the category name."},
+                        {"role": "user", "content": categorization_prompt}
+                    ],
+                    temperature=0.1,
+                    max_tokens=20
+                )
+                
+                category = response.choices[0].message.content.strip().lower()
+                
+                # Log token usage for categorization
+                input_tokens = response.usage.prompt_tokens
+                output_tokens = response.usage.completion_tokens
+                log_token_usage("OpenAI GPT-4 (categorization)", input_tokens, output_tokens)
+                
+                # Validate category
+                valid_categories = ['money', 'eligibility', 'district', 'ingredients', 'other']
+                if category in valid_categories:
+                    return [category]
+                else:
+                    logging.warning(f"AI returned invalid category: {category}, defaulting to 'other'")
+                    return ['other']
+                    
+            except Exception as e:
+                logging.error(f"OpenAI categorization failed: {e}, defaulting to 'other'")
+                return ['other']
+                
+    except Exception as e:
+        logging.error(f"AI categorization completely failed: {e}, defaulting to 'other'")
+        return ['other']
 
 def find_matching_question(user_input):
     user_input = user_input.lower().strip()
@@ -579,10 +784,111 @@ def make_groq_request_with_retry(url, headers, payload, max_retries=3, base_dela
     logging.error(f"Groq API failed after {max_retries} attempts")
     return None
 
+def extract_text_from_file(file_path: str, file_type: str) -> str:
+    """Extract text from different file types"""
+    try:
+        if file_type.lower() in ['pdf']:
+            return extract_text_from_pdf(file_path)
+        elif file_type.lower() in ['doc', 'docx']:
+            return extract_text_from_doc(file_path)
+        elif file_type.lower() in ['xls', 'xlsx']:
+            return extract_text_from_excel(file_path)
+        elif file_type.lower() in ['txt']:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                return f.read()
+        else:
+            logging.error(f"Unsupported file type: {file_type}")
+            return ""
+    except Exception as e:
+        logging.error(f"Failed to extract text from {file_path}: {e}")
+        return ""
+
+def extract_text_from_uploaded_file(file, file_type: str) -> str:
+    """Extract text from uploaded file object"""
+    try:
+        # Save uploaded file temporarily
+        import tempfile
+        import os
+        
+        # Create temp file with proper extension
+        temp_fd, temp_path = tempfile.mkstemp(suffix=f".{file_type}")
+        os.close(temp_fd)
+        
+        # Save uploaded file
+        file.save(temp_path)
+        
+        # Extract text
+        text = extract_text_from_file(temp_path, file_type)
+        
+        # Clean up temp file
+        os.unlink(temp_path)
+        
+        return text
+    except Exception as e:
+        logging.error(f"Failed to extract text from uploaded file: {e}")
+        return ""
+
+def extract_text_from_pdf(file_path: str) -> str:
+    """Extract text from PDF file"""
+    try:
+        import PyPDF2
+        text = ""
+        with open(file_path, 'rb') as file:
+            pdf_reader = PyPDF2.PdfReader(file)
+            for page in pdf_reader.pages:
+                text += page.extract_text() + "\n"
+        return text
+    except ImportError:
+        logging.error("PyPDF2 not installed. Install with: pip install PyPDF2")
+        return ""
+    except Exception as e:
+        logging.error(f"PDF extraction failed: {e}")
+        return ""
+
+def extract_text_from_doc(file_path: str) -> str:
+    """Extract text from DOC/DOCX file"""
+    try:
+        from docx import Document
+        doc = Document(file_path)
+        text = ""
+        for paragraph in doc.paragraphs:
+            text += paragraph.text + "\n"
+        return text
+    except ImportError:
+        logging.error("python-docx not installed. Install with: pip install python-docx")
+        return ""
+    except Exception as e:
+        logging.error(f"DOC extraction failed: {e}")
+        return ""
+
+def extract_text_from_excel(file_path: str) -> str:
+    """Extract text from Excel file"""
+    try:
+        import openpyxl
+        workbook = openpyxl.load_workbook(file_path)
+        text = ""
+        for sheet_name in workbook.sheetnames:
+            sheet = workbook[sheet_name]
+            text += f"Sheet: {sheet_name}\n"
+            for row in sheet.iter_rows(values_only=True):
+                row_text = " | ".join([str(cell) if cell else "" for cell in row])
+                if row_text.strip():
+                    text += row_text + "\n"
+            text += "\n"
+        return text
+    except ImportError:
+        logging.error("openpyxl not installed. Install with: pip install openpyxl")
+        return ""
+    except Exception as e:
+        logging.error(f"Excel extraction failed: {e}")
+        return ""
+
 # ─── Admin endpoints ───────────────────────────────────────────────────
 @app.route("/upload", methods=["POST"])
 def upload_override():
     global global_prompt, global_knowledge
+    
+    # Handle prompt file upload
     if "promptFile" in request.files:
         file = request.files["promptFile"]
         text = extract_text(file)
@@ -593,19 +899,69 @@ def upload_override():
             logging.info("Global prompt overridden and saved to system_prompt.txt.")
         except Exception as e:
             logging.error(f"Failed to save system_prompt.txt: {e}")
+    
+    # Handle knowledge file uploads
     if "knowledgeFile" in request.files:
         file = request.files["knowledgeFile"]
-        text = extract_text(file)
+        file_id = str(uuid.uuid4())
+        file_name = file.filename
+        file_type = file_name.split('.')[-1].lower() if '.' in file_name else 'txt'
+        
+        # Extract text based on file type
+        text = extract_text_from_uploaded_file(file, file_type)
+        if not text:
+            return jsonify({"status": "error", "message": f"Failed to extract text from {file_name}"}), 400
+        
+        # Update FAISS index with new file
+        update_faiss_index(text, file_id, file_name, file_type)
+        
+        # Also update global knowledge for backward compatibility
         global_knowledge = text
         try:
             with open("custom_knowledge.txt", "w", encoding="utf8") as f:
                 f.write(text)
-            logging.info("Global knowledge overridden and saved to custom_knowledge.txt.")
-            # Update FAISS index with new knowledge
-            update_faiss_index(text)
+            logging.info(f"Knowledge file '{file_name}' uploaded and FAISS index updated.")
         except Exception as e:
             logging.error(f"Failed to save custom_knowledge.txt: {e}")
-    return jsonify({"status":"override_uploaded"})
+    
+    # Handle multiple knowledge files
+    if "knowledgeFiles" in request.files:
+        files = request.files.getlist("knowledgeFiles")
+        uploaded_files = []
+        
+        for file in files:
+            if file.filename:
+                file_id = str(uuid.uuid4())
+                file_name = file.filename
+                file_type = file_name.split('.')[-1].lower() if '.' in file_name else 'txt'
+                
+                # Extract text based on file type
+                text = extract_text_from_uploaded_file(file, file_type)
+                if text:
+                    # Update FAISS index with new file
+                    update_faiss_index(text, file_id, file_name, file_type)
+                    uploaded_files.append({
+                        "file_id": file_id,
+                        "name": file_name,
+                        "type": file_type,
+                        "status": "success"
+                    })
+                    logging.info(f"Knowledge file '{file_name}' uploaded and FAISS index updated.")
+                else:
+                    uploaded_files.append({
+                        "name": file_name,
+                        "type": file_type,
+                        "status": "error",
+                        "message": "Failed to extract text"
+                    })
+        
+        return jsonify({
+            "status": "files_uploaded",
+            "uploaded_files": uploaded_files,
+            "total_files": len(files)
+        })
+    
+    return jsonify({"status": "override_uploaded"})
 
 @app.route("/set_model", methods=["POST"])
 def set_model():
@@ -617,6 +973,98 @@ def set_model():
     current_model = m
     logging.info(f"Global model switched to: {current_model}")
     return jsonify(status="ok", model=current_model)
+
+@app.route("/files", methods=["GET"])
+def list_files():
+    """Get list of all files in the knowledge base"""
+    try:
+        files = get_knowledge_base_files()
+        return jsonify({"status": "success", "files": files})
+    except Exception as e:
+        logging.error(f"Failed to list files: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route("/files/<file_id>", methods=["DELETE"])
+def delete_file(file_id):
+    """Delete a file from the knowledge base"""
+    try:
+        success = delete_file_from_knowledge(file_id)
+        if success:
+            return jsonify({"status": "success", "message": "File deleted successfully"})
+        else:
+            return jsonify({"status": "error", "message": "File not found or deletion failed"}), 404
+    except Exception as e:
+        logging.error(f"Failed to delete file {file_id}: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route("/files/clear", methods=["POST"])
+def clear_all_files():
+    """Clear all files from the knowledge base"""
+    try:
+        global faiss_index, knowledge_chunks, file_metadata
+        
+        # Reset everything
+        faiss_index = None
+        knowledge_chunks = []
+        file_metadata = {}
+        
+        # Save empty state
+        with open('faiss_index.pkl', 'wb') as f:
+            pickle.dump(None, f)
+        with open('knowledge_chunks.pkl', 'wb') as f:
+            pickle.dump([], f)
+        with open('file_metadata.pkl', 'wb') as f:
+            pickle.dump({}, f)
+        
+        logging.info("All files cleared from knowledge base")
+        return jsonify({"status": "success", "message": "All files cleared successfully"})
+    except Exception as e:
+        logging.error(f"Failed to clear all files: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route("/upload_prompt", methods=["POST"])
+def upload_prompt():
+    """Upload and update the system prompt file"""
+    try:
+        if 'prompt_file' not in request.files:
+            return jsonify(status="error", message="No file uploaded"), 400
+        
+        file = request.files['prompt_file']
+        if file.filename == '':
+            return jsonify(status="error", message="No file selected"), 400
+        
+        if file and file.filename.endswith('.txt'):
+            # Save the new prompt file
+            file.save('system_prompt.txt')
+            
+            # Log the prompt update
+            log_to_ui(f"SYSTEM_PROMPT_UPDATED - New prompt file uploaded: {file.filename}")
+            logging.info(f"SYSTEM_PROMPT_UPDATED [{now_str()}] File: {file.filename}, Size: {len(file.read())} bytes")
+            
+            return jsonify(status="success", message="System prompt updated successfully")
+        else:
+            return jsonify(status="error", message="Only .txt files are allowed"), 400
+            
+    except Exception as e:
+        log_to_ui(f"PROMPT_UPLOAD_ERROR - {str(e)}")
+        logging.error(f"PROMPT_UPLOAD_ERROR [{now_str()}] {str(e)}")
+        return jsonify(status="error", message=f"Error updating prompt: {str(e)}"), 500
+
+@app.route("/get_prompt", methods=["GET"])
+def get_prompt():
+    """Get the current system prompt content"""
+    try:
+        with open('system_prompt.txt', 'r', encoding='utf-8') as f:
+            prompt_content = f.read()
+        
+        return jsonify(status="success", prompt=prompt_content)
+        
+    except FileNotFoundError:
+        return jsonify(status="error", message="System prompt file not found"), 404
+    except Exception as e:
+        log_to_ui(f"PROMPT_READ_ERROR - {str(e)}")
+        logging.error(f"PROMPT_READ_ERROR [{now_str()}] {str(e)}")
+        return jsonify(status="error", message=f"Error reading prompt: {str(e)}"), 500
 
 # ─── UI routes ─────────────────────────────────────────────────────────
 @app.route("/")
@@ -658,7 +1106,7 @@ def start_toggle():
     # CRITICAL: Ensure every session has at least one category
     if not info:
         info = ['other']
-        log_to_ui(f"SESSION_END - No categories detected, forcing default: {info}")
+        log_to_ui(f"SESSION_END - No categories detected, defaulting to: {info}")
     
     # Validate and clean categories
     allowed = ['money', 'eligibility', 'district', 'ingredients', 'other']
@@ -672,7 +1120,7 @@ def start_toggle():
     if not info:
         info = ['other']
         log_to_ui(f"SESSION_END - Final safety check: forcing 'other' category")
-
+    
     duration = str(len(chat))
 
     # Log the categorization results clearly
@@ -736,7 +1184,8 @@ def start_toggle():
 def chat():
     data   = request.get_json() or {}
     sid    = data.get("session_id")
-    prompt = data.get("prompt", "")
+    # Accept both 'message' and 'prompt' for compatibility
+    prompt = data.get("message") or data.get("prompt", "")
     session_type = data.get("session_type")
     if sid not in histories:
         return jsonify(response="Please start a session first."), 400
@@ -812,9 +1261,27 @@ def chat():
         full_knowledge = ""
 
     # Search for relevant knowledge chunks using FAISS
-    relevant_chunks = search_knowledge(prompt, top_k=3)
+    relevant_chunks = search_knowledge(prompt, top_k=5)  # Increased to 5 for better conflict detection
+    
+    # Format knowledge with file sources for conflict detection
     if relevant_chunks:
-        relevant_knowledge = "\n\n".join(relevant_chunks)
+        # Group chunks by file source
+        chunks_by_file = {}
+        for chunk in relevant_chunks:
+            file_name = chunk.get("file_name", "Unknown Source")
+            if file_name not in chunks_by_file:
+                chunks_by_file[file_name] = []
+            chunks_by_file[file_name].append(chunk)
+        
+        # Format knowledge with clear file sources
+        knowledge_parts = []
+        for file_name, chunks in chunks_by_file.items():
+            file_knowledge = f"From {file_name}:\n"
+            for chunk in chunks:
+                file_knowledge += f"{chunk['text']}\n"
+            knowledge_parts.append(file_knowledge)
+        
+        relevant_knowledge = "\n\n".join(knowledge_parts)
     else:
         relevant_knowledge = full_knowledge
 
@@ -860,20 +1327,31 @@ def chat():
     
     print(f"CHAT - Session: {sid}, Message: '{prompt[:50]}...', Types: {detected_types}, Final: info={info}, Model={current_model}")
 
-    # System prompt for language and direct answers
+    # System prompt for language and direct answers with conflict detection
     system_p = (
-        "You are an assistant for the BISP Nashonuma program. Always answer user questions concisely using the provided knowledge base. "
-        "Detect the language of the user's input (English, Urdu, or Roman Urdu) and reply in the same language. "
-        "Keep answers brief and highlight key information with **bold** formatting. "
-        "IMPORTANT: Always highlight the following information in **bold**: "
+        "You are an assistant for the BISP Nashonuma program. "
+        "IMPORTANT: Keep answers CONCISE but INFORMATIVE. "
+        "Answer the user's question directly using the knowledge base. "
+        "Use 2-4 sentences maximum unless more detail is specifically requested. "
+        
+        "Detect the user's language (English, Urdu, or Roman Urdu) and reply in the same language. "
+        "Highlight key information with **bold** formatting. "
+        
+        "CONFLICT DETECTION: If you find conflicting information in different knowledge base files for the same question, "
+        "clearly explain the conflict to the user. Show both pieces of information with their file sources. "
+        "Example: 'I found conflicting information in 2 knowledge base files: From file1.pdf: Age requirement is 17-21 years. "
+        "From file2.pdf: Age requirement is 13-19 years. Please verify the most current information.' "
+        
+        "ALWAYS highlight these in **bold**: "
         "- District names (e.g., **Neelam**, **Lasbela**, **Hub**, **Swat**, **Rajanpur**) "
-        "- Age requirements (e.g., **13-19 years**, **13 years to 17 years, 11 months, 29 days**) "
-        "- Cash amounts (e.g., **Rs. 2000**, **Rs 2000 per quarter**) "
-        "- Document names (e.g., **B-Form**, **CNIC**, **Mother's CNIC**) "
-        "- Program names (e.g., **BISP Nashonuma**, **Adolescent Nutrition Program**) "
-        "- Important numbers (e.g., **4 sisters**, **3 months**, **quarterly**) "
-        "- Key services (e.g., **IFA tablets**, **nutrition counseling**) "
-        "Format your response with proper **bold** highlighting for all important details."
+        "- Age requirements (e.g., **13-19 years**) "
+        "- Cash amounts (e.g., **Rs. 2000**) "
+        "- Document names (e.g., **B-Form**, **CNIC**) "
+        "- Program names (e.g., **BISP Nashonuma**) "
+        "- Important numbers (e.g., **4 sisters**, **3 months**) "
+        "- Key services (e.g., **IFA tablets**) "
+        
+        "REMEMBER: Be concise but helpful. Use the knowledge base to answer questions accurately."
     )
     
     if current_model == "groq":
@@ -945,10 +1423,15 @@ def chat():
 
     histories[sid].append({"role":"assistant","content":reply})
 
-    # Get relevant knowledge base excerpt
+    # Get relevant knowledge base excerpt with file sources
     kb_excerpt = ""
     if relevant_chunks:
-        kb_excerpt = "\n\n".join(relevant_chunks[:2])  # Show top 2 most relevant chunks
+        # Show top 2 most relevant chunks with file sources
+        excerpt_parts = []
+        for chunk in relevant_chunks[:2]:
+            file_name = chunk.get("file_name", "Unknown Source")
+            excerpt_parts.append(f"From {file_name}: {chunk['text'][:200]}...")
+        kb_excerpt = "\n\n".join(excerpt_parts)
 
     return jsonify(response=reply, kb_excerpt=kb_excerpt)
 
@@ -973,8 +1456,10 @@ def suggestions():
             
             # Optimize the prompt to be shorter and more focused
             system_prompt = (
-                "Suggest 2-3 related questions based on the knowledge base and user input. "
-                "Return ONLY questions, one per line, no extra text."
+                "Generate 2-3 SHORT, specific questions based on the knowledge base. "
+                "Each question should be 5-10 words maximum. "
+                "Focus on common user inquiries about eligibility, money, documents, or locations. "
+                "Return ONLY the questions, one per line, no extra text or numbering."
             )
             
             # Truncate knowledge to reduce tokens (limit to first 1000 chars)
